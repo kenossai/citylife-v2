@@ -455,7 +455,7 @@
     </div>
 
     <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-stretch">
             <div>
                 <p class="text-[#e85d26] text-sm font-semibold uppercase tracking-widest mb-3">Volunteer / Outreach</p>
                 <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight mb-6">
@@ -473,15 +473,15 @@
                 </a>
             </div>
 
-            {{-- Images side by side --}}
-            <div class="grid grid-cols-2 gap-4 hidden lg:grid">
-                <div class="rounded-2xl overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=400&q=80"
-                         alt="Service" class="w-full h-72 object-cover">
+            {{-- Two large images, offset stacked --}}
+            <div class="hidden lg:flex items-start gap-5 pt-6">
+                <div class="rounded-2xl overflow-hidden shadow-xl flex-1">
+                    <img src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=900&q=80"
+                         alt="Service" class="w-full h-[580px] object-cover">
                 </div>
-                <div class="rounded-2xl overflow-hidden mt-8">
-                    <img src="https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=400&q=80"
-                         alt="Helping" class="w-full h-72 object-cover">
+                <div class="rounded-2xl overflow-hidden shadow-xl flex-1 mt-14">
+                    <img src="https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=900&q=80"
+                         alt="Helping" class="w-full h-[580px] object-cover">
                 </div>
             </div>
         </div>
