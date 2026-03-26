@@ -35,23 +35,16 @@ class HeroSlideForm
                             ->columnSpanFull(),
                     ]),
 
-                Section::make('Buttons')
-                    ->columns(2)
-                    ->schema([
-                        TextInput::make('primary_btn_text')->label('Primary Button Text')->maxLength(50),
-                        TextInput::make('primary_btn_url')->label('Primary Button URL')->maxLength(200),
-                        TextInput::make('secondary_btn_text')->label('Secondary Button Text')->maxLength(50),
-                        TextInput::make('secondary_btn_url')->label('Secondary Button URL')->maxLength(200),
-                    ]),
-
                 Section::make('Image & Order')
                     ->columns(2)
                     ->schema([
-                        TextInput::make('image_path')
-                            ->label('Image Path')
-                            ->placeholder('images/slide-1.png')
+                        FileUpload::make('image_path')
+                            ->label('Slide Image')
+                            ->image()
+                            ->disk('public')
+                            ->directory('hero-slides')
                             ->required()
-                            ->helperText('Relative to public/ directory'),
+                            ->columnSpanFull(),
                         TextInput::make('sort_order')
                             ->label('Sort Order')
                             ->numeric()

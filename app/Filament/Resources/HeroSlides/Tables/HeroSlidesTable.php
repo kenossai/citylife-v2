@@ -6,6 +6,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -18,7 +19,7 @@ class HeroSlidesTable
                 TextColumn::make('sort_order')->label('#')->sortable()->width('60px'),
                 TextColumn::make('eyebrow')->label('Eyebrow')->limit(30)->searchable(),
                 TextColumn::make('heading')->label('Heading')->limit(50)->searchable(),
-                TextColumn::make('image_path')->label('Image')->limit(40),
+                ImageColumn::make('image_path')->label('Image')->disk('public')->height(60),
                 IconColumn::make('is_active')->label('Active')->boolean(),
             ])
             ->filters([])
