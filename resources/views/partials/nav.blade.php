@@ -1,3 +1,17 @@
+@php
+    $desktopLinkClass = function (bool $active): string {
+        return $active
+            ? 'text-[#e85d26]'
+            : 'text-gray-300 hover:text-white transition-colors';
+    };
+
+    $mobileLinkClass = function (bool $active): string {
+        return $active
+            ? 'block py-1 text-[#e85d26]'
+            : 'block py-1 text-gray-300 hover:text-white';
+    };
+@endphp
+
 <nav class="fixed top-0 left-0 right-0 z-50 bg-[#111111] text-white" x-data="{ open: false }">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
@@ -12,9 +26,9 @@
 
             {{-- Desktop Nav --}}
             <div class="hidden lg:flex items-center gap-6 text-sm">
-                <a href="{{ url('/') }}" class="text-gray-300 hover:text-white transition-colors">Home</a>
-                <a href="{{ url('/about-citylife') }}" class="text-gray-300 hover:text-white transition-colors">About Us</a>
-                <a href="{{ url('/missions') }}" class="text-gray-300 hover:text-white transition-colors">Missions</a>
+                <a href="{{ url('/') }}" class="{{ $desktopLinkClass(request()->routeIs('home')) }}">Home</a>
+                <a href="{{ url('/about-citylife') }}" class="{{ $desktopLinkClass(request()->routeIs('about')) }}">About Us</a>
+                <a href="{{ url('/missions') }}" class="{{ $desktopLinkClass(request()->routeIs('missions')) }}">Missions</a>
                 <a href="{{ url('/our-ministry') }}" class="text-gray-300 hover:text-white transition-colors">Ministries</a>
 
                 {{-- Media Dropdown --}}
@@ -67,9 +81,9 @@
 
     {{-- Mobile menu --}}
     <div x-show="open" x-transition class="lg:hidden bg-[#1a1a1a] border-t border-gray-800 px-4 py-4 space-y-3 text-sm">
-        <a href="{{ url('/') }}" class="block text-gray-300 hover:text-white py-1">Home</a>
-        <a href="{{ url('/about-citylife') }}" class="block text-gray-300 hover:text-white py-1">About Us</a>
-        <a href="{{ url('/missions') }}" class="block text-gray-300 hover:text-white py-1">Missions</a>
+        <a href="{{ url('/') }}" class="{{ $mobileLinkClass(request()->routeIs('home')) }}">Home</a>
+        <a href="{{ url('/about-citylife') }}" class="{{ $mobileLinkClass(request()->routeIs('about')) }}">About Us</a>
+        <a href="{{ url('/missions') }}" class="{{ $mobileLinkClass(request()->routeIs('missions')) }}">Missions</a>
         <a href="{{ url('/our-ministry') }}" class="block text-gray-300 hover:text-white py-1">Ministries</a>
         <a href="{{ url('/sermons') }}" class="block text-gray-300 hover:text-white py-1">Sermons</a>
         <a href="{{ url('/courses') }}" class="block text-gray-300 hover:text-white py-1">Courses</a>
