@@ -53,7 +53,7 @@
                     Join With Us
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                 </a>
-                <a href="{{ url('/sermons') }}" class="inline-flex items-center gap-2 text-white border border-white/30 hover:border-white/60 font-semibold px-6 py-3 rounded-full transition-colors text-sm backdrop-blur-sm">
+                <a href="{{ route('media') }}" class="inline-flex items-center gap-2 text-white border border-white/30 hover:border-white/60 font-semibold px-6 py-3 rounded-full transition-colors text-sm backdrop-blur-sm">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                     Watch Online
                 </a>
@@ -81,7 +81,7 @@
                     Our Ministries
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                 </a>
-                <a href="{{ url('/sermons') }}" class="inline-flex items-center gap-2 text-white border border-white/30 hover:border-white/60 font-semibold px-6 py-3 rounded-full transition-colors text-sm backdrop-blur-sm">
+                <a href="{{ route('media') }}" class="inline-flex items-center gap-2 text-white border border-white/30 hover:border-white/60 font-semibold px-6 py-3 rounded-full transition-colors text-sm backdrop-blur-sm">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                     Watch Online
                 </a>
@@ -109,7 +109,7 @@
                     Our Missions
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                 </a>
-                <a href="{{ url('/sermons') }}" class="inline-flex items-center gap-2 text-white border border-white/30 hover:border-white/60 font-semibold px-6 py-3 rounded-full transition-colors text-sm backdrop-blur-sm">
+                <a href="{{ route('media') }}" class="inline-flex items-center gap-2 text-white border border-white/30 hover:border-white/60 font-semibold px-6 py-3 rounded-full transition-colors text-sm backdrop-blur-sm">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                     Watch Online
                 </a>
@@ -258,12 +258,12 @@
                 <p class="text-gray-500 italic mb-2 text-sm">"Walking in the Spirit" — Pastor David Williams takes us through Galatians 5 and explores what it means to truly live a Spirit-led life in today's world.</p>
                 <p class="text-gray-400 text-xs mb-8 uppercase tracking-wider">March 22, 2026 · Sunday Morning Service</p>
                 <div class="flex flex-wrap gap-3">
-                    <a href="{{ url('/sermons') }}"
+                    <a href="{{ route('media') }}"
                        class="inline-flex items-center gap-2 bg-gray-900 hover:bg-gray-700 text-white font-semibold px-6 py-3 rounded-full transition-colors text-sm">
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                         Watch Sermon
                     </a>
-                    <a href="{{ url('/sermons') }}"
+                    <a href="{{ route('media') }}"
                        class="inline-flex items-center gap-2 border-2 border-gray-200 hover:border-gray-400 text-gray-700 font-semibold px-6 py-3 rounded-full transition-colors text-sm">
                         All Messages
                     </a>

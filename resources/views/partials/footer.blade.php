@@ -52,7 +52,7 @@
                 <h4 class="text-white font-semibold text-sm mb-4 uppercase tracking-wider">Resources</h4>
                 <ul class="space-y-2 text-sm">
                     <li><a href="{{ url('/books') }}" class="hover:text-white transition-colors">Books</a></li>
-                    <li><a href="{{ url('/sermons') }}" class="hover:text-white transition-colors">Teaching Notes</a></li>
+                    <li><a href="{{ route('media') }}" class="hover:text-white transition-colors">Teaching Notes</a></li>
                     <li><a href="{{ url('/courses') }}" class="hover:text-white transition-colors">Courses</a></li>
                     <li><a href="{{ url('/member/login') }}" class="hover:text-white transition-colors">Member Login</a></li>
                     <li><a href="#" class="hover:text-white transition-colors">Download Our App</a></li>

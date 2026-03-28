@@ -30,19 +30,7 @@
                 <a href="{{ url('/about-citylife') }}" class="{{ $desktopLinkClass(request()->routeIs('about')) }}">About Us</a>
                 <a href="{{ url('/missions') }}" class="{{ $desktopLinkClass(request()->routeIs('missions')) }}">Missions</a>
                 <a href="{{ url('/our-ministry') }}" class="text-gray-300 hover:text-white transition-colors">Ministries</a>
-
-                {{-- Media Dropdown --}}
-                <div class="relative" x-data="{ mediaOpen: false }" @mouseenter="mediaOpen = true" @mouseleave="mediaOpen = false">
-                    <button class="text-gray-300 hover:text-white transition-colors flex items-center gap-1">
-                        Media
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                    </button>
-                    <div x-show="mediaOpen" x-transition class="absolute top-full left-0 mt-1 w-44 bg-white text-gray-800 rounded shadow-lg py-2 text-sm">
-                        <a href="{{ url('/sermons') }}" class="block px-4 py-2 hover:bg-gray-50">Sermons</a>
-                        <a href="{{ url('/books') }}" class="block px-4 py-2 hover:bg-gray-50">Books</a>
-                        <a href="{{ url('/bible-school') }}" class="block px-4 py-2 hover:bg-gray-50">Bible School</a>
-                    </div>
-                </div>
+                <a href="{{ route('media') }}" class="{{ $desktopLinkClass(request()->routeIs('media') || request()->routeIs('sermons')) }}">Media</a>
 
                 {{-- Resources Dropdown --}}
                 <div class="relative" x-data="{ resOpen: false }" @mouseenter="resOpen = true" @mouseleave="resOpen = false">
@@ -85,7 +73,7 @@
         <a href="{{ url('/about-citylife') }}" class="{{ $mobileLinkClass(request()->routeIs('about')) }}">About Us</a>
         <a href="{{ url('/missions') }}" class="{{ $mobileLinkClass(request()->routeIs('missions')) }}">Missions</a>
         <a href="{{ url('/our-ministry') }}" class="block text-gray-300 hover:text-white py-1">Ministries</a>
-        <a href="{{ url('/sermons') }}" class="block text-gray-300 hover:text-white py-1">Sermons</a>
+        <a href="{{ route('media') }}" class="{{ $mobileLinkClass(request()->routeIs('media') || request()->routeIs('sermons')) }}">Media</a>
         <a href="{{ url('/courses') }}" class="block text-gray-300 hover:text-white py-1">Courses</a>
         <a href="{{ url('/books') }}" class="block text-gray-300 hover:text-white py-1">Books</a>
         <a href="{{ url('/events') }}" class="block text-gray-300 hover:text-white py-1">Events</a>
