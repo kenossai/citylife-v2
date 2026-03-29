@@ -20,7 +20,7 @@
             'students'    => 248,
             'price'       => 'Free',
             'image'       => 'https://images.unsplash.com/photo-1504052434569-70ad5836ab65?auto=format&fit=crop&w=600&q=80',
-            'url'         => '#',
+            'slug'        => 'foundations-of-faith',
         ],
         [
             'category'    => 'Leadership',
@@ -37,7 +37,7 @@
             'students'    => 124,
             'price'       => '£60',
             'image'       => 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=600&q=80',
-            'url'         => '#',
+            'slug'        => 'leadership-school',
         ],
         [
             'category'    => 'Prayer',
@@ -54,7 +54,7 @@
             'students'    => 312,
             'price'       => 'Free',
             'image'       => 'https://images.unsplash.com/photo-1461378810796-1bd3f1ce3c73?auto=format&fit=crop&w=600&q=80',
-            'url'         => '#',
+            'slug'        => 'school-of-prayer',
         ],
         [
             'category'    => 'Evangelism',
@@ -71,7 +71,7 @@
             'students'    => 189,
             'price'       => 'Free',
             'image'       => 'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?auto=format&fit=crop&w=600&q=80',
-            'url'         => '#',
+            'slug'        => 'evangelism-training',
         ],
         [
             'category'    => 'Family Life',
@@ -88,7 +88,7 @@
             'students'    => 97,
             'price'       => '£30 per couple',
             'image'       => 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=600&q=80',
-            'url'         => '#',
+            'slug'        => 'marriage-and-family',
         ],
         [
             'category'    => 'Worship',
@@ -105,7 +105,7 @@
             'students'    => 76,
             'price'       => '£40',
             'image'       => 'https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?auto=format&fit=crop&w=600&q=80',
-            'url'         => '#',
+            'slug'        => 'worship-and-arts-school',
         ],
     ];
 
@@ -352,7 +352,7 @@
                             {{-- CTA button --}}
                             <div class="mt-auto pt-4">
                                 <a
-                                    href="{{ $course['url'] }}"
+                                    href="{{ route('courses.show', $course['slug']) }}"
                                     class="flex w-full items-center justify-center gap-2 rounded-lg bg-[#e85d26] py-2.5 text-[13px] font-semibold text-white transition-colors hover:bg-[#d14f1e]"
                                 >
                                     View Course

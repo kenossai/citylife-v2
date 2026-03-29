@@ -18,3 +18,4 @@ Route::get('/media', [MediaController::class, 'index'])->name('media');
 Route::get('/sermons', [MediaController::class, 'index'])->name('sermons');
 Route::get('/resources', [ResourcesController::class, 'index'])->name('resources');
 Route::get('/courses', [CoursesController::class, 'index'])->name('courses');
+Route::get('/courses/{slug}', [CoursesController::class, 'show'])->name('courses.show');

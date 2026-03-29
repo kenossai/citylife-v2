@@ -8,4 +8,9 @@ class CoursesController extends Controller
     {
         return view('pages.courses');
     }
+
+    public function show(string $slug)
+    {
+        return view('pages.course-detail', ['slug' => $slug]);
+    }
 }
