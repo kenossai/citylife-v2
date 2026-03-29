@@ -6,6 +6,7 @@ use App\Http\Controllers\AboutController;
 use App\Http\Controllers\EventsController;
 use App\Http\Controllers\MissionsController;
 use App\Http\Controllers\MediaController;
+use App\Http\Controllers\ResourcesController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about-citylife', [AboutController::class, 'index'])->name('about');
@@ -14,3 +15,4 @@ Route::get('/events', [EventsController::class, 'index'])->name('events');
 Route::get('/events/{slug}', [EventsController::class, 'show'])->name('events.show');
 Route::get('/media', [MediaController::class, 'index'])->name('media');
 Route::get('/sermons', [MediaController::class, 'index'])->name('sermons');
+Route::get('/resources', [ResourcesController::class, 'index'])->name('resources');
