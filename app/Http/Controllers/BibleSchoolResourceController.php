@@ -11,6 +11,19 @@ class BibleSchoolResourceController extends Controller
 
     public function show(string $slug)
     {
-        return view('pages.speaker-session', ['slug' => $slug]);
+        $unlocked = in_array($slug, array_keys(session('unlocked_speakers', [])));
+
+        return view('pages.speaker-session', [
+            'slug' => $slug,
+            'unlocked' => $unlocked,
+        ]);
+    }
+
+    public function play(string $speakerSlug, string $sessionSlug)
+    {
+        return view('pages.session-play', [
+            'speakerSlug' => $speakerSlug,
+            'sessionSlug' => $sessionSlug,
+        ]);
     }
 }

@@ -10,6 +10,7 @@ use App\Http\Controllers\ResourcesController;
 use App\Http\Controllers\CoursesController;
 use App\Http\Controllers\BibleSchoolController;
 use App\Http\Controllers\BibleSchoolResourceController;
+use App\Http\Controllers\SessionAccessController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about-citylife', [AboutController::class, 'index'])->name('about');
@@ -24,3 +25,7 @@ Route::get('/courses/{slug}', [CoursesController::class, 'show'])->name('courses
 Route::get('/bible-school', [BibleSchoolController::class, 'index'])->name('bible-school');
 Route::get('/bible-school/resources', [BibleSchoolResourceController::class, 'index'])->name('bible-school.resources');
 Route::get('/bible-school/resources/{slug}', [BibleSchoolResourceController::class, 'show'])->name('bible-school.resources.show');
+Route::get('/bible-school/resources/{speaker}/{session}', [BibleSchoolResourceController::class, 'play'])->name('bible-school.resources.play');
+
+Route::post('/session-access/send-code', [SessionAccessController::class, 'sendCode'])->name('session-access.send-code');
+Route::post('/session-access/verify-code', [SessionAccessController::class, 'verifyCode'])->name('session-access.verify-code');
