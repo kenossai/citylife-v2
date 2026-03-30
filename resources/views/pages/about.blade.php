@@ -54,7 +54,7 @@
             'eyebrow' => 'Our Leadership',
             'title' => 'Meet the people helping steward the vision and care of our church family.',
             'image' => 'https://images.unsplash.com/photo-1573496799652-408c2ac9fe98?auto=format&fit=crop&w=900&q=80',
-            'href' => url('/about-citylife') . '#story',
+            'href' => url('/leadership'),
         ],
         [
             'eyebrow' => 'Our Core Values',
@@ -362,7 +362,7 @@
         </div>
     </section>
 
-    
+
 </div>
 @endsection
 

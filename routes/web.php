@@ -11,9 +11,11 @@ use App\Http\Controllers\CoursesController;
 use App\Http\Controllers\BibleSchoolController;
 use App\Http\Controllers\BibleSchoolResourceController;
 use App\Http\Controllers\SessionAccessController;
+use App\Http\Controllers\LeadershipController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about-citylife', [AboutController::class, 'index'])->name('about');
+Route::get('/leadership', [LeadershipController::class, 'index'])->name('leadership');
 Route::get('/missions', [MissionsController::class, 'index'])->name('missions');
 Route::get('/events', [EventsController::class, 'index'])->name('events');
 Route::get('/events/{slug}', [EventsController::class, 'show'])->name('events.show');
