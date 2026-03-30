@@ -191,7 +191,7 @@
 
                         @if ($isLocked)
                             {{-- Locked state — email unlock card --}}
-                            <div class="mt-6 overflow-hidden rounded-2xl bg-[#13131f] p-8 text-center shadow-xl" x-data="{ email: '' }">
+                            <div class="mt-6 overflow-hidden rounded-2xl bg-[#13131f] p-8 text-center shadow-xl" x-data="{ email: '', consent: false }">
                                 {{-- Lock icon --}}
                                 <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#ff8904]/30 to-[#e85d26]/30 ring-1 ring-[#ff8904]/20">
                                     <svg class="h-7 w-7 text-[#ff8904]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
@@ -218,10 +218,26 @@
                                     >
                                 </div>
 
+                                {{-- Data consent checkbox --}}
+                                <div class="mx-auto mt-4 max-w-sm">
+                                    <label class="flex items-start gap-2.5 text-left">
+                                        <input
+                                            x-model="consent"
+                                            type="checkbox"
+                                            class="mt-0.5 h-4 w-4 shrink-0 rounded border-white/20 bg-white/5 text-[#e85d26] focus:ring-[#e85d26]/30"
+                                        >
+                                        <span class="text-[12px] leading-relaxed text-white/45">
+                                            I consent to my email being used to send a one-time access code and agree to the <a href="#" class="text-[#ff8904] underline hover:text-[#e85d26]">Privacy Policy</a>.
+                                        </span>
+                                    </label>
+                                </div>
+
                                 {{-- Unlock button --}}
                                 <div class="mx-auto mt-4 max-w-sm">
                                     <button
-                                        class="flex h-[46px] w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#e85d26] to-[#ff8904] text-[14px] font-bold text-white shadow-lg transition-all hover:shadow-[#e85d26]/25 hover:brightness-110"
+                                        :disabled="!consent || !email"
+                                        :class="consent && email ? 'opacity-100 hover:shadow-[#e85d26]/25 hover:brightness-110' : 'opacity-50 cursor-not-allowed'"
+                                        class="flex h-[46px] w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#e85d26] to-[#ff8904] text-[14px] font-bold text-white shadow-lg transition-all"
                                     >
                                         <svg class="h-4.5 w-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                                         Unlock Sessions
