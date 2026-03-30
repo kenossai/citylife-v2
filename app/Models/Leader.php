@@ -12,10 +12,6 @@ class Leader extends Model
         'image_path',
         'bio',
         'is_featured',
-        'social_instagram',
-        'social_twitter',
-        'social_youtube',
-        'social_facebook',
         'sort_order',
         'is_active',
     ];

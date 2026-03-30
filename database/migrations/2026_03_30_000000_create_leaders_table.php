@@ -18,10 +18,6 @@ return new class extends Migration
             $table->string('image_path')->nullable();
             $table->text('bio')->nullable();
             $table->boolean('is_featured')->default(false);
-            $table->string('social_instagram')->nullable();
-            $table->string('social_twitter')->nullable();
-            $table->string('social_youtube')->nullable();
-            $table->string('social_facebook')->nullable();
             $table->unsignedInteger('sort_order')->default(0);
             $table->boolean('is_active')->default(true);
             $table->timestamps();

@@ -41,23 +41,6 @@ class LeaderForm
                             ->columnSpanFull(),
                     ]),
 
-                Section::make('Social Links')
-                    ->columns(2)
-                    ->schema([
-                        TextInput::make('social_instagram')
-                            ->label('Instagram URL')
-                            ->maxLength(300),
-                        TextInput::make('social_twitter')
-                            ->label('X / Twitter URL')
-                            ->maxLength(300),
-                        TextInput::make('social_youtube')
-                            ->label('YouTube URL')
-                            ->maxLength(300),
-                        TextInput::make('social_facebook')
-                            ->label('Facebook URL')
-                            ->maxLength(300),
-                    ]),
-
                 Section::make('Visibility')
                     ->columns(2)
                     ->schema([
