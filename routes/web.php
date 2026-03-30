@@ -9,6 +9,7 @@ use App\Http\Controllers\MediaController;
 use App\Http\Controllers\ResourcesController;
 use App\Http\Controllers\CoursesController;
 use App\Http\Controllers\BibleSchoolController;
+use App\Http\Controllers\BibleSchoolResourceController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about-citylife', [AboutController::class, 'index'])->name('about');
@@ -21,3 +22,5 @@ Route::get('/resources', [ResourcesController::class, 'index'])->name('resources
 Route::get('/courses', [CoursesController::class, 'index'])->name('courses');
 Route::get('/courses/{slug}', [CoursesController::class, 'show'])->name('courses.show');
 Route::get('/bible-school', [BibleSchoolController::class, 'index'])->name('bible-school');
+Route::get('/bible-school/resources', [BibleSchoolResourceController::class, 'index'])->name('bible-school.resources');
+Route::get('/bible-school/resources/{slug}', [BibleSchoolResourceController::class, 'show'])->name('bible-school.resources.show');

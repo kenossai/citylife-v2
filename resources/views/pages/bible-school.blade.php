@@ -104,7 +104,7 @@
 
                     <div class="mt-8 flex flex-wrap items-center gap-4">
                         <a
-                            href="{{ route('resources') }}"
+                            href="{{ route('bible-school.resources') }}"
                             class="inline-flex h-[44px] items-center gap-2.5 rounded-full bg-[#1a1a2e] px-6 text-[13px] font-semibold text-white transition-colors hover:bg-[#2a2a3e]"
                         >
                             <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path d="M6.3 2.84A1.5 1.5 0 004 4.11v11.78a1.5 1.5 0 002.3 1.27l9.344-5.891a1.5 1.5 0 000-2.538L6.3 2.84z"/></svg>
