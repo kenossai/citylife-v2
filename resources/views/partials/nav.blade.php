@@ -29,7 +29,7 @@
                 <a href="{{ url('/') }}" class="{{ $desktopLinkClass(request()->routeIs('home')) }}">Home</a>
                 <a href="{{ url('/about-citylife') }}" class="{{ $desktopLinkClass(request()->routeIs('about')) }}">About Us</a>
                 <a href="{{ url('/missions') }}" class="{{ $desktopLinkClass(request()->routeIs('missions')) }}">Missions</a>
-                <a href="{{ url('/our-ministries') }}" class="{{ $desktopLinkClass(request()->routeIs('ministries')) }}">Ministries</a>
+                <a href="{{ route('ministries') }}" class="{{ $desktopLinkClass(request()->routeIs('ministries*')) }}">Ministries</a>
                 <a href="{{ route('media') }}" class="{{ $desktopLinkClass(request()->routeIs('media') || request()->routeIs('sermons')) }}">Media</a>
 
                 {{-- Resources Dropdown --}}
@@ -72,12 +72,12 @@
         <a href="{{ url('/') }}" class="{{ $mobileLinkClass(request()->routeIs('home')) }}">Home</a>
         <a href="{{ url('/about-citylife') }}" class="{{ $mobileLinkClass(request()->routeIs('about')) }}">About Us</a>
         <a href="{{ url('/missions') }}" class="{{ $mobileLinkClass(request()->routeIs('missions')) }}">Missions</a>
-        <a href="{{ url('/our-ministry') }}" class="block text-gray-300 hover:text-white py-1">Ministries</a>
+        <a href="{{ route('ministries') }}" class="{{ $mobileLinkClass(request()->routeIs('ministries*')) }}">Ministries</a>
         <a href="{{ route('media') }}" class="{{ $mobileLinkClass(request()->routeIs('media') || request()->routeIs('sermons')) }}">Media</a>
         <a href="{{ url('/courses') }}" class="block text-gray-300 hover:text-white py-1">Courses</a>
         <a href="{{ url('/books') }}" class="block text-gray-300 hover:text-white py-1">Books</a>
         <a href="{{ url('/events') }}" class="block text-gray-300 hover:text-white py-1">Events</a>
-        <a href="{{ url('/news') }}" class="block text-gray-300 hover:text-white py-1">News</a>
+        <a href="{{ url('/bible-school') }}" class="block text-gray-300 hover:text-white py-1">Bible School</a>
         <a href="{{ url('/contact') }}" class="block text-gray-300 hover:text-white py-1">Contact Us</a>
         <a href="{{ url('/giving') }}" class="inline-block mt-2 bg-[#e85d26] text-white font-semibold px-5 py-2 rounded-full">Give Online</a>
     </div>

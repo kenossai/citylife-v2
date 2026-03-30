@@ -77,7 +77,7 @@
                 From small groups to Sunday gatherings, we're a church family rooted in love, prayer, and growing together in faith.
             </p>
             <div class="flex flex-wrap gap-4">
-                <a href="{{ url('/our-ministry') }}" class="inline-flex items-center gap-2 bg-[#e85d26] hover:bg-[#cf4f1e] text-white font-semibold px-6 py-3 rounded-full transition-colors text-sm">
+                <a href="{{ route('ministries') }}" class="inline-flex items-center gap-2 bg-[#e85d26] hover:bg-[#cf4f1e] text-white font-semibold px-6 py-3 rounded-full transition-colors text-sm">
                     Our Ministries
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                 </a>
@@ -230,7 +230,7 @@
                 </div>
                 <h3 class="text-gray-900 font-bold text-base mb-2">{{ $ministry['name'] }}</h3>
                 <p class="text-gray-500 text-sm leading-relaxed mb-4">{{ $ministry['desc'] }}</p>
-                <a href="{{ url('/our-ministry') }}" class="text-[#e85d26] text-sm font-semibold hover:underline inline-flex items-center gap-1">
+                <a href="{{ route('ministries') }}" class="text-[#e85d26] text-sm font-semibold hover:underline inline-flex items-center gap-1">
                     Learn More
                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                 </a>

@@ -40,7 +40,7 @@
                 <ul class="space-y-2 text-sm">
                     <li><a href="{{ url('/') }}" class="hover:text-white transition-colors">Home</a></li>
                     <li><a href="{{ url('/about-citylife') }}" class="hover:text-white transition-colors">About Us</a></li>
-                    <li><a href="{{ url('/our-ministry') }}" class="hover:text-white transition-colors">Ministries</a></li>
+                    <li><a href="{{ route('ministries') }}" class="hover:text-white transition-colors">Ministries</a></li>
                     <li><a href="{{ url('/events') }}" class="hover:text-white transition-colors">Events</a></li>
                     <li><a href="{{ url('/news') }}" class="hover:text-white transition-colors">News</a></li>
                     <li><a href="{{ url('/contact') }}" class="hover:text-white transition-colors">Contact Us</a></li>

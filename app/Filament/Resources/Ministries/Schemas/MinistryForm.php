@@ -20,16 +20,45 @@ class MinistryForm
                         TextInput::make('name')
                             ->required()
                             ->maxLength(80),
+                        TextInput::make('slug')
+                            ->required()
+                            ->maxLength(100)
+                            ->helperText('URL-friendly name, e.g. "worship-and-arts"'),
                         TextInput::make('subtitle')
                             ->placeholder('Ages 13 – 25')
                             ->maxLength(100),
+                        TextInput::make('image_path')
+                            ->label('Image Path / URL')
+                            ->maxLength(300),
                         Textarea::make('description')
                             ->required()
                             ->rows(3)
+                            ->helperText('Short description shown on the listing cards.')
                             ->columnSpanFull(),
-                        TextInput::make('image_path')
-                            ->label('Image Path / URL')
-                            ->maxLength(300)
+                        Textarea::make('about_text')
+                            ->label('About Text (Detail Page)')
+                            ->rows(5)
+                            ->helperText('Full description shown on the ministry detail page. Separate paragraphs with blank lines.')
+                            ->columnSpanFull(),
+                        Textarea::make('vision_quote')
+                            ->label('Vision / Mission Quote')
+                            ->rows(2)
+                            ->helperText('Highlighted quote block on the detail page.')
+                            ->columnSpanFull(),
+                    ]),
+
+                Section::make('Tags & Gallery')
+                    ->columns(2)
+                    ->schema([
+                        TextInput::make('tags')
+                            ->label('Tags (comma-separated)')
+                            ->placeholder('Arts, Live Worship, Dance, Music')
+                            ->helperText('Shown as pills on the detail page hero.')
+                            ->columnSpanFull(),
+                        Textarea::make('gallery_images')
+                            ->label('Gallery Image URLs (one per line)')
+                            ->rows(4)
+                            ->helperText('Enter one image URL per line for the gallery section.')
                             ->columnSpanFull(),
                     ]),
 
@@ -67,10 +96,22 @@ class MinistryForm
                             ->label('Meeting Schedule')
                             ->placeholder('Fridays · 7:00 PM')
                             ->maxLength(150),
+                        TextInput::make('location')
+                            ->label('Location / Venue')
+                            ->placeholder('Main Auditorium')
+                            ->maxLength(150),
                         TextInput::make('leader_name')
                             ->label('Leader Name')
                             ->placeholder('Ps. Daniel Wright')
                             ->maxLength(100),
+                        TextInput::make('leader_role')
+                            ->label('Leader Role')
+                            ->placeholder('Ministry Lead')
+                            ->maxLength(100),
+                        TextInput::make('leader_image')
+                            ->label('Leader Image URL')
+                            ->maxLength(300)
+                            ->columnSpanFull(),
                     ]),
 
                 Section::make('Appearance & Settings')

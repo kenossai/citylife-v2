@@ -18,6 +18,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about-citylife', [AboutController::class, 'index'])->name('about');
 Route::get('/leadership', [LeadershipController::class, 'index'])->name('leadership');
 Route::get('/our-ministries', [MinistryController::class, 'index'])->name('ministries');
+Route::get('/our-ministries/{slug}', [MinistryController::class, 'show'])->name('ministries.show');
 Route::get('/missions', [MissionsController::class, 'index'])->name('missions');
 Route::get('/events', [EventsController::class, 'index'])->name('events');
 Route::get('/events/{slug}', [EventsController::class, 'show'])->name('events.show');
