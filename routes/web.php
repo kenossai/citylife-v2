@@ -20,6 +20,7 @@ Route::get('/missions', [MissionsController::class, 'index'])->name('missions');
 Route::get('/events', [EventsController::class, 'index'])->name('events');
 Route::get('/events/{slug}', [EventsController::class, 'show'])->name('events.show');
 Route::get('/media', [MediaController::class, 'index'])->name('media');
+Route::get('/media/{slug}', [MediaController::class, 'show'])->name('media.show');
 Route::get('/sermons', [MediaController::class, 'index'])->name('sermons');
 Route::get('/resources', [ResourcesController::class, 'index'])->name('resources');
 Route::get('/courses', [CoursesController::class, 'index'])->name('courses');

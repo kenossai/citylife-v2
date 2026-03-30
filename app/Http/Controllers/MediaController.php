@@ -17,4 +17,9 @@ class MediaController extends Controller
 
         return view('pages.media', compact('sermons', 'featuredSermon'));
     }
+
+    public function show(string $slug): View
+    {
+        return view('pages.sermon-play', ['slug' => $slug]);
+    }
 }
