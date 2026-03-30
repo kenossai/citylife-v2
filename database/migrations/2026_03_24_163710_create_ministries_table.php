@@ -14,10 +14,17 @@ return new class extends Migration
         Schema::create('ministries', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('subtitle')->nullable();              // e.g. "Ages 13 – 25"
             $table->text('description');
-            $table->text('icon_svg_path');                   // SVG <path d="..."> value
-            $table->string('icon_bg_class');                // e.g. "bg-orange-50"
-            $table->string('icon_text_class');              // e.g. "text-[#e85d26]"
+            $table->string('image_path')->nullable();             // card background image
+            $table->text('icon_svg_path');                        // SVG <path d="..."> value
+            $table->string('icon_bg_class');                     // e.g. "bg-yellow-400"
+            $table->string('icon_text_class');                   // e.g. "text-white"
+            $table->string('category_label')->nullable();         // e.g. "Youth", "Kids"
+            $table->string('category_color')->nullable();         // e.g. "bg-red-500"
+            $table->string('meeting_schedule')->nullable();       // e.g. "Fridays · 7:00 PM"
+            $table->string('leader_name')->nullable();            // e.g. "Ps. Daniel Wright"
+            $table->string('button_gradient')->nullable();        // e.g. "from-red-500 to-orange-400"
             $table->string('link_url')->nullable();
             $table->unsignedSmallInteger('sort_order')->default(0);
             $table->boolean('is_active')->default(true);

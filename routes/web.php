@@ -12,10 +12,12 @@ use App\Http\Controllers\BibleSchoolController;
 use App\Http\Controllers\BibleSchoolResourceController;
 use App\Http\Controllers\SessionAccessController;
 use App\Http\Controllers\LeadershipController;
+use App\Http\Controllers\MinistryController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about-citylife', [AboutController::class, 'index'])->name('about');
 Route::get('/leadership', [LeadershipController::class, 'index'])->name('leadership');
+Route::get('/our-ministries', [MinistryController::class, 'index'])->name('ministries');
 Route::get('/missions', [MissionsController::class, 'index'])->name('missions');
 Route::get('/events', [EventsController::class, 'index'])->name('events');
 Route::get('/events/{slug}', [EventsController::class, 'show'])->name('events.show');

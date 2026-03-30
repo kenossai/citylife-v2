@@ -29,7 +29,7 @@
                 <a href="{{ url('/') }}" class="{{ $desktopLinkClass(request()->routeIs('home')) }}">Home</a>
                 <a href="{{ url('/about-citylife') }}" class="{{ $desktopLinkClass(request()->routeIs('about')) }}">About Us</a>
                 <a href="{{ url('/missions') }}" class="{{ $desktopLinkClass(request()->routeIs('missions')) }}">Missions</a>
-                <a href="{{ url('/our-ministry') }}" class="text-gray-300 hover:text-white transition-colors">Ministries</a>
+                <a href="{{ url('/our-ministries') }}" class="{{ $desktopLinkClass(request()->routeIs('ministries')) }}">Ministries</a>
                 <a href="{{ route('media') }}" class="{{ $desktopLinkClass(request()->routeIs('media') || request()->routeIs('sermons')) }}">Media</a>
 
                 {{-- Resources Dropdown --}}
