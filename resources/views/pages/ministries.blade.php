@@ -3,73 +3,6 @@
 @section('title', 'Our Ministries — City Life International')
 @section('meta_description', 'Explore the ministries at City Life International Church. Find your place to belong and grow.')
 
-@php
-    $fallbackMinistries = collect([
-        (object) [
-            'name'             => 'Youth Ministry',
-            'subtitle'         => 'Ages 13 – 25',
-            'description'      => 'Youth Ministry at City Life is a dynamic, Spirit-filled community where young people aged 13–25 can encounter God, find genuine friendships, and grow in their faith through worship, the Word, and real-life mentoring.',
-            'image_path'       => 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&w=600&h=400&q=80',
-            'category_label'   => 'Youth',
-            'meeting_schedule' => 'Fridays · 7:00 PM',
-            'leader_name'      => 'Ps. Daniel Wright',
-            'slug'             => 'youth-ministry',
-        ],
-        (object) [
-            'name'             => 'Kids Church',
-            'subtitle'         => 'Ages 0 – 12',
-            'description'      => 'Kids Church is a fun, safe and faith-filled environment where children aged 0–12 encounter God\'s love every Sunday. Our fully trained team uses creative lessons, worship, games and crafts to teach biblical truths.',
-            'image_path'       => 'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=600&h=400&q=80',
-            'category_label'   => 'Kids',
-            'meeting_schedule' => 'Sundays · During Both Services',
-            'leader_name'      => 'Mrs. Grace Thompson',
-            'slug'             => 'kids-church',
-        ],
-        (object) [
-            'name'             => 'Women of Destiny',
-            'subtitle'         => "Women's Ministry",
-            'description'      => 'Women of Destiny is a vibrant community of women of all ages and backgrounds who gather monthly to pray, worship, hear the Word, and encourage one another to walk boldly in their God-given purpose.',
-            'image_path'       => 'https://images.unsplash.com/photo-1529070538774-1843cb3265df?auto=format&fit=crop&w=600&h=400&q=80',
-            'category_label'   => 'Women',
-            'meeting_schedule' => 'Saturdays · 10:00 AM (Monthly)',
-            'leader_name'      => 'Pastor Mrs. Okafor',
-            'slug'             => 'women-of-destiny',
-        ],
-        (object) [
-            'name'             => 'Men of Valour',
-            'subtitle'         => "Men's Ministry",
-            'description'      => "Men of Valour is a brotherhood built on the foundation of God's Word, genuine friendship and a commitment to becoming the men God has called us to be — in our homes, workplaces and communities.",
-            'image_path'       => 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=600&h=400&q=80',
-            'category_label'   => 'Men',
-            'meeting_schedule' => 'Saturdays · 8:00 AM (Monthly)',
-            'leader_name'      => 'Ps. Michael Adisa',
-            'slug'             => 'men-of-valour',
-        ],
-        (object) [
-            'name'             => 'Worship & Arts',
-            'subtitle'         => 'Creative Ministry',
-            'description'      => 'Worship & Arts is the creative heartbeat of City Life International Church. Our team of over 60 musicians, singers, dancers, graphic designers and creatives use their gifts to glorify God and enhance every service.',
-            'image_path'       => 'https://images.unsplash.com/photo-1507838153414-b4b713384a76?auto=format&fit=crop&w=600&h=400&q=80',
-            'category_label'   => 'Arts',
-            'meeting_schedule' => 'Thursdays · 7:00 PM (Rehearsals)',
-            'leader_name'      => 'Samuel Akin',
-            'slug'             => 'worship-and-arts',
-        ],
-        (object) [
-            'name'             => 'Community Outreach',
-            'subtitle'         => 'Serve the City',
-            'description'      => "Community Outreach is how City Life demonstrates the love of Christ in tangible ways across Sheffield. Our programmes include food drives, clothing donations, hospital visits, prison ministry and more.",
-            'image_path'       => 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?auto=format&fit=crop&w=600&h=400&q=80',
-            'category_label'   => 'Outreach',
-            'meeting_schedule' => 'Various Days — Sign Up to Serve',
-            'leader_name'      => 'Ps. James Okafor',
-            'slug'             => 'community-outreach',
-        ],
-    ]);
-
-    $items = $ministries->isEmpty() ? $fallbackMinistries : $ministries;
-@endphp
-
 @section('content')
 <div class="bg-white text-[#101828]">
 
@@ -137,7 +70,7 @@
         <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
             <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
 
-                @foreach ($items as $ministry)
+                @foreach ($ministries as $ministry)
                     <div class="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-md transition-shadow hover:shadow-lg">
 
                         {{-- Card Image --}}

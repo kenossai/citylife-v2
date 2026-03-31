@@ -164,11 +164,11 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($ministries as $ministry)
             <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group">
-                @if($ministry->image_path)
+                {{-- @if($ministry->image_path)
                 <div class="h-44 overflow-hidden">
                     <img src="{{ $ministry->image_path }}" alt="{{ $ministry->name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                 </div>
-                @endif
+                @endif --}}
                 <div class="p-6">
                     @if($ministry->category_label)
                     <span class="inline-block text-[#e85d26] text-xs font-bold uppercase tracking-wider mb-2">{{ $ministry->category_label }}</span>
