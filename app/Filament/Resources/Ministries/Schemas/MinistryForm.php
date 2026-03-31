@@ -30,6 +30,10 @@ class MinistryForm
                         TextInput::make('image_path')
                             ->label('Image Path / URL')
                             ->maxLength(300),
+                        TextInput::make('category_label')
+                            ->label('Category Tag')
+                            ->placeholder('Youth')
+                            ->maxLength(30),
                         Textarea::make('description')
                             ->required()
                             ->rows(3)
@@ -45,48 +49,11 @@ class MinistryForm
                             ->rows(2)
                             ->helperText('Highlighted quote block on the detail page.')
                             ->columnSpanFull(),
-                    ]),
-
-                Section::make('Tags & Gallery')
-                    ->columns(2)
-                    ->schema([
-                        TextInput::make('tags')
-                            ->label('Tags (comma-separated)')
-                            ->placeholder('Arts, Live Worship, Dance, Music')
-                            ->helperText('Shown as pills on the detail page hero.')
-                            ->columnSpanFull(),
                         Textarea::make('gallery_images')
                             ->label('Gallery Image URLs (one per line)')
                             ->rows(4)
                             ->helperText('Enter one image URL per line for the gallery section.')
                             ->columnSpanFull(),
-                    ]),
-
-                Section::make('Category & Icon')
-                    ->columns(2)
-                    ->schema([
-                        TextInput::make('category_label')
-                            ->label('Category Tag')
-                            ->placeholder('Youth')
-                            ->maxLength(30),
-                        TextInput::make('category_color')
-                            ->label('Category Tag Color')
-                            ->placeholder('bg-red-500')
-                            ->maxLength(60),
-                        Textarea::make('icon_svg_path')
-                            ->label('SVG Path Data')
-                            ->required()
-                            ->rows(3)
-                            ->helperText('The d="..." attribute value of the SVG <path> element.')
-                            ->columnSpanFull(),
-                        TextInput::make('icon_bg_class')
-                            ->label('Icon Background Class')
-                            ->placeholder('bg-yellow-400')
-                            ->required(),
-                        TextInput::make('icon_text_class')
-                            ->label('Icon Text / Color Class')
-                            ->placeholder('text-white')
-                            ->required(),
                     ]),
 
                 Section::make('Schedule & Leader')
@@ -114,17 +81,9 @@ class MinistryForm
                             ->columnSpanFull(),
                     ]),
 
-                Section::make('Appearance & Settings')
+                Section::make('Settings')
                     ->columns(2)
                     ->schema([
-                        TextInput::make('button_gradient')
-                            ->label('Button Gradient Classes')
-                            ->placeholder('from-red-500 to-orange-400')
-                            ->maxLength(100),
-                        TextInput::make('link_url')
-                            ->label('Link URL')
-                            ->placeholder('/ministries/youth')
-                            ->maxLength(200),
                         TextInput::make('sort_order')
                             ->label('Sort Order')
                             ->numeric()

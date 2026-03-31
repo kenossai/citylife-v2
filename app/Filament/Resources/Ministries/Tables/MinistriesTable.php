@@ -17,8 +17,8 @@ class MinistriesTable
             ->columns([
                 TextColumn::make('sort_order')->label('#')->sortable()->width('60px'),
                 TextColumn::make('name')->searchable()->sortable(),
-                TextColumn::make('description')->limit(60),
-                TextColumn::make('link_url')->label('URL')->limit(40),
+                TextColumn::make('category_label')->label('Category'),
+                TextColumn::make('leader_name')->label('Leader'),
                 IconColumn::make('is_active')->label('Active')->boolean(),
             ])
             ->filters([])
