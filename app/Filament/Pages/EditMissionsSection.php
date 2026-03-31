@@ -4,12 +4,13 @@ namespace App\Filament\Pages;
 
 use App\Models\MissionsSection;
 use Filament\Actions\Action;
-use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Schemas\Components\EmbeddedSchema;
+use Filament\Schemas\Components\Form;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -61,25 +62,6 @@ class EditMissionsSection extends Page
                             ->maxLength(200),
                     ]),
 
-                Section::make('Stats')
-                    ->schema([
-                        Repeater::make('stats')
-                            ->label('Mission Stats')
-                            ->schema([
-                                TextInput::make('value')
-                                    ->required()
-                                    ->placeholder('15+')
-                                    ->maxLength(20),
-                                TextInput::make('label')
-                                    ->required()
-                                    ->placeholder('Mission Partners')
-                                    ->maxLength(60),
-                            ])
-                            ->columns(2)
-                            ->defaultItems(3)
-                            ->maxItems(6),
-                    ]),
-
                 Section::make('Images')
                     ->schema([
                         Repeater::make('images')
@@ -93,6 +75,15 @@ class EditMissionsSection extends Page
                             ->defaultItems(3)
                             ->maxItems(4),
                     ]),
+            ]);
+    }
+
+    public function content(Schema $schema): Schema
+    {
+        return $schema
+            ->components([
+                Form::make([EmbeddedSchema::make('form')])
+                    ->livewireSubmitHandler('save'),
             ]);
     }
 
