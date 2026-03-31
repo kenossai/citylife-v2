@@ -10,45 +10,6 @@
 
     $heroImage = 'https://images.unsplash.com/photo-1507692049790-de58290a4334?auto=format&fit=crop&w=1800&q=80';
 
-    $values = [
-        [
-            'tag' => 'Prayer',
-            'image' => 'https://images.unsplash.com/photo-1504052434569-70ad5836ab65?auto=format&fit=crop&w=900&q=80',
-            'heading' => "We Don't Just Believe In Prayer. We Believe In Answered Prayer.",
-            'body_1' => "Prayer is the foundation of everything we do at City Life International Church. We believe prayer connects us to God's heart, aligns us with His will, and releases His power in every season.",
-            'body_2' => "Through personal prayer, corporate gatherings, and intercession, we seek God's direction, strength, and guidance for our church, our city, and the nations.",
-            'quote' => 'Devote yourselves to prayer, being watchful and thankful.',
-            'scripture' => 'Colossians 4:2',
-        ],
-        [
-            'tag' => 'The Word',
-            'image' => 'https://images.unsplash.com/photo-1461378810796-1bd3f1ce3c73?auto=format&fit=crop&w=900&q=80',
-            'heading' => "We Build Our Lives On The Foundation Of God's Word.",
-            'body_1' => 'The Bible is our authority, our comfort, and our guide. We are committed to teaching Scripture clearly so people can know Jesus deeply and live out their faith with confidence.',
-            'body_2' => 'From Sunday preaching to discipleship spaces, we want every generation to be rooted in truth and equipped to walk faithfully in everyday life.',
-            'quote' => 'Your word is a lamp to my feet and a light to my path.',
-            'scripture' => 'Psalm 119:105',
-        ],
-        [
-            'tag' => 'Community',
-            'image' => 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=900&q=80',
-            'heading' => 'We Are Better Together. Family Is At The Heart Of Who We Are.',
-            'body_1' => 'God designed us to follow Jesus in community, not in isolation. At City Life, we value authentic relationships marked by love, encouragement, accountability, and belonging.',
-            'body_2' => 'Through small groups, shared meals, serving teams, and intentional care, we create a church family where people are known and supported.',
-            'quote' => 'Let us consider how we may spur one another on toward love and good deeds.',
-            'scripture' => 'Hebrews 10:24',
-        ],
-        [
-            'tag' => 'Outreach',
-            'image' => 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=900&q=80',
-            'heading' => 'We Are Called To Go Beyond Our Walls And Serve Our City.',
-            'body_1' => 'We believe the Church exists not only for itself, but for the world around it. Outreach is part of our DNA, from local care projects to partnerships that extend far beyond Sheffield.',
-            'body_2' => 'We want to be a people who carry the compassion, hope, and truth of Jesus into every street, every neighbourhood, and every nation we can reach.',
-            'quote' => 'Go and make disciples of all nations.',
-            'scripture' => 'Matthew 28:19',
-        ],
-    ];
-
     $featureCards = [
         [
             'eyebrow' => 'Our Leadership',
@@ -67,25 +28,6 @@
             'title' => 'Discover how we serve our city and extend the love of Christ beyond Sunday.',
             'image' => 'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?auto=format&fit=crop&w=900&q=80',
             'href' => url('/about-citylife') . '#worship-centres',
-        ],
-    ];
-
-    $worshipCentres = [
-        [
-            'label' => 'City Centre',
-            'name' => 'Sheffield City Centre',
-            'address' => '1 South Parade, Sheffield S1 2BJ',
-            'landmark' => 'Behind Sheffield City Hall',
-            'times' => 'Sunday 9:00 AM and 11:00 AM',
-            'phone' => '+44 114 134 8912',
-        ],
-        [
-            'label' => 'North',
-            'name' => 'Sheffield North',
-            'address' => '45 Burngreave Road, Sheffield S3 9DQ',
-            'landmark' => 'Burngreave Community Centre',
-            'times' => 'Sunday 10:30 AM and Friday 6:30 PM',
-            'phone' => '+44 114 134 8913',
         ],
     ];
 @endphp
@@ -184,8 +126,9 @@
                 <h2 class="mt-3 text-3xl font-extrabold tracking-tight text-[#27242a] sm:text-4xl">Core Values That Guide Us</h2>
             </div>
 
+            @if($coreValues->count())
             <div
-                x-data="coreValuesCarousel({{ count($values) }})"
+                x-data="coreValuesCarousel({{ $coreValues->count() }})"
                 class="relative"
                 @mouseenter="stop()"
                 @mouseleave="start()"
@@ -196,7 +139,7 @@
                         class="relative min-h-[760px] overflow-hidden transition-[height] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] sm:min-h-[700px] lg:min-h-[430px]"
                         :style="activeHeight ? { height: activeHeight } : {}"
                     >
-                        @foreach ($values as $index => $value)
+                        @foreach ($coreValues as $index => $value)
                             <article
                                 data-slide="{{ $index }}"
                                 x-show="current === {{ $index }}"
@@ -210,31 +153,37 @@
                                 class="absolute inset-x-0 top-0 grid w-full gap-6 lg:grid-cols-[0.92fr_1.08fr] lg:items-center"
                             >
                                 <div class="relative min-h-[270px] overflow-hidden rounded-[24px] bg-[#19161b] sm:min-h-[340px] lg:min-h-[390px]">
+                                    @if($value->image_path)
                                     <img
-                                        src="{{ $value['image'] }}"
-                                        alt="{{ $value['tag'] }}"
+                                        src="{{ $value->image_path }}"
+                                        alt="{{ $value->tag }}"
                                         class="absolute inset-0 h-full w-full object-cover"
                                     >
+                                    @endif
                                     <div class="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent"></div>
                                     <span class="absolute left-4 top-4 rounded-full bg-white px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.26em] text-[#1b1820] shadow-sm">
-                                        {{ $value['tag'] }}
+                                        {{ $value->tag }}
                                     </span>
                                 </div>
 
                                 <div class="px-1 py-2 sm:px-2 lg:px-4">
                                     <h3 class="max-w-xl text-2xl font-extrabold leading-tight text-[#201d24] sm:text-[32px]">
-                                        {{ $value['heading'] }}
+                                        {{ $value->heading }}
                                     </h3>
 
                                     <div class="mt-5 space-y-4 text-sm leading-7 text-[#66615b] sm:text-[15px]">
-                                        <p>{{ $value['body_1'] }}</p>
-                                        <p>{{ $value['body_2'] }}</p>
+                                        @if($value->body_1)<p>{{ $value->body_1 }}</p>@endif
+                                        @if($value->body_2)<p>{{ $value->body_2 }}</p>@endif
                                     </div>
 
+                                    @if($value->quote)
                                     <div class="mt-6 border-l-2 border-[#e85d26] pl-4">
-                                        <p class="text-sm italic leading-7 text-[#4d4742]">{{ $value['quote'] }}</p>
-                                        <p class="mt-2 text-[11px] font-bold uppercase tracking-[0.3em] text-[#e85d26]">{{ $value['scripture'] }}</p>
+                                        <p class="text-sm italic leading-7 text-[#4d4742]">{{ $value->quote }}</p>
+                                        @if($value->scripture)
+                                        <p class="mt-2 text-[11px] font-bold uppercase tracking-[0.3em] text-[#e85d26]">{{ $value->scripture }}</p>
+                                        @endif
                                     </div>
+                                    @endif
                                 </div>
                             </article>
                         @endforeach
@@ -253,12 +202,12 @@
                     </button>
 
                     <div class="flex items-center gap-2">
-                        @foreach ($values as $index => $value)
+                        @foreach ($coreValues as $index => $value)
                             <button
                                 @click="goTo({{ $index }})"
                                 :class="current === {{ $index }} ? 'w-7 bg-[#e85d26]' : 'w-2.5 bg-[#d9d0c5]'"
                                 class="h-2.5 rounded-full transition-all duration-300"
-                                aria-label="Show {{ $value['tag'] }} value"
+                                aria-label="Show {{ $value->tag }} value"
                             ></button>
                         @endforeach
                     </div>
@@ -274,6 +223,7 @@
                     </button>
                 </div>
             </div>
+            @endif
         </div>
     </section>
 
@@ -343,16 +293,16 @@
                         @foreach ($worshipCentres as $centre)
                             <article class="rounded-[24px] bg-white/95 p-5 shadow-[0_18px_40px_rgba(0,0,0,0.18)] backdrop-blur">
                                 <span class="inline-flex rounded-full bg-[#efe8e0] px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.28em] text-[#6b6259]">
-                                    {{ $centre['label'] }}
+                                    {{ $centre->label }}
                                 </span>
 
-                                <h3 class="mt-4 text-lg font-extrabold text-[#1f1b22]">{{ $centre['name'] }}</h3>
+                                <h3 class="mt-4 text-lg font-extrabold text-[#1f1b22]">{{ $centre->name }}</h3>
 
                                 <div class="mt-3 space-y-2 text-sm leading-6 text-[#645f59]">
-                                    <p>{{ $centre['address'] }}</p>
-                                    <p>{{ $centre['landmark'] }}</p>
-                                    <p class="font-semibold text-[#302b33]">{{ $centre['times'] }}</p>
-                                    <p class="text-[#8b847b]">{{ $centre['phone'] }}</p>
+                                    <p>{{ $centre->address }}</p>
+                                    @if($centre->landmark)<p>{{ $centre->landmark }}</p>@endif
+                                    <p class="font-semibold text-[#302b33]">{{ $centre->times }}</p>
+                                    @if($centre->phone)<p class="text-[#8b847b]">{{ $centre->phone }}</p>@endif
                                 </div>
                             </article>
                         @endforeach
