@@ -28,6 +28,7 @@ Route::get('/sermons', [MediaController::class, 'index'])->name('sermons');
 Route::get('/resources', [ResourcesController::class, 'index'])->name('resources');
 Route::get('/courses', [CoursesController::class, 'index'])->name('courses');
 Route::get('/courses/{slug}', [CoursesController::class, 'show'])->name('courses.show');
+Route::post('/courses/{slug}/enrol', [CoursesController::class, 'enrol'])->name('courses.enrol');
 Route::get('/bible-school', [BibleSchoolController::class, 'index'])->name('bible-school');
 Route::get('/bible-school/resources', [BibleSchoolResourceController::class, 'index'])->name('bible-school.resources');
 Route::get('/bible-school/resources/{slug}', [BibleSchoolResourceController::class, 'show'])->name('bible-school.resources.show');

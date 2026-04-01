@@ -222,22 +222,52 @@
                         </div>
 
                         <div class="space-y-3 px-6 py-5">
-                            <input
-                                type="text"
-                                placeholder="Full Name *"
-                                class="h-[42px] w-full rounded-lg border border-[#e5e7eb] px-4 text-[13px] text-[#101828] outline-none placeholder:text-[#98a2b3] focus:border-[#d0d5dd] focus:ring-1 focus:ring-[#d0d5dd]"
-                            >
-                            <input
-                                type="email"
-                                placeholder="Email Address *"
-                                class="h-[42px] w-full rounded-lg border border-[#e5e7eb] px-4 text-[13px] text-[#101828] outline-none placeholder:text-[#98a2b3] focus:border-[#d0d5dd] focus:ring-1 focus:ring-[#d0d5dd]"
-                            >
-                            <button
-                                type="button"
-                                class="h-[44px] w-full rounded-lg bg-[#e85d26] text-[14px] font-semibold text-white transition-colors hover:bg-[#d14f1e]"
-                            >
-                                {{ $course->is_registration_open ? 'Register Now' : 'Coming Soon' }}
-                            </button>
+                            @if (session('enrol_success'))
+                                <div class="rounded-lg bg-green-50 px-4 py-3 text-[13px] text-green-700">
+                                    {{ session('enrol_success') }}
+                                </div>
+                            @elseif (session('enrol_error'))
+                                <div class="rounded-lg bg-red-50 px-4 py-3 text-[13px] text-red-700">
+                                    {{ session('enrol_error') }}
+                                </div>
+                            @endif
+
+                            @if ($errors->has('name') || $errors->has('email'))
+                                <div class="rounded-lg bg-red-50 px-4 py-3 text-[13px] text-red-700">
+                                    @foreach ($errors->all() as $error) <p>{{ $error }}</p> @endforeach
+                                </div>
+                            @endif
+
+                            <form method="POST" action="{{ route('courses.enrol', $course->slug) }}">
+                                @csrf
+                                <div class="space-y-3">
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        value="{{ old('name') }}"
+                                        placeholder="Full Name *"
+                                        class="h-[42px] w-full rounded-lg border border-[#e5e7eb] px-4 text-[13px] text-[#101828] outline-none placeholder:text-[#98a2b3] focus:border-[#d0d5dd] focus:ring-1 focus:ring-[#d0d5dd]"
+                                    >
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        value="{{ old('email') }}"
+                                        placeholder="Email Address *"
+                                        class="h-[42px] w-full rounded-lg border border-[#e5e7eb] px-4 text-[13px] text-[#101828] outline-none placeholder:text-[#98a2b3] focus:border-[#d0d5dd] focus:ring-1 focus:ring-[#d0d5dd]"
+                                    >
+                                    <button
+                                        type="submit"
+                                        @class([
+                                            'h-[44px] w-full rounded-lg text-[14px] font-semibold text-white transition-colors',
+                                            'bg-[#e85d26] hover:bg-[#d14f1e]' => $course->is_registration_open,
+                                            'cursor-not-allowed bg-[#d0d5dd]'  => ! $course->is_registration_open,
+                                        ])
+                                        @if (! $course->is_registration_open) disabled @endif
+                                    >
+                                        {{ $course->is_registration_open ? 'Register Now' : 'Coming Soon' }}
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
 

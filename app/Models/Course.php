@@ -19,16 +19,18 @@ class Course extends Model
         'start_date',
         'end_date',
         'has_certificate',
+        'min_attendance_for_certificate',
         'is_registration_open',
         'is_active',
     ];
 
     protected $casts = [
-        'start_date'           => 'date',
-        'end_date'             => 'date',
-        'has_certificate'      => 'boolean',
-        'is_registration_open' => 'boolean',
-        'is_active'            => 'boolean',
+        'start_date'                     => 'date',
+        'end_date'                       => 'date',
+        'has_certificate'                => 'boolean',
+        'min_attendance_for_certificate' => 'integer',
+        'is_registration_open'           => 'boolean',
+        'is_active'                      => 'boolean',
     ];
 
     public function leader(): BelongsTo
@@ -39,6 +41,11 @@ class Course extends Model
     public function lessons(): HasMany
     {
         return $this->hasMany(CourseLesson::class);
+    }
+
+    public function enrollments(): HasMany
+    {
+        return $this->hasMany(CourseEnrollment::class);
     }
 
     public function getInstructorNameAttribute(): string
