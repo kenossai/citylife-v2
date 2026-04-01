@@ -4,114 +4,18 @@
 @section('meta_description', 'Explore Bible School courses and training programmes at City Life International. Theology, leadership, prayer, evangelism and more.')
 
 @php
-    $courses = [
-        [
-            'category'    => 'Theology',
-            'catColor'    => 'bg-[#7c3aed]',
-            'level'       => 'Beginner',
-            'levelColor'  => 'border-[#2563eb] text-[#2563eb]',
-            'certificate' => true,
-            'title'       => 'Foundations of Faith',
-            'description' => 'Build an unshakeable foundation in your Christian faith with this comprehensive 8-week introduction to biblical theology.',
-            'instructor'  => 'Bishop Robert Clarke',
-            'stars'       => 5.0,
-            'weeks'       => 8,
-            'lessons'     => 32,
-            'students'    => 248,
-            'price'       => 'Free',
-            'image'       => 'https://images.unsplash.com/photo-1504052434569-70ad5836ab65?auto=format&fit=crop&w=600&q=80',
-            'slug'        => 'foundations-of-faith',
-        ],
-        [
-            'category'    => 'Leadership',
-            'catColor'    => 'bg-[#16a34a]',
-            'level'       => 'Intermediate',
-            'levelColor'  => 'border-[#f97316] text-[#f97316]',
-            'certificate' => true,
-            'title'       => 'Leadership School',
-            'description' => 'Equip yourself to lead with character, courage and clarity. A comprehensive 12-week leadership development programme rooted in biblical principles.',
-            'instructor'  => 'Pastor James Okafor',
-            'stars'       => 5.0,
-            'weeks'       => 12,
-            'lessons'     => 48,
-            'students'    => 124,
-            'price'       => '£60',
-            'image'       => 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=600&q=80',
-            'slug'        => 'leadership-school',
-        ],
-        [
-            'category'    => 'Prayer',
-            'catColor'    => 'bg-[#dc2626]',
-            'level'       => 'All Levels',
-            'levelColor'  => 'border-[#7c3aed] text-[#7c3aed]',
-            'certificate' => false,
-            'title'       => 'School of Prayer',
-            'description' => 'Discover the transformative power of prayer and build a consistent, powerful prayer life through this 6-week school.',
-            'instructor'  => 'Bishop Robert Clarke',
-            'stars'       => 5.0,
-            'weeks'       => 6,
-            'lessons'     => 24,
-            'students'    => 312,
-            'price'       => 'Free',
-            'image'       => 'https://images.unsplash.com/photo-1461378810796-1bd3f1ce3c73?auto=format&fit=crop&w=600&q=80',
-            'slug'        => 'school-of-prayer',
-        ],
-        [
-            'category'    => 'Evangelism',
-            'catColor'    => 'bg-[#f97316]',
-            'level'       => 'All Levels',
-            'levelColor'  => 'border-[#7c3aed] text-[#7c3aed]',
-            'certificate' => false,
-            'title'       => 'Evangelism Training',
-            'description' => 'Get equipped to share your faith naturally and boldly. This 4-week course will give you the tools, confidence and strategy you need.',
-            'instructor'  => 'Pastor Michael Adisa',
-            'stars'       => 4.0,
-            'weeks'       => 4,
-            'lessons'     => 16,
-            'students'    => 189,
-            'price'       => 'Free',
-            'image'       => 'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?auto=format&fit=crop&w=600&q=80',
-            'slug'        => 'evangelism-training',
-        ],
-        [
-            'category'    => 'Family Life',
-            'catColor'    => 'bg-[#ec4899]',
-            'level'       => 'Couples',
-            'levelColor'  => 'border-[#ec4899] text-[#ec4899]',
-            'certificate' => false,
-            'title'       => 'Marriage & Family',
-            'description' => 'A transformative 6-week course for married couples and those preparing for marriage, built on God\'s design for the family.',
-            'instructor'  => 'Pastor James & Mrs. Okafor',
-            'stars'       => 5.0,
-            'weeks'       => 6,
-            'lessons'     => 24,
-            'students'    => 97,
-            'price'       => '£30 per couple',
-            'image'       => 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=600&q=80',
-            'slug'        => 'marriage-and-family',
-        ],
-        [
-            'category'    => 'Worship',
-            'catColor'    => 'bg-[#a855f7]',
-            'level'       => 'All Levels',
-            'levelColor'  => 'border-[#7c3aed] text-[#7c3aed]',
-            'certificate' => true,
-            'title'       => 'Worship & Arts School',
-            'description' => 'Develop your gifts as a musician, singer, dancer, or creative and discover how to lead others into God\'s presence.',
-            'instructor'  => 'Samuel Akin',
-            'stars'       => 4.0,
-            'weeks'       => 8,
-            'lessons'     => 32,
-            'students'    => 76,
-            'price'       => '£40',
-            'image'       => 'https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?auto=format&fit=crop&w=600&q=80',
-            'slug'        => 'worship-and-arts-school',
-        ],
+    $catColors = [
+        'Theology'   => 'bg-[#7c3aed]',
+        'Leadership' => 'bg-[#16a34a]',
+        'Prayer'     => 'bg-[#dc2626]',
+        'Evangelism' => 'bg-[#f97316]',
+        'Family Life'=> 'bg-[#ec4899]',
+        'Worship'    => 'bg-[#a855f7]',
+        'Bible Study'=> 'bg-[#2563eb]',
     ];
-
-    $categories = ['All', 'Theology', 'Leadership', 'Prayer', 'Evangelism', 'Family Life', 'Worship'];
-
-    $featured = array_slice($courses, 0, 2);
+    $getCatColor = fn ($cat) => $catColors[$cat] ?? 'bg-[#6b7280]';
+    $getWeeks    = fn ($s, $e) => ($s && $e) ? (int) ceil($s->diffInDays($e) / 7) : null;
+    $featured = $courses->take(2);
 @endphp
 
 @push('head')
@@ -175,11 +79,15 @@
                 <div class="flex overflow-hidden rounded-2xl border border-[#f3f4f6] bg-white shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition-shadow hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)]">
                     {{-- Image side --}}
                     <div class="relative hidden w-[200px] shrink-0 sm:block">
-                        <img
-                            src="{{ $course['image'] }}"
-                            alt="{{ $course['title'] }}"
-                            class="h-full w-full object-cover"
-                        >
+                        @if ($course->image_path)
+                            <img
+                                src="{{ $course->image_path }}"
+                                alt="{{ $course->title }}"
+                                class="h-full w-full object-cover"
+                            >
+                        @else
+                            <div class="h-full w-full {{ $getCatColor($course->category) }}"></div>
+                        @endif
                         <div class="absolute left-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-[#e85d26] text-white shadow-md">
                             <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M6.3 2.84A1.5 1.5 0 004 4.11v11.78a1.5 1.5 0 002.3 1.27l9.344-5.891a1.5 1.5 0 000-2.538L6.3 2.84z"/>
@@ -190,24 +98,36 @@
                     {{-- Content side --}}
                     <div class="flex flex-1 flex-col justify-center px-5 py-5 sm:px-6">
                         <div class="flex flex-wrap items-center gap-2">
-                            <span class="inline-flex h-[22px] items-center rounded-md px-2.5 text-[11px] font-bold text-white {{ $course['catColor'] }}">{{ $course['category'] }}</span>
-                            <span class="inline-flex h-[22px] items-center rounded-md border px-2.5 text-[11px] font-bold {{ $course['levelColor'] }}">{{ $course['level'] }}</span>
+                            <span class="inline-flex h-[22px] items-center rounded-md px-2.5 text-[11px] font-bold text-white {{ $getCatColor($course->category) }}">{{ $course->category }}</span>
+                            @if ($course->has_certificate)
+                                <span class="inline-flex h-[22px] items-center gap-1 rounded-md bg-[#16a34a] px-2 text-[11px] font-bold text-white">
+                                    <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+                                    Certificate
+                                </span>
+                            @endif
                         </div>
 
-                        <h3 class="mt-2.5 text-[18px] font-bold leading-snug text-[#101828]">{{ $course['title'] }}</h3>
-                        <p class="mt-1.5 text-[13px] leading-relaxed text-[#667085] line-clamp-2">{{ $course['description'] }}</p>
+                        <h3 class="mt-2.5 text-[18px] font-bold leading-snug text-[#101828]">{{ $course->title }}</h3>
+                        <p class="mt-1.5 text-[13px] leading-relaxed text-[#667085] line-clamp-2">{{ $course->description }}</p>
 
                         {{-- Meta row --}}
                         <div class="mt-3 flex items-center gap-4 text-[12px] text-[#98a2b3]">
-                            <span class="flex items-center gap-1">
-                                <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="M12 6v6l4 2"/></svg>
-                                {{ $course['weeks'] }} weeks
-                            </span>
-                            <span class="flex items-center gap-1">
-                                <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-                                {{ $course['lessons'] }} lessons
-                            </span>
-                            <span class="ml-auto text-[15px] font-bold {{ $course['price'] === 'Free' ? 'text-[#16a34a]' : 'text-[#101828]' }}">{{ $course['price'] }}</span>
+                            @php $weeks = $getWeeks($course->start_date, $course->end_date); @endphp
+                            @if ($weeks)
+                                <span class="flex items-center gap-1">
+                                    <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="M12 6v6l4 2"/></svg>
+                                    {{ $weeks }} weeks
+                                </span>
+                            @endif
+                            @if ($course->lessons_count)
+                                <span class="flex items-center gap-1">
+                                    <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                                    {{ $course->lessons_count }} lessons
+                                </span>
+                            @endif
+                            @if ($course->is_registration_open)
+                                <span class="ml-auto inline-flex h-[20px] items-center rounded-md bg-[#f0fdf4] px-2 text-[11px] font-bold text-[#16a34a]">Open</span>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -265,7 +185,7 @@
             <div class="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
                 @foreach ($courses as $i => $course)
                     <div
-                        x-show="(activeFilter === 'All' || activeFilter === '{{ $course['category'] }}') && (!search || '{{ strtolower($course['title'] . ' ' . $course['instructor'] . ' ' . $course['category']) }}'.includes(search.toLowerCase()))"
+                        x-show="(activeFilter === 'All' || activeFilter === '{{ $course->category }}') && (!search || '{{ strtolower($course->title . ' ' . ($course->instructor_name ?? '') . ' ' . $course->category) }}'.includes(search.toLowerCase()))"
                         x-transition:enter="transition ease-out duration-200"
                         x-transition:enter-start="opacity-0 translate-y-2"
                         x-transition:enter-end="opacity-100 translate-y-0"
@@ -273,62 +193,69 @@
                     >
                         {{-- Image --}}
                         <div class="relative aspect-[16/10] overflow-hidden">
-                            <img
-                                src="{{ $course['image'] }}"
-                                alt="{{ $course['title'] }}"
-                                class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                            >
+                            @if ($course->image_path)
+                                <img
+                                    src="{{ $course->image_path }}"
+                                    alt="{{ $course->title }}"
+                                    class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                >
+                            @else
+                                <div class="h-full w-full {{ $getCatColor($course->category) }}"></div>
+                            @endif
                             {{-- Category badge --}}
-                            <span class="absolute left-3 top-3 inline-flex h-[24px] items-center rounded-md px-2.5 text-[11px] font-bold text-white {{ $course['catColor'] }}">
-                                {{ $course['category'] }}
+                            <span class="absolute left-3 top-3 inline-flex h-[24px] items-center rounded-md px-2.5 text-[11px] font-bold text-white {{ $getCatColor($course->category) }}">
+                                {{ $course->category }}
                             </span>
-                            {{-- Free badge --}}
-                            @if ($course['price'] === 'Free')
+                            {{-- Registration open badge --}}
+                            @if ($course->is_registration_open)
                                 <span class="absolute right-3 top-3 inline-flex h-[24px] items-center rounded-md bg-[#16a34a] px-2.5 text-[11px] font-bold text-white">
-                                    Free
+                                    Open
                                 </span>
                             @endif
                             {{-- Instructor overlay --}}
-                            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-4 pb-3 pt-8">
-                                <p class="text-[12px] font-medium text-white/90">{{ $course['instructor'] }}</p>
-                            </div>
+                            @if ($course->instructor_name)
+                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-4 pb-3 pt-8">
+                                    <p class="text-[12px] font-medium text-white/90">{{ $course->instructor_name }}</p>
+                                </div>
+                            @endif
                         </div>
 
                         {{-- Content --}}
                         <div class="flex flex-1 flex-col px-4 pb-5 pt-3.5">
-                            {{-- Level + Certificate badges --}}
-                            <div class="flex flex-wrap items-center gap-2">
-                                <span class="inline-flex h-[22px] items-center rounded-md border px-2 text-[11px] font-bold {{ $course['levelColor'] }}">
-                                    {{ $course['level'] }}
-                                </span>
-                                @if ($course['certificate'])
+                            {{-- Certificate badge --}}
+                            @if ($course->has_certificate)
+                                <div class="flex flex-wrap items-center gap-2">
                                     <span class="inline-flex h-[22px] items-center gap-1 rounded-md bg-[#16a34a] px-2 text-[11px] font-bold text-white">
                                         <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
                                         Certificate
                                     </span>
-                                @endif
-                            </div>
+                                </div>
+                            @endif
 
-                            <h3 class="mt-2.5 text-[15px] font-bold leading-snug text-[#101828]">{{ $course['title'] }}</h3>
-                            <p class="mt-1 text-[12px] leading-relaxed text-[#667085] line-clamp-3">{{ $course['description'] }}</p>
+                            <h3 class="mt-2.5 text-[15px] font-bold leading-snug text-[#101828]">{{ $course->title }}</h3>
+                            <p class="mt-1 text-[12px] leading-relaxed text-[#667085] line-clamp-3">{{ $course->description }}</p>
 
                             {{-- Meta row --}}
                             <div class="mt-2.5 flex items-center gap-3 text-[12px] text-[#98a2b3]">
-                                <span class="flex items-center gap-1">
-                                    <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="M12 6v6l4 2"/></svg>
-                                    {{ $course['weeks'] }} weeks
-                                </span>
-                                <span class="flex items-center gap-1">
-                                    <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5V4H2v16h5"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14a3 3 0 100-6 3 3 0 000 6z"/></svg>
-                                    {{ $course['students'] }}
-                                </span>
-                                <span class="ml-auto text-[14px] font-bold {{ $course['price'] === 'Free' ? 'text-[#16a34a]' : 'text-[#101828]' }}">{{ $course['price'] }}</span>
+                                @php $weeks = $getWeeks($course->start_date, $course->end_date); @endphp
+                                @if ($weeks)
+                                    <span class="flex items-center gap-1">
+                                        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="M12 6v6l4 2"/></svg>
+                                        {{ $weeks }} weeks
+                                    </span>
+                                @endif
+                                @if ($course->lessons_count)
+                                    <span class="flex items-center gap-1">
+                                        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5V4H2v16h5"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14a3 3 0 100-6 3 3 0 000 6z"/></svg>
+                                        {{ $course->lessons_count }} lessons
+                                    </span>
+                                @endif
                             </div>
 
                             {{-- CTA button --}}
                             <div class="mt-auto pt-4">
                                 <a
-                                    href="{{ route('courses.show', $course['slug']) }}"
+                                    href="{{ route('courses.show', $course->slug) }}"
                                     class="flex w-full items-center justify-center gap-2 rounded-lg bg-[#e85d26] py-2.5 text-[13px] font-semibold text-white transition-colors hover:bg-[#d14f1e]"
                                 >
                                     View Course
@@ -362,7 +289,7 @@
             activeFilter: 'All',
             search: '',
             get emptyState() {
-                const courses = @json(array_map(fn($c) => ['cat' => $c['category'], 'text' => strtolower($c['title'].' '.$c['instructor'].' '.$c['category'])], $courses));
+                const courses = @json($courses->map(fn ($c) => ['cat' => $c->category, 'text' => strtolower($c->title.' '.($c->instructor_name ?? '').' '.$c->category)]));
                 return courses.every(c =>
                     (this.activeFilter !== 'All' && c.cat !== this.activeFilter) ||
                     (this.search && !c.text.includes(this.search.toLowerCase()))
