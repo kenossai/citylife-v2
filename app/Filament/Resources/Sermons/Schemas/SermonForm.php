@@ -2,7 +2,9 @@
 
 namespace App\Filament\Resources\Sermons\Schemas;
 
+use App\Models\Leader;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -22,9 +24,19 @@ class SermonForm
                             ->required()
                             ->maxLength(150)
                             ->columnSpanFull(),
-                        TextInput::make('speaker')
-                            ->required()
-                            ->maxLength(100),
+                        Select::make('leader_id')
+                            ->label('Pastor / Speaker')
+                            ->relationship('leader', 'name')
+                            ->searchable()
+                            ->preload()
+                            ->placeholder('Select a pastor…')
+                            ->helperText('Leave empty and use Guest Speaker below for external speakers.')
+                            ->nullable(),
+                        TextInput::make('guest_speaker_name')
+                            ->label('Guest Speaker')
+                            ->placeholder('Guest speaker name')
+                            ->maxLength(150)
+                            ->helperText('Only fill this if the speaker is not one of our pastors.'),
                         TextInput::make('scripture')
                             ->label('Scripture Reference')
                             ->placeholder('Galatians 5')

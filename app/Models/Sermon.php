@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Sermon extends Model
 {
     protected $fillable = [
         'title',
-        'speaker',
+        'leader_id',
+        'guest_speaker_name',
         'scripture',
         'description',
         'preached_at',
@@ -24,6 +26,16 @@ class Sermon extends Model
         'is_featured' => 'boolean',
         'is_active'   => 'boolean',
     ];
+
+    public function leader(): BelongsTo
+    {
+        return $this->belongsTo(Leader::class);
+    }
+
+    public function getSpeakerNameAttribute(): string
+    {
+        return $this->guest_speaker_name ?? $this->leader?->name ?? '';
+    }
 
     public function scopeActive($query)
     {
