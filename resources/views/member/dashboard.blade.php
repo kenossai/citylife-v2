@@ -14,7 +14,7 @@
 {{-- ── Page heading ───────────────────────────────────────────────────── --}}
 <div class="mb-8">
     <p class="text-[#e85d26] text-xs font-semibold uppercase tracking-widest mb-2">Bible School</p>
-    <h1 class="text-2xl font-extrabold text-white">
+    <h1 class="text-2xl font-extrabold text-gray-900">
         Welcome back, {{ $member->first_name }}!
     </h1>
     <p class="text-gray-500 text-sm mt-1">Here's an overview of your learning journey.</p>
@@ -24,7 +24,7 @@
 <div class="grid grid-cols-2 gap-4 lg:grid-cols-4 mb-10">
 
     {{-- Enrolled Courses --}}
-    <div class="rounded-2xl bg-white/5 border border-white/10 p-5">
+    <div class="rounded-2xl bg-white border border-gray-200 shadow-sm p-5">
         <div class="flex items-center justify-between mb-3">
             <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Enrolled</span>
             <div class="h-8 w-8 rounded-lg bg-[#e85d26]/15 flex items-center justify-center">
@@ -33,12 +33,12 @@
                 </svg>
             </div>
         </div>
-        <p class="text-3xl font-extrabold text-white">{{ $enrolledCount }}</p>
-        <p class="text-xs text-gray-600 mt-1">Active courses</p>
+        <p class="text-3xl font-extrabold text-gray-900">{{ $enrolledCount }}</p>
+        <p class="text-xs text-gray-500 mt-1">Active courses</p>
     </div>
 
     {{-- Lessons Read --}}
-    <div class="rounded-2xl bg-white/5 border border-white/10 p-5">
+    <div class="rounded-2xl bg-white border border-gray-200 shadow-sm p-5">
         <div class="flex items-center justify-between mb-3">
             <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Lessons</span>
             <div class="h-8 w-8 rounded-lg bg-[#e85d26]/15 flex items-center justify-center">
@@ -47,12 +47,12 @@
                 </svg>
             </div>
         </div>
-        <p class="text-3xl font-extrabold text-white">{{ $totalLessonsRead }}</p>
-        <p class="text-xs text-gray-600 mt-1">of {{ $totalLessons }} total</p>
+        <p class="text-3xl font-extrabold text-gray-900">{{ $totalLessonsRead }}</p>
+        <p class="text-xs text-gray-500 mt-1">of {{ $totalLessons }} total</p>
     </div>
 
     {{-- Avg Quiz Score --}}
-    <div class="rounded-2xl bg-white/5 border border-white/10 p-5">
+    <div class="rounded-2xl bg-white border border-gray-200 shadow-sm p-5">
         <div class="flex items-center justify-between mb-3">
             <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Quiz Score</span>
             <div class="h-8 w-8 rounded-lg bg-[#e85d26]/15 flex items-center justify-center">
@@ -61,14 +61,14 @@
                 </svg>
             </div>
         </div>
-        <p class="text-3xl font-extrabold text-white">
+        <p class="text-3xl font-extrabold text-gray-900">
             {{ $avgQuizScore !== null ? round($avgQuizScore) . '%' : '—' }}
         </p>
-        <p class="text-xs text-gray-600 mt-1">Average score</p>
+        <p class="text-xs text-gray-500 mt-1">Average score</p>
     </div>
 
     {{-- Certificates --}}
-    <div class="rounded-2xl bg-white/5 border border-white/10 p-5">
+    <div class="rounded-2xl bg-white border border-gray-200 shadow-sm p-5">
         <div class="flex items-center justify-between mb-3">
             <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Certificates</span>
             <div class="h-8 w-8 rounded-lg bg-[#e85d26]/15 flex items-center justify-center">
@@ -77,8 +77,8 @@
                 </svg>
             </div>
         </div>
-        <p class="text-3xl font-extrabold text-white">{{ $certificatesEarned }}</p>
-        <p class="text-xs text-gray-600 mt-1">Earned</p>
+        <p class="text-3xl font-extrabold text-gray-900">{{ $certificatesEarned }}</p>
+        <p class="text-xs text-gray-500 mt-1">Earned</p>
     </div>
 
 </div>
@@ -87,7 +87,7 @@
 @if($activeCourses->isNotEmpty())
 <section class="mb-10">
     <div class="flex items-center justify-between mb-4">
-        <h2 class="text-base font-bold text-white uppercase tracking-wide">Continue Learning</h2>
+        <h2 class="text-base font-bold text-gray-900 uppercase tracking-wide">Continue Learning</h2>
         <a href="{{ route('member.courses') }}" class="text-sm text-[#e85d26] hover:text-[#cf4f1e] transition-colors flex items-center gap-1">
             All Courses
             <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
@@ -100,7 +100,7 @@
             $course   = $enrollment->course;
             $progress = $enrollment->progress_percentage;
         @endphp
-        <div class="group rounded-2xl bg-white/5 border border-white/10 overflow-hidden hover:border-[#e85d26]/40 transition-colors">
+        <div class="group rounded-2xl bg-white border border-gray-200 shadow-sm overflow-hidden hover:border-[#e85d26]/40 transition-colors">
 
             {{-- Course image banner --}}
             <div class="relative h-36 bg-[#1a1a1a] overflow-hidden">
@@ -128,12 +128,12 @@
                             {{ $course->category }}
                         </span>
                     @endif
-                    <span class="inline-flex items-center rounded-full bg-white/5 border border-white/10 px-2.5 py-0.5 text-xs font-medium text-gray-400">
+                    <span class="inline-flex items-center rounded-full bg-gray-100 border border-gray-200 px-2.5 py-0.5 text-xs font-medium text-gray-600">
                         {{ $enrollment->quiz_completed }} quiz{{ $enrollment->quiz_completed !== 1 ? 'zes' : '' }} done
                     </span>
                 </div>
 
-                <h3 class="font-semibold text-white leading-snug line-clamp-2">
+                <h3 class="font-semibold text-gray-900 leading-snug line-clamp-2">
                     {{ $course->title }}
                 </h3>
 
@@ -142,24 +142,31 @@
                     <div class="flex items-center justify-between text-xs text-gray-500 mb-1.5">
                         <span>{{ $enrollment->lessons_done_count }} / {{ $enrollment->total_lessons }} lessons</span>
                     </div>
-                    <div class="h-1.5 w-full rounded-full bg-white/10">
+                    <div class="h-1.5 w-full rounded-full bg-gray-200">
                         <div class="h-1.5 rounded-full bg-[#e85d26] transition-all" style="width: {{ $progress }}%"></div>
                     </div>
                 </div>
 
                 {{-- Next lesson chip --}}
                 @if($enrollment->next_lesson)
-                    <div class="flex items-center gap-2 rounded-lg bg-white/5 border border-white/10 px-3 py-2">
+                    <div class="flex items-center gap-2 rounded-lg bg-gray-50 border border-gray-200 px-3 py-2">
                         <svg class="h-3.5 w-3.5 text-[#e85d26] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
                         </svg>
-                        <span class="text-xs text-gray-400 truncate">Next: {{ $enrollment->next_lesson->title }}</span>
+                        <span class="text-xs text-gray-600 truncate">Next: {{ $enrollment->next_lesson->title }}</span>
                     </div>
                 @endif
 
                 {{-- CTA --}}
+                @php
+                    if ($enrollment->next_lesson) {
+                        $ctaHref = route('member.lesson.show', ['courseSlug' => $course->slug, 'lessonSlug' => $enrollment->next_lesson->slug]);
+                    } else {
+                        $ctaHref = route('courses.show', $course->slug);
+                    }
+                @endphp
                 <a
-                    href="{{ route('courses.show', $course->slug) }}"
+                    href="{{ $ctaHref }}"
                     class="mt-1 flex items-center justify-center gap-2 rounded-full bg-[#e85d26] hover:bg-[#cf4f1e] px-4 py-2.5 text-sm font-semibold text-white transition-colors"
                 >
                     Continue Reading
@@ -178,7 +185,7 @@
 @if($exploreCourses->isNotEmpty())
 <section class="mb-10">
     <div class="flex items-center justify-between mb-4">
-        <h2 class="text-base font-bold text-white uppercase tracking-wide">Explore More Courses</h2>
+        <h2 class="text-base font-bold text-gray-900 uppercase tracking-wide">Explore More Courses</h2>
         <a href="{{ route('courses') }}" class="text-sm text-[#e85d26] hover:text-[#cf4f1e] transition-colors flex items-center gap-1">
             All Courses
             <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
@@ -189,7 +196,7 @@
         @foreach($exploreCourses as $course)
         <a
             href="{{ route('courses.show', $course->slug) }}"
-            class="snap-start shrink-0 w-52 rounded-2xl bg-white/5 border border-white/10 hover:border-[#e85d26]/40 overflow-hidden group transition-colors"
+            class="snap-start shrink-0 w-52 rounded-2xl bg-white border border-gray-200 shadow-sm hover:border-[#e85d26]/40 overflow-hidden group transition-colors"
         >
             <div class="h-28 bg-[#1a1a1a] overflow-hidden relative">
                 @if($course->image_path)
@@ -208,7 +215,7 @@
                         {{ $course->category }}
                     </span>
                 @endif
-                <p class="text-sm font-semibold text-white leading-snug line-clamp-2">
+                <p class="text-sm font-semibold text-gray-900 leading-snug line-clamp-2">
                     {{ $course->title }}
                 </p>
                 @if($course->leader)
@@ -224,51 +231,51 @@
 {{-- ── Quiz History ────────────────────────────────────────────────────── --}}
 <section class="mb-10">
     <div class="flex items-center justify-between mb-4">
-        <h2 class="text-base font-bold text-white uppercase tracking-wide">Quiz History</h2>
+        <h2 class="text-base font-bold text-gray-900 uppercase tracking-wide">Quiz History</h2>
     </div>
 
     @if($quizHistory->isNotEmpty())
-    <div class="rounded-2xl bg-white/5 border border-white/10 overflow-hidden">
-        <table class="min-w-full divide-y divide-white/10 text-sm">
+    <div class="rounded-2xl bg-white border border-gray-200 overflow-hidden">
+        <table class="min-w-full divide-y divide-gray-200 text-sm">
             <thead>
-                <tr class="bg-white/5">
+                <tr class="bg-gray-50">
                     <th class="py-3 pl-5 pr-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Course</th>
                     <th class="px-3 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Quiz (Lesson)</th>
                     <th class="px-3 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide w-40">Score</th>
                     <th class="px-3 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Result</th>
                 </tr>
             </thead>
-            <tbody class="divide-y divide-white/5">
+            <tbody class="divide-y divide-gray-100">
                 @foreach($quizHistory as $progress)
                 @php $score = $progress->quiz_score; $passed = $score >= 60; @endphp
-                <tr class="hover:bg-white/5 transition-colors">
-                    <td class="py-3 pl-5 pr-3 font-medium text-white max-w-xs">
+                <tr class="hover:bg-gray-50 transition-colors">
+                    <td class="py-3 pl-5 pr-3 font-medium text-gray-900 max-w-xs">
                         <span class="line-clamp-1">{{ $progress->enrollment->course->title ?? '—' }}</span>
                     </td>
-                    <td class="px-3 py-3 text-gray-400 max-w-xs">
+                    <td class="px-3 py-3 text-gray-600 max-w-xs">
                         <span class="line-clamp-1">{{ $progress->lesson->title ?? '—' }}</span>
                     </td>
                     <td class="px-3 py-3">
                         <div class="flex items-center gap-2">
-                            <div class="h-1.5 w-24 rounded-full bg-white/10 overflow-hidden">
+                            <div class="h-1.5 w-24 rounded-full bg-gray-200 overflow-hidden">
                                 <div
                                     class="h-1.5 rounded-full {{ $passed ? 'bg-emerald-500' : 'bg-red-500' }} transition-all"
                                     style="width: {{ $score }}%"
                                 ></div>
                             </div>
-                            <span class="text-xs font-semibold text-gray-300">{{ $score }}%</span>
+                            <span class="text-xs font-semibold text-gray-700">{{ $score }}%</span>
                         </div>
                     </td>
                     <td class="px-3 py-3">
                         @if($passed)
-                            <span class="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 text-xs font-semibold text-emerald-400">
+                            <span class="inline-flex items-center gap-1 rounded-full bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 text-xs font-semibold text-emerald-700">
                                 <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                                 </svg>
                                 Passed
                             </span>
                         @else
-                            <span class="inline-flex items-center gap-1 rounded-full bg-red-500/10 border border-red-500/20 px-2.5 py-0.5 text-xs font-semibold text-red-400">
+                            <span class="inline-flex items-center gap-1 rounded-full bg-red-50 border border-red-200 px-2.5 py-0.5 text-xs font-semibold text-red-600">
                                 <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
                                 </svg>
@@ -282,7 +289,7 @@
         </table>
     </div>
     @else
-    <div class="rounded-2xl bg-white/5 border border-white/10 px-6 py-10 text-center">
+    <div class="rounded-2xl bg-white border border-gray-200 px-6 py-10 text-center">
         <p class="text-sm text-gray-500">No quizzes completed yet. Finish a lesson with a quiz to see your results here.</p>
     </div>
     @endif
@@ -296,7 +303,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
         </svg>
     </div>
-    <h3 class="text-base font-bold text-white mb-1">No courses yet</h3>
+    <h3 class="text-base font-bold text-gray-900 mb-1">No courses yet</h3>
     <p class="text-sm text-gray-500 mb-6">Browse our available courses and start learning today.</p>
     <a href="{{ route('courses') }}" class="inline-flex items-center gap-2 rounded-full bg-[#e85d26] hover:bg-[#cf4f1e] px-6 py-2.5 text-sm font-semibold text-white transition-colors">
         Browse Courses

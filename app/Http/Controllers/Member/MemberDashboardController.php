@@ -17,7 +17,7 @@ class MemberDashboardController extends Controller
             ->with([
                 'course:id,title,slug,category,image_path,leader_id',
                 'course.leader:id,name',
-                'course.lessons:id,course_id,title,lesson_number,is_published',
+                'course.lessons:id,course_id,slug,title,lesson_number,is_published',
                 'progress:id,enrollment_id,lesson_id,completed_at,quiz_score',
             ])
             ->whereIn('status', ['active', 'completed'])
@@ -98,7 +98,7 @@ class MemberDashboardController extends Controller
             ->with([
                 'course:id,title,slug,category,image_path,leader_id',
                 'course.leader:id,name',
-                'course.lessons:id,course_id,is_published',
+                'course.lessons:id,course_id,slug,is_published,lesson_number',
                 'progress:id,enrollment_id,lesson_id,completed_at,quiz_score',
             ])
             ->orderByDesc('enrolled_at')

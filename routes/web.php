@@ -12,6 +12,7 @@ use App\Http\Controllers\BibleSchoolController;
 use App\Http\Controllers\BibleSchoolResourceController;
 use App\Http\Controllers\Member\MemberAuthController;
 use App\Http\Controllers\Member\MemberDashboardController;
+use App\Http\Controllers\Member\MemberLessonController;
 use App\Http\Controllers\SessionAccessController;
 use App\Http\Controllers\LeadershipController;
 use App\Http\Controllers\MinistryController;
@@ -51,5 +52,14 @@ Route::prefix('member')->name('member.')->group(function () {
     Route::middleware('member.auth')->group(function () {
         Route::get('/dashboard', [MemberDashboardController::class, 'index'])->name('dashboard');
         Route::get('/my-courses', [MemberDashboardController::class, 'courses'])->name('courses');
+
+        // Lesson viewer
+        Route::get('/courses/{courseSlug}/lessons/{lessonSlug}', [MemberLessonController::class, 'show'])->name('lesson.show');
+        Route::post('/courses/{courseSlug}/lessons/{lessonSlug}/mark-read', [MemberLessonController::class, 'markRead'])->name('lesson.mark-read');
+        Route::post('/courses/{courseSlug}/lessons/{lessonSlug}/notes', [MemberLessonController::class, 'saveNotes'])->name('lesson.notes');
+        Route::get('/courses/{courseSlug}/lessons/{lessonSlug}/notes', [MemberLessonController::class, 'notesPage'])->name('lesson.notes-page');
+        Route::post('/courses/{courseSlug}/lessons/{lessonSlug}/notes', [MemberLessonController::class, 'saveNotes'])->name('lesson.notes');
+        Route::get('/courses/{courseSlug}/lessons/{lessonSlug}/quiz', [MemberLessonController::class, 'quizPage'])->name('lesson.quiz-page');
+        Route::post('/courses/{courseSlug}/lessons/{lessonSlug}/quiz', [MemberLessonController::class, 'submitQuiz'])->name('lesson.quiz');
     });
 });

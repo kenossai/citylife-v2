@@ -13,6 +13,7 @@ class CourseLesson extends Model
         'title',
         'slug',
         'lesson_number',
+        'week_group',
         'description',
         'content',
         'quiz_questions',

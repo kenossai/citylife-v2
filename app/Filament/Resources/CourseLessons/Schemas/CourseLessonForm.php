@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\CourseLessons\Schemas;
 
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -41,20 +42,54 @@ class CourseLessonForm
                             ->numeric()
                             ->default(1)
                             ->required(),
+                        TextInput::make('week_group')
+                            ->label('Week / Module Group')
+                            ->placeholder('e.g. Week 1-2 — The Nature of Prayer')
+                            ->maxLength(100)
+                            ->columnSpanFull(),
                         Textarea::make('description')
                             ->rows(3)
                             ->columnSpanFull(),
                         RichEditor::make('content')
                             ->label('Lesson Content')
                             ->columnSpanFull(),
-                        Textarea::make('quiz_questions')
-                            ->label('Quiz Questions (JSON format)')
-                            ->rows(4)
-                            ->columnSpanFull(),
                         Toggle::make('is_published')
                             ->label('Published'),
                         DatePicker::make('available_date')
                             ->label('Available Date'),
+                    ]),
+
+                Section::make('Quiz Questions')
+                    ->description('Add multiple-choice questions for this lesson\'s quiz. Leave empty if no quiz is needed.')
+                    ->collapsible()
+                    ->schema([
+                        Repeater::make('quiz_questions')
+                            ->label('')
+                            ->schema([
+                                TextInput::make('question')
+                                    ->label('Question')
+                                    ->required()
+                                    ->columnSpanFull(),
+                                TextInput::make('options.0')->label('Option A')->required(),
+                                TextInput::make('options.1')->label('Option B')->required(),
+                                TextInput::make('options.2')->label('Option C')->nullable(),
+                                TextInput::make('options.3')->label('Option D')->nullable(),
+                                Select::make('answer')
+                                    ->label('Correct Answer')
+                                    ->options([
+                                        0 => 'Option A',
+                                        1 => 'Option B',
+                                        2 => 'Option C',
+                                        3 => 'Option D',
+                                    ])
+                                    ->required(),
+                            ])
+                            ->columns(2)
+                            ->addActionLabel('Add Question')
+                            ->defaultItems(0)
+                            ->reorderable()
+                            ->collapsible()
+                            ->itemLabel(fn (array $state): ?string => $state['question'] ?? null),
                     ]),
             ]);
     }

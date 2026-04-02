@@ -14,6 +14,7 @@ class LessonProgress extends Model
         'lesson_id',
         'completed_at',
         'quiz_score',
+        'notes',
     ];
 
     protected $casts = [
