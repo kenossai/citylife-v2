@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <title>{{ $lesson->title }} — {{ $course->title }}</title>
+    <title>Notes – {{ $lesson->title }} — {{ $course->title }}</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -225,14 +225,14 @@
         <div class="sticky top-12 z-20 border-b border-gray-200 bg-white px-6 lg:px-10">
             <div class="flex items-center gap-0">
                 <a href="{{ route('member.lesson.show', ['courseSlug' => $course->slug, 'lessonSlug' => $lesson->slug]) }}"
-                   class="flex items-center gap-2 border-b-2 border-[#e85d26] text-[#e85d26] px-4 py-3.5 text-sm font-semibold">
+                   class="flex items-center gap-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700 px-4 py-3.5 text-sm font-semibold transition-colors">
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
                     </svg>
                     Lesson
                 </a>
                 <a href="{{ route('member.lesson.notes-page', ['courseSlug' => $course->slug, 'lessonSlug' => $lesson->slug]) }}"
-                   class="flex items-center gap-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700 px-4 py-3.5 text-sm font-semibold transition-colors">
+                   class="flex items-center gap-2 border-b-2 border-[#e85d26] text-[#e85d26] px-4 py-3.5 text-sm font-semibold">
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                     </svg>
@@ -253,7 +253,7 @@
             </div>
         </div>
 
-        {{-- ── LESSON CONTENT ── --}}
+        {{-- ── NOTES CONTENT ── --}}
         <div class="flex-1 overflow-y-auto px-6 py-8 lg:px-12 pb-28 max-w-3xl">
 
             {{-- Flash --}}
@@ -263,86 +263,30 @@
             </div>
             @endif
 
-            {{-- Next lesson locked notification --}}
-            @if(session('next_locked_until'))
-            <div class="mb-6 flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3.5">
-                <span class="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-amber-100 border border-amber-200">
-                    <svg class="h-4 w-4 text-amber-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                    </svg>
-                </span>
-                <div>
-                    <p class="text-sm font-semibold text-amber-800">Next lesson not yet available</p>
-                    <p class="mt-0.5 text-sm text-amber-700">
-                        <span class="font-medium">{{ session('next_locked_title') }}</span>
-                        unlocks {{ \Carbon\Carbon::parse(session('next_locked_until'))->diffForHumans() }}
-                        — {{ \Carbon\Carbon::parse(session('next_locked_until'))->format('D, d M Y') }}.
-                    </p>
-                </div>
-            </div>
-            @endif
-
-            {{-- Lesson meta --}}
-            <div class="mb-6 flex flex-wrap items-center gap-3">
-                @if($lesson->week_group)
-                <span class="inline-flex items-center rounded-full bg-purple-100 border border-purple-200 px-3 py-0.5 text-xs font-semibold text-purple-700">
-                    {{ $lesson->week_group }}
-                </span>
-                @endif
-                <span class="flex items-center gap-1.5 text-xs text-gray-400">
-                    <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                    {{ ceil(str_word_count(strip_tags($lesson->content ?? '')) / 200) }} min read
-                    &nbsp;·&nbsp;
-                    @if($lessonPosition) Lesson {{ $lessonPosition }} of {{ $totalLessons }} @endif
-                </span>
-
-                {{-- Bookmark placeholder --}}
-                <button class="ml-auto text-gray-300 hover:text-[#e85d26] transition-colors">
-                    <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
-                    </svg>
-                </button>
+            {{-- Header --}}
+            <div class="mb-6">
+                <h1 class="text-2xl font-extrabold text-gray-900">My Notes</h1>
+                <p class="mt-1 text-sm text-gray-500">{{ $lesson->title }}</p>
             </div>
 
-            {{-- Title & author --}}
-            <h1 class="mb-1 text-3xl font-extrabold leading-tight text-gray-900">{{ $lesson->title }}</h1>
-            @if($course->instructor_name)
-            <p class="mb-8 text-sm text-gray-500">by {{ $course->instructor_name }}</p>
-            @endif
+            {{-- Notes form --}}
+            <form
+                method="POST"
+                action="{{ route('member.lesson.notes', ['courseSlug' => $course->slug, 'lessonSlug' => $lesson->slug]) }}"
+            >
+                @csrf
+                <textarea
+                    name="notes"
+                    rows="18"
+                    placeholder="Write your notes here…"
+                    class="w-full rounded-xl border border-gray-200 bg-gray-50 px-5 py-4 text-sm text-gray-800 placeholder-gray-400 focus:border-[#e85d26] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#e85d26]/20 transition resize-none"
+                >{{ old('notes', $progress?->notes) }}</textarea>
 
-            {{-- Lesson body content --}}
-            <div class="prose prose-gray max-w-none
-                prose-headings:font-bold prose-headings:text-gray-900
-                prose-h2:text-xl prose-h3:text-base
-                prose-p:text-gray-700 prose-p:leading-relaxed
-                prose-strong:text-gray-900
-                prose-ul:text-gray-700 prose-ol:text-gray-700
-                prose-blockquote:border-l-4 prose-blockquote:border-[#e85d26] prose-blockquote:pl-4 prose-blockquote:text-gray-600 prose-blockquote:italic
-                prose-a:text-[#e85d26] hover:prose-a:underline">
-                {!! $lesson->content !!}
-            </div>
+                @error('notes')
+                <p class="mt-2 text-xs text-red-600">{{ $message }}</p>
+                @enderror
 
-            {{-- Mark as read CTA --}}
-            <div class="mt-12 rounded-2xl border border-gray-200 bg-gray-50 p-6 flex items-center justify-between gap-4">
-                <div>
-                    <p class="font-semibold text-gray-800">Finished reading?</p>
-                    <p class="text-sm text-gray-500 mt-0.5">Mark this lesson as complete to track your progress.</p>
-                </div>
-                @if($progress?->completed_at)
-                <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 border border-emerald-200 px-4 py-2 text-sm font-semibold text-emerald-700">
-                    <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
-                    </svg>
-                    Read
-                </span>
-                @else
-                <form method="POST" action="{{ route('member.lesson.mark-read', ['courseSlug' => $course->slug, 'lessonSlug' => $lesson->slug]) }}">
-                    @csrf
-                    @if($nextLesson)
-                        <input type="hidden" name="next" value="{{ $nextLesson->slug }}">
-                    @endif
+                <div class="mt-4 flex justify-end">
                     <button
                         type="submit"
                         class="flex items-center gap-2 rounded-full bg-[#e85d26] hover:bg-[#cf4f1e] px-6 py-2.5 text-sm font-semibold text-white transition-colors"
@@ -350,11 +294,10 @@
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
                         </svg>
-                        Mark as Read
+                        Save Notes
                     </button>
-                </form>
-                @endif
-            </div>
+                </div>
+            </form>
         </div>
 
         {{-- ── Bottom nav bar ── --}}
@@ -375,70 +318,31 @@
             <div></div>
             @endif
 
-            {{-- Quiz score badge --}}
-            @if($quizScore !== null)
-            <span class="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-emerald-100 border border-emerald-200 px-4 py-2 text-sm font-bold text-emerald-700">
-                <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                </svg>
-                Quiz: {{ $quizScore }}%
-            </span>
-            @endif
-
-            {{-- Mark as Read & Continue / Next --}}
-            @if($progress?->completed_at)
-                @if($nextLesson && !$nextLessonLocked)
-                <a
-                    href="{{ route('member.lesson.show', ['courseSlug' => $course->slug, 'lessonSlug' => $nextLesson->slug]) }}"
-                    class="flex items-center gap-2 rounded-full bg-[#e85d26] hover:bg-[#cf4f1e] px-6 py-2.5 text-sm font-semibold text-white transition-colors"
-                >
-                    Next Lesson
-                    <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
-                    </svg>
-                </a>
-                @elseif($nextLesson && $nextLessonLocked)
-                <span class="flex items-center gap-2 rounded-full border border-gray-200 bg-gray-100 px-6 py-2.5 text-sm font-semibold text-gray-400 cursor-not-allowed">
-                    <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                    </svg>
-                    Next Lesson
-                </span>
-                @else
-                <a
-                    href="{{ route('member.dashboard') }}"
-                    class="flex items-center gap-2 rounded-full bg-[#e85d26] hover:bg-[#cf4f1e] px-6 py-2.5 text-sm font-semibold text-white transition-colors"
-                >
-                    Back to Dashboard
-                    <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
-                    </svg>
-                </a>
-                @endif
-            @else
-            <form
-                method="POST"
-                action="{{ route('member.lesson.mark-read', ['courseSlug' => $course->slug, 'lessonSlug' => $lesson->slug]) }}"
+            {{-- Next --}}
+            @if($nextLesson && !$nextLessonLocked)
+            <a
+                href="{{ route('member.lesson.show', ['courseSlug' => $course->slug, 'lessonSlug' => $nextLesson->slug]) }}"
+                class="flex items-center gap-2 rounded-full bg-[#e85d26] hover:bg-[#cf4f1e] px-6 py-2.5 text-sm font-semibold text-white transition-colors"
             >
-                @csrf
-                @if($nextLesson && !$nextLessonLocked)
-                    <input type="hidden" name="next" value="{{ $nextLesson->slug }}">
-                @endif
-                <button
-                    type="submit"
-                    class="flex items-center gap-2 rounded-full bg-[#e85d26] hover:bg-[#cf4f1e] px-6 py-2.5 text-sm font-semibold text-white transition-colors"
-                >
-                    <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
-                    </svg>
-                    {{ ($nextLesson && !$nextLessonLocked) ? 'Mark as Read & Continue' : 'Mark as Read' }}
-                    @if($nextLesson && !$nextLessonLocked)
-                    <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
-                    </svg>
-                    @endif
-                </button>
-            </form>
+                Next Lesson
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                </svg>
+            </a>
+            @elseif($nextLesson && $nextLessonLocked)
+            <span class="flex items-center gap-2 rounded-full border border-gray-200 bg-gray-100 px-6 py-2.5 text-sm font-semibold text-gray-400 cursor-not-allowed">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                </svg>
+                Next Lesson
+            </span>
+            @else
+            <a
+                href="{{ route('member.dashboard') }}"
+                class="flex items-center gap-2 rounded-full border border-gray-200 bg-white hover:bg-gray-50 px-6 py-2.5 text-sm font-semibold text-gray-700 transition-colors"
+            >
+                Back to Dashboard
+            </a>
             @endif
 
         </div>

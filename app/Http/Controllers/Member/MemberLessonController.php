@@ -52,11 +52,21 @@ class MemberLessonController extends Controller
         $progressPercent = $totalLessons > 0 ? round(($completedCount / $totalLessons) * 100) : 0;
         $quizScore       = $progress?->quiz_score;
 
+        // Lock gate: each lesson unlocks (lesson_number - 1) weeks after enrollment
+        $enrolledAt = $enrollment->enrolled_at ?? $enrollment->created_at;
+        $unlockDate = $lesson->available_date ?? $enrolledAt->copy()->addWeeks($lesson->lesson_number - 1);
+        abort_if(now()->lt($unlockDate), 403, 'This lesson is not yet available.');
+
+        // Whether the next lesson is still locked
+        $nextLessonLocked = $nextLesson
+            ? now()->lt($nextLesson->available_date ?? $enrolledAt->copy()->addWeeks($nextLesson->lesson_number - 1))
+            : false;
+
         return compact(
             'member', 'course', 'enrollment', 'lesson',
             'grouped', 'progressMap', 'progress',
             'lessonPosition', 'totalLessons',
-            'prevLesson', 'nextLesson',
+            'prevLesson', 'nextLesson', 'nextLessonLocked',
             'completedCount', 'progressPercent', 'quizScore',
         );
     }
@@ -101,7 +111,7 @@ class MemberLessonController extends Controller
             ['completed_at'  => now()]
         );
 
-        // Redirect to next lesson if one exists, otherwise back to dashboard
+        // Redirect to next lesson if it exists AND is already unlocked
         if ($request->has('next') && $request->input('next')) {
             $nextLesson = $course->lessons()
                 ->where('slug', $request->input('next'))
@@ -109,10 +119,23 @@ class MemberLessonController extends Controller
                 ->first();
 
             if ($nextLesson) {
+                $enrolledAt  = $enrollment->enrolled_at ?? $enrollment->created_at;
+                $unlockDate  = $nextLesson->available_date ?? $enrolledAt->copy()->addWeeks($nextLesson->lesson_number - 1);
+
+                if (now()->gte($unlockDate)) {
+                    return redirect()->route('member.lesson.show', [
+                        'courseSlug' => $courseSlug,
+                        'lessonSlug' => $nextLesson->slug,
+                    ]);
+                }
+
+                // Next lesson exists but is locked — tell the member when it unlocks
                 return redirect()->route('member.lesson.show', [
                     'courseSlug' => $courseSlug,
-                    'lessonSlug' => $nextLesson->slug,
-                ]);
+                    'lessonSlug' => $lessonSlug,
+                ])->with('status', 'Lesson marked as read!')
+                  ->with('next_locked_until', $unlockDate->toDateTimeString())
+                  ->with('next_locked_title', $nextLesson->title);
             }
         }
 
@@ -158,31 +181,9 @@ class MemberLessonController extends Controller
      */
     public function quizPage(string $courseSlug, string $lessonSlug)
     {
-        $member = Auth::guard('member')->user();
-
-        $course = Course::where('slug', $courseSlug)
-            ->where('is_active', true)
-            ->firstOrFail();
-
-        $enrollment = $member->enrollments()
-            ->where('course_id', $course->id)
-            ->whereIn('status', ['active', 'completed'])
-            ->firstOrFail();
-
-        $lesson = $course->lessons()
-            ->where('slug', $lessonSlug)
-            ->where('is_published', true)
-            ->firstOrFail();
-
-        abort_if(empty($lesson->quiz_questions), 404);
-
-        $progress = LessonProgress::where('enrollment_id', $enrollment->id)
-            ->where('lesson_id', $lesson->id)
-            ->first();
-
-        $quizScore = $progress?->quiz_score;
-
-        return view('member.quiz', compact('course', 'lesson', 'quizScore'));
+        $data = $this->lessonContext($courseSlug, $lessonSlug);
+        abort_if(empty($data['lesson']->quiz_questions), 404);
+        return view('member.quiz', $data);
     }
 
     /**

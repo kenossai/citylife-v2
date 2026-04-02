@@ -42,12 +42,24 @@
         $quizzesDone  = $enrollment->progress->whereNotNull('quiz_score')->count();
         $avgScore     = $enrollment->progress->whereNotNull('quiz_score')->avg('quiz_score');
 
-        // Find the next unread lesson for the CTA
+        // Find the next unread lesson for the CTA — skip locked ones
         $completedLessonIds = $enrollment->progress->whereNotNull('completed_at')->pluck('lesson_id')->toArray();
+        $enrolledAt = $enrollment->enrolled_at ?? $enrollment->created_at;
         $nextLesson = $course->lessons
             ->where('is_published', true)
             ->sortBy('lesson_number')
+            ->first(fn($l) =>
+                !in_array($l->id, $completedLessonIds) &&
+                now()->gte($l->available_date ?? $enrolledAt->copy()->addWeeks($l->lesson_number - 1))
+            );
+        // Next locked lesson (for "available in X days" message)
+        $nextLockedLesson = $nextLesson ? null : $course->lessons
+            ->where('is_published', true)
+            ->sortBy('lesson_number')
             ->first(fn($l) => !in_array($l->id, $completedLessonIds));
+        $nextUnlockDate = $nextLockedLesson
+            ? ($nextLockedLesson->available_date ?? $enrolledAt->copy()->addWeeks($nextLockedLesson->lesson_number - 1))
+            : null;
     @endphp
 
     <div class="group rounded-2xl bg-white border border-gray-200 shadow-sm overflow-hidden hover:border-[#e85d26]/30 transition-colors flex flex-col">
@@ -145,10 +157,19 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                         </svg>
                     </a>
+                @elseif($nextLockedLesson)
+                    <div class="flex items-center gap-2 rounded-full border border-gray-200 bg-gray-50 px-4 py-2.5">
+                        <svg class="h-4 w-4 shrink-0 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                        </svg>
+                        <span class="text-xs text-gray-500">
+                            Next lesson available {{ \Carbon\Carbon::parse($nextUnlockDate)->diffForHumans() }}
+                        </span>
+                    </div>
                 @else
                     <a
                         href="{{ route('courses.show', $course->slug) }}"
-                        class="flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 px-4 py-2.5 text-sm font-semibold text-white transition-colors"
+                        class="flex items-center justify-center gap-2 rounded-full border border-gray-200 bg-white hover:bg-gray-50 px-4 py-2.5 text-sm font-semibold text-gray-700 transition-colors"
                     >
                         View Course
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">

@@ -155,18 +155,24 @@
                         </svg>
                         <span class="text-xs text-gray-600 truncate">Next: {{ $enrollment->next_lesson->title }}</span>
                     </div>
+                @elseif($enrollment->next_locked_lesson)
+                    @php
+                        $lockedEnrolledAt   = $enrollment->enrolled_at ?? $enrollment->created_at;
+                        $lockedUnlockDate   = $enrollment->next_locked_lesson->available_date
+                            ?? $lockedEnrolledAt->copy()->addWeeks($enrollment->next_locked_lesson->lesson_number - 1);
+                    @endphp
+                    <div class="flex items-center gap-2 rounded-lg bg-gray-50 border border-gray-200 px-3 py-2">
+                        <svg class="h-3.5 w-3.5 text-gray-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                        </svg>
+                        <span class="text-xs text-gray-500 truncate">Available {{ \Carbon\Carbon::parse($lockedUnlockDate)->diffForHumans() }}</span>
+                    </div>
                 @endif
 
                 {{-- CTA --}}
-                @php
-                    if ($enrollment->next_lesson) {
-                        $ctaHref = route('member.lesson.show', ['courseSlug' => $course->slug, 'lessonSlug' => $enrollment->next_lesson->slug]);
-                    } else {
-                        $ctaHref = route('courses.show', $course->slug);
-                    }
-                @endphp
+                @if($enrollment->next_lesson)
                 <a
-                    href="{{ $ctaHref }}"
+                    href="{{ route('member.lesson.show', ['courseSlug' => $course->slug, 'lessonSlug' => $enrollment->next_lesson->slug]) }}"
                     class="mt-1 flex items-center justify-center gap-2 rounded-full bg-[#e85d26] hover:bg-[#cf4f1e] px-4 py-2.5 text-sm font-semibold text-white transition-colors"
                 >
                     Continue Reading
@@ -174,6 +180,17 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                     </svg>
                 </a>
+                @else
+                <a
+                    href="{{ route('courses.show', $course->slug) }}"
+                    class="mt-1 flex items-center justify-center gap-2 rounded-full border border-gray-200 bg-white hover:bg-gray-50 px-4 py-2.5 text-sm font-semibold text-gray-700 transition-colors"
+                >
+                    View Course
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </a>
+                @endif
             </div>
         </div>
         @endforeach

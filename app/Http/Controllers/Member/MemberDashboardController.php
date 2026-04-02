@@ -17,7 +17,7 @@ class MemberDashboardController extends Controller
             ->with([
                 'course:id,title,slug,category,image_path,leader_id',
                 'course.leader:id,name',
-                'course.lessons:id,course_id,slug,title,lesson_number,is_published',
+                'course.lessons:id,course_id,slug,title,lesson_number,is_published,available_date',
                 'progress:id,enrollment_id,lesson_id,completed_at,quiz_score',
             ])
             ->whereIn('status', ['active', 'completed'])
@@ -45,12 +45,24 @@ class MemberDashboardController extends Controller
                     ->pluck('lesson_id')
                     ->toArray();
 
+                $enrolledAt = $enrollment->enrolled_at ?? $enrollment->created_at;
+
                 $nextLesson = $enrollment->course->lessons
+                    ->where('is_published', true)
+                    ->sortBy('lesson_number')
+                    ->first(fn($lesson) =>
+                        ! in_array($lesson->id, $completedLessonIds) &&
+                        now()->gte($lesson->available_date ?? $enrolledAt->copy()->addWeeks($lesson->lesson_number - 1))
+                    );
+
+                // First unread locked lesson (for "available in X days" fallback)
+                $nextLockedLesson = $nextLesson ? null : $enrollment->course->lessons
                     ->where('is_published', true)
                     ->sortBy('lesson_number')
                     ->first(fn($lesson) => ! in_array($lesson->id, $completedLessonIds));
 
-                $enrollment->next_lesson       = $nextLesson;
+                $enrollment->next_lesson        = $nextLesson;
+                $enrollment->next_locked_lesson = $nextLockedLesson;
                 $enrollment->quiz_completed    = $enrollment->progress->whereNotNull('quiz_score')->count();
 
                 return $enrollment;
@@ -98,7 +110,7 @@ class MemberDashboardController extends Controller
             ->with([
                 'course:id,title,slug,category,image_path,leader_id',
                 'course.leader:id,name',
-                'course.lessons:id,course_id,slug,is_published,lesson_number',
+                'course.lessons:id,course_id,slug,title,is_published,lesson_number,available_date',
                 'progress:id,enrollment_id,lesson_id,completed_at,quiz_score',
             ])
             ->orderByDesc('enrolled_at')
