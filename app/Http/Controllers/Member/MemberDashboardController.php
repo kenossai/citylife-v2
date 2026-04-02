@@ -118,4 +118,99 @@ class MemberDashboardController extends Controller
 
         return view('member.courses', compact('member', 'enrollments'));
     }
+
+    public function progress()
+    {
+        $member = Auth::guard('member')->user();
+
+        $enrollments = $member->enrollments()
+            ->with([
+                'course:id,title,slug,category,guest_instructor_name,image_path,leader_id',
+                'course.leader:id,name',
+                'course.lessons:id,course_id,title,slug,lesson_number,is_published,week_group,available_date,content,quiz_questions',
+                'progress:id,enrollment_id,lesson_id,completed_at,quiz_score',
+            ])
+            ->whereIn('status', ['active', 'completed'])
+            ->orderByDesc('enrolled_at')
+            ->get();
+
+        $enrollmentIds = $enrollments->pluck('id');
+
+        // ── Study activity heatmap (last 5 weeks, Mon→Sun) ────────────────────
+        $heatmapStart = now()->startOfWeek(\Carbon\Carbon::MONDAY)->subWeeks(4);
+        $heatmapEnd   = now()->endOfWeek(\Carbon\Carbon::SUNDAY);
+
+        $activityMap = \App\Models\LessonProgress::whereIn('enrollment_id', $enrollmentIds)
+            ->whereNotNull('completed_at')
+            ->whereBetween('completed_at', [$heatmapStart, $heatmapEnd])
+            ->get()
+            ->groupBy(fn($p) => $p->completed_at->format('Y-m-d'))
+            ->map->count();
+
+        $heatmap = [];
+        for ($week = 0; $week < 5; $week++) {
+            $row = [];
+            for ($day = 0; $day < 7; $day++) {
+                $date  = $heatmapStart->copy()->addDays($week * 7 + $day);
+                $key   = $date->format('Y-m-d');
+                $row[] = [
+                    'date'    => $key,
+                    'count'   => $activityMap[$key] ?? 0,
+                    'isFuture' => $date->isFuture(),
+                ];
+            }
+            $heatmap[] = $row;
+        }
+
+        // ── Course breakdown ──────────────────────────────────────────────────
+        $courseBreakdowns = $enrollments->map(function ($enrollment) {
+            $progressMap  = $enrollment->progress->keyBy('lesson_id');
+            $lessons      = $enrollment->course->lessons
+                ->where('is_published', true)
+                ->sortBy('lesson_number');
+
+            $totalLessons     = $lessons->count();
+            $completedLessons = $progressMap->whereNotNull('completed_at')->count();
+            $progressPercent  = $totalLessons > 0 ? round(($completedLessons / $totalLessons) * 100) : 0;
+
+            $minutesStudied = $lessons
+                ->filter(fn($l) => $progressMap->get($l->id)?->completed_at !== null)
+                ->sum(fn($l) => max(1, (int) ceil(str_word_count(strip_tags($l->content ?? '')) / 200)));
+
+            $totalQuizzes = $lessons->filter(fn($l) => !empty($l->quiz_questions))->count();
+            $quizzesDone  = $progressMap->whereNotNull('quiz_score')->count();
+
+            $modules = $lessons
+                ->groupBy(fn($l) => $l->week_group ?: 'Lessons')
+                ->map(function ($groupLessons, $groupName) use ($progressMap) {
+                    $total     = $groupLessons->count();
+                    $completed = $groupLessons->filter(fn($l) => $progressMap->get($l->id)?->completed_at !== null)->count();
+                    $quizLesson = $groupLessons->first(fn($l) => !empty($l->quiz_questions));
+                    $quizScore  = $quizLesson ? $progressMap->get($quizLesson->id)?->quiz_score : null;
+
+                    return [
+                        'name'       => $groupName,
+                        'total'      => $total,
+                        'completed'  => $completed,
+                        'percent'    => $total > 0 ? round(($completed / $total) * 100) : 0,
+                        'quiz_score' => $quizScore,
+                    ];
+                })
+                ->values();
+
+            return [
+                'enrollment'       => $enrollment,
+                'course'           => $enrollment->course,
+                'totalLessons'     => $totalLessons,
+                'completedLessons' => $completedLessons,
+                'progressPercent'  => $progressPercent,
+                'minutesStudied'   => $minutesStudied,
+                'quizzesDone'      => $quizzesDone,
+                'totalQuizzes'     => $totalQuizzes,
+                'modules'          => $modules,
+            ];
+        });
+
+        return view('member.progress', compact('member', 'heatmap', 'courseBreakdowns'));
+    }
 }

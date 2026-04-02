@@ -52,6 +52,7 @@ Route::prefix('member')->name('member.')->group(function () {
     Route::middleware('member.auth')->group(function () {
         Route::get('/dashboard', [MemberDashboardController::class, 'index'])->name('dashboard');
         Route::get('/my-courses', [MemberDashboardController::class, 'courses'])->name('courses');
+        Route::get('/progress', [MemberDashboardController::class, 'progress'])->name('progress');
 
         // Lesson viewer
         Route::get('/courses/{courseSlug}/lessons/{lessonSlug}', [MemberLessonController::class, 'show'])->name('lesson.show');
