@@ -213,4 +213,77 @@ class MemberDashboardController extends Controller
 
         return view('member.progress', compact('member', 'heatmap', 'courseBreakdowns'));
     }
+
+    public function certificates()
+    {
+        $member = Auth::guard('member')->user();
+
+        $certificates = $member->enrollments()
+            ->with([
+                'course:id,title,slug,category,guest_instructor_name,leader_id,has_certificate',
+                'course.leader:id,name',
+                'progress:id,enrollment_id,lesson_id,completed_at,quiz_score',
+            ])
+            ->where('certificate_issued', true)
+            ->orderByDesc('completed_at')
+            ->get()
+            ->map(function ($enrollment) {
+                $avgGrade = $enrollment->average_grade;
+
+                if ($avgGrade === null) {
+                    $grade = null;
+                } elseif ($avgGrade >= 85) {
+                    $grade = 'Distinction';
+                } elseif ($avgGrade >= 70) {
+                    $grade = 'Merit';
+                } else {
+                    $grade = 'Pass';
+                }
+
+                $enrolledAt   = $enrollment->enrolled_at ?? $enrollment->created_at;
+                $completedAt  = $enrollment->completed_at;
+                $durationWeeks = $enrolledAt && $completedAt
+                    ? max(1, (int) ceil($enrolledAt->diffInWeeks($completedAt)))
+                    : null;
+
+                return [
+                    'enrollment'    => $enrollment,
+                    'course'        => $enrollment->course,
+                    'grade'         => $grade,
+                    'avg_score'     => $avgGrade,
+                    'issued_at'     => $completedAt ?? $enrollment->updated_at,
+                    'duration_weeks' => $durationWeeks,
+                ];
+            });
+
+        return view('member.certificates', compact('member', 'certificates'));
+    }
+
+    public function certificateDetail(int $enrollmentId)
+    {
+        $member = Auth::guard('member')->user();
+
+        $enrollment = $member->enrollments()
+            ->with([
+                'course:id,title,slug,category,guest_instructor_name,leader_id',
+                'course.leader:id,name',
+                'progress:id,enrollment_id,lesson_id,completed_at,quiz_score',
+            ])
+            ->where('certificate_issued', true)
+            ->findOrFail($enrollmentId);
+
+        $avgGrade = $enrollment->average_grade;
+        $grade    = $avgGrade === null ? null
+            : ($avgGrade >= 85 ? 'Distinction' : ($avgGrade >= 70 ? 'Merit' : 'Pass'));
+
+        $enrolledAt    = $enrollment->enrolled_at ?? $enrollment->created_at;
+        $completedAt   = $enrollment->completed_at;
+        $durationWeeks = $enrolledAt && $completedAt
+            ? max(1, (int) ceil($enrolledAt->diffInWeeks($completedAt)))
+            : null;
+
+        return view('member.certificate-detail', compact(
+            'member', 'enrollment', 'grade', 'avgGrade', 'completedAt', 'durationWeeks'
+        ));
+    }
 }

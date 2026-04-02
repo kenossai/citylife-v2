@@ -54,6 +54,8 @@ Route::prefix('member')->name('member.')->group(function () {
         Route::get('/dashboard', [MemberDashboardController::class, 'index'])->name('dashboard');
         Route::get('/my-courses', [MemberDashboardController::class, 'courses'])->name('courses');
         Route::get('/progress', [MemberDashboardController::class, 'progress'])->name('progress');
+        Route::get('/certificates', [MemberDashboardController::class, 'certificates'])->name('certificates');
+        Route::get('/certificates/{enrollmentId}', [MemberDashboardController::class, 'certificateDetail'])->name('certificates.view');
 
         // Settings
         Route::get('/settings', [MemberSettingsController::class, 'show'])->name('settings');
