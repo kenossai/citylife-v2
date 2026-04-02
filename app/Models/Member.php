@@ -33,6 +33,7 @@ class Member extends Authenticatable
 
     protected $fillable = [
         'membership_number',
+        'avatar_path',
         'title',
         'first_name',
         'last_name',
@@ -55,7 +56,11 @@ class Member extends Authenticatable
         'baptism_status',
         'baptism_date',
         'notes',
+        'bio',
         'is_active',
+        'notify_study_reminders',
+        'notify_quiz_results',
+        'notify_weekly_digest',
         'password_setup_token',
         'password_setup_token_expires_at',
     ];
@@ -67,8 +72,11 @@ class Member extends Authenticatable
         'first_visit_date' => 'date',
         'membership_date'  => 'date',
         'baptism_date'     => 'date',
-        'is_spouse_member' => 'boolean',
-        'is_active'                      => 'boolean',
+        'is_spouse_member'          => 'boolean',
+        'is_active'                => 'boolean',
+        'notify_study_reminders'   => 'boolean',
+        'notify_quiz_results'      => 'boolean',
+        'notify_weekly_digest'     => 'boolean',
         'password_setup_token_expires_at' => 'datetime',
     ];
 
@@ -80,6 +88,11 @@ class Member extends Authenticatable
     public function getFullNameAttribute(): string
     {
         return trim(collect([$this->title, $this->first_name, $this->last_name])->filter()->implode(' '));
+    }
+
+    public function getAvatarUrlAttribute(): ?string
+    {
+        return $this->avatar_path ? asset('storage/' . $this->avatar_path) : null;
     }
 
     public function enrollments(): HasMany

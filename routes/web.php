@@ -13,6 +13,7 @@ use App\Http\Controllers\BibleSchoolResourceController;
 use App\Http\Controllers\Member\MemberAuthController;
 use App\Http\Controllers\Member\MemberDashboardController;
 use App\Http\Controllers\Member\MemberLessonController;
+use App\Http\Controllers\Member\MemberSettingsController;
 use App\Http\Controllers\SessionAccessController;
 use App\Http\Controllers\LeadershipController;
 use App\Http\Controllers\MinistryController;
@@ -53,6 +54,14 @@ Route::prefix('member')->name('member.')->group(function () {
         Route::get('/dashboard', [MemberDashboardController::class, 'index'])->name('dashboard');
         Route::get('/my-courses', [MemberDashboardController::class, 'courses'])->name('courses');
         Route::get('/progress', [MemberDashboardController::class, 'progress'])->name('progress');
+
+        // Settings
+        Route::get('/settings', [MemberSettingsController::class, 'show'])->name('settings');
+        Route::post('/settings/avatar', [MemberSettingsController::class, 'updateAvatar'])->name('settings.avatar');
+        Route::patch('/settings/profile', [MemberSettingsController::class, 'updateProfile'])->name('settings.profile');
+        Route::patch('/settings/password', [MemberSettingsController::class, 'updatePassword'])->name('settings.password');
+        Route::patch('/settings/notifications', [MemberSettingsController::class, 'updateNotifications'])->name('settings.notifications');
+        Route::delete('/settings/account', [MemberSettingsController::class, 'deleteAccount'])->name('settings.delete-account');
 
         // Lesson viewer
         Route::get('/courses/{courseSlug}/lessons/{lessonSlug}', [MemberLessonController::class, 'show'])->name('lesson.show');

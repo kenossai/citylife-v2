@@ -11,6 +11,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>[x-cloak]{display:none!important}</style>
 </head>
 <body class="h-full min-h-screen bg-gray-50 font-sans antialiased" x-data="{ sidebarOpen: false }">
 
@@ -79,8 +81,9 @@
                 Certificates
             </a>
 
-            <a href="#"
-               class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-900 transition-colors">
+            <a href="{{ route('member.settings') }}"
+               class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors
+                      {{ str_starts_with($routeName, 'member.settings') ? 'bg-[#e85d26]/10 text-[#e85d26]' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900' }}">
                 <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
@@ -92,15 +95,21 @@
         {{-- User profile + back link --}}
         <div class="border-t border-gray-200 px-4 py-4 space-y-3">
             <div class="flex items-center gap-3">
+                @php $sidebarMember = Auth::guard('member')->user(); @endphp
+                @if($sidebarMember->avatar_url)
+                <img src="{{ $sidebarMember->avatar_url }}" alt=""
+                     class="h-8 w-8 rounded-full object-cover shrink-0 ring-2 ring-[#e85d26]/30">
+                @else
                 <div class="h-8 w-8 rounded-full bg-[#e85d26] flex items-center justify-center shrink-0 text-white font-bold text-xs uppercase">
-                    {{ substr(Auth::guard('member')->user()->first_name ?? 'M', 0, 1) }}
+                    {{ substr($sidebarMember->first_name ?? 'M', 0, 1) }}
                 </div>
+                @endif
                 <div class="min-w-0">
                     <p class="text-sm font-semibold text-gray-900 truncate">
-                        {{ Auth::guard('member')->user()->full_name }}
+                        {{ $sidebarMember->full_name }}
                     </p>
                     <p class="text-xs text-gray-500 truncate">
-                        {{ Auth::guard('member')->user()->email }}
+                        {{ $sidebarMember->email }}
                     </p>
                 </div>
             </div>
