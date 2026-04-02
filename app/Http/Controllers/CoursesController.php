@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use App\Models\CourseEnrollment;
 use App\Models\Member;
+use App\Mail\CourseEnrollmentRequestMail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class CoursesController extends Controller
 {
@@ -70,11 +72,21 @@ class CoursesController extends Controller
         CourseEnrollment::create([
             'course_id'   => $course->id,
             'member_id'   => $member->id,
-            'status'      => 'active',
+            'status'      => 'pending',
             'enrolled_at' => now(),
         ]);
 
-        return back()->with('enrol_success', 'You have been successfully enrolled! We will be in touch with further details.');
+        // Notify instructor / courses admin
+        $adminEmail = env('COURSES_ADMIN_EMAIL', config('mail.from.address'));
+        $enrollment = CourseEnrollment::with(['course', 'member'])
+            ->where('course_id', $course->id)
+            ->where('member_id', $member->id)
+            ->latest()
+            ->first();
+
+        Mail::to($adminEmail)->send(new CourseEnrollmentRequestMail($enrollment));
+
+        return back()->with('enrol_success', 'Your enrollment request has been submitted! We will review it and be in touch shortly.');
     }
 }
 

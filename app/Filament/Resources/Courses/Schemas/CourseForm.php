@@ -78,6 +78,9 @@ class CourseForm
                     ->schema([
                         Toggle::make('has_certificate')
                             ->label('Certificate on Completion'),
+                        Toggle::make('is_membership_course')
+                            ->label('Membership Entry Course')
+                            ->helperText('Approval upgrades student to active member (e.g. CDC).'),
                         Toggle::make('is_registration_open')
                             ->label('Registration Open'),
                         Toggle::make('is_active')

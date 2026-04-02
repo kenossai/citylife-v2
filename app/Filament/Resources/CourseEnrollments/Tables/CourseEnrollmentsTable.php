@@ -31,10 +31,11 @@ class CourseEnrollmentsTable
                 TextColumn::make('status')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
+                        'pending'   => 'warning',
                         'active'    => 'success',
                         'completed' => 'info',
                         'cancelled' => 'danger',
-                        'suspended' => 'warning',
+                        'suspended' => 'gray',
                         default     => 'gray',
                     }),
 

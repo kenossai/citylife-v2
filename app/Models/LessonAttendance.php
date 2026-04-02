@@ -11,10 +11,12 @@ class LessonAttendance extends Model
         'enrollment_id',
         'lesson_id',
         'attended_at',
+        'present',
     ];
 
     protected $casts = [
         'attended_at' => 'datetime',
+        'present'     => 'boolean',
     ];
 
     public function enrollment(): BelongsTo

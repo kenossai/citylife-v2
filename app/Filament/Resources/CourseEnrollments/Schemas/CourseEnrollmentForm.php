@@ -38,12 +38,13 @@ class CourseEnrollmentForm
                 Grid::make(2)->schema([
                     Select::make('status')
                         ->options([
-                            'active'    => 'Active',
+                            'pending'   => 'Pending',
+                            'active'    => 'Active (Approved)',
                             'completed' => 'Completed',
                             'cancelled' => 'Cancelled',
                             'suspended' => 'Suspended',
                         ])
-                        ->default('active')
+                        ->default('pending')
                         ->required(),
 
                     \Filament\Forms\Components\TextInput::make('attendance_count')
