@@ -10,6 +10,8 @@ use App\Http\Controllers\ResourcesController;
 use App\Http\Controllers\CoursesController;
 use App\Http\Controllers\BibleSchoolController;
 use App\Http\Controllers\BibleSchoolResourceController;
+use App\Http\Controllers\Member\MemberAuthController;
+use App\Http\Controllers\Member\MemberDashboardController;
 use App\Http\Controllers\SessionAccessController;
 use App\Http\Controllers\LeadershipController;
 use App\Http\Controllers\MinistryController;
@@ -36,3 +38,18 @@ Route::get('/bible-school/resources/{speaker}/{session}', [BibleSchoolResourceCo
 
 Route::post('/session-access/send-code', [SessionAccessController::class, 'sendCode'])->name('session-access.send-code');
 Route::post('/session-access/verify-code', [SessionAccessController::class, 'verifyCode'])->name('session-access.verify-code');
+
+Route::prefix('member')->name('member.')->group(function () {
+    Route::get('/login', [MemberAuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [MemberAuthController::class, 'login'])->name('login.post');
+    Route::post('/logout', [MemberAuthController::class, 'logout'])->name('logout');
+
+    // Password setup (one-time link from approval email)
+    Route::get('/setup-password/{token}', [MemberAuthController::class, 'showSetupPassword'])->name('setup-password.show');
+    Route::post('/setup-password/{token}', [MemberAuthController::class, 'setupPassword'])->name('setup-password.store');
+
+    Route::middleware('member.auth')->group(function () {
+        Route::get('/dashboard', [MemberDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/my-courses', [MemberDashboardController::class, 'courses'])->name('courses');
+    });
+});

@@ -19,6 +19,13 @@ class CourseEnrollmentObserver
         // Approved → send enrollment confirmation email to student
         if ($enrollment->status === 'active') {
             if ($enrollment->member?->email) {
+                // Generate a password-setup token for first-time members
+                if (! $enrollment->member->password) {
+                    $enrollment->member->generatePasswordSetupToken();
+                    // Refresh so the mailable sees the new token
+                    $enrollment->member->refresh();
+                }
+
                 Mail::to($enrollment->member->email)
                     ->send(new CourseEnrollmentApprovedMail($enrollment));
             }

@@ -54,4 +54,29 @@ class CourseEnrollment extends Model
     {
         return $this->certificate_issued;
     }
+
+    public function getLessonsDoneCountAttribute(): int
+    {
+        return $this->progress()->whereNotNull('completed_at')->count();
+    }
+
+    public function getTotalLessonsAttribute(): int
+    {
+        return $this->course?->lessons()->count() ?? 0;
+    }
+
+    public function getProgressPercentageAttribute(): float
+    {
+        $total = $this->total_lessons;
+        if ($total === 0) {
+            return 0;
+        }
+        return round(($this->lessons_done_count / $total) * 100, 2);
+    }
+
+    public function getAverageGradeAttribute(): ?float
+    {
+        $avg = $this->progress()->whereNotNull('quiz_score')->avg('quiz_score');
+        return $avg !== null ? round($avg, 2) : null;
+    }
 }

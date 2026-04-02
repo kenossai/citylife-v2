@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Str;
 
-class Member extends Model
+class Member extends Authenticatable
 {
+    protected $guard = 'member';
     protected static function booted(): void
     {
         static::creating(function (Member $member) {
@@ -34,6 +37,7 @@ class Member extends Model
         'first_name',
         'last_name',
         'email',
+        'password',
         'phone',
         'date_of_birth',
         'gender',
@@ -52,7 +56,11 @@ class Member extends Model
         'baptism_date',
         'notes',
         'is_active',
+        'password_setup_token',
+        'password_setup_token_expires_at',
     ];
+
+    protected $hidden = ['password', 'remember_token'];
 
     protected $casts = [
         'date_of_birth'    => 'date',
@@ -60,7 +68,8 @@ class Member extends Model
         'membership_date'  => 'date',
         'baptism_date'     => 'date',
         'is_spouse_member' => 'boolean',
-        'is_active'        => 'boolean',
+        'is_active'                      => 'boolean',
+        'password_setup_token_expires_at' => 'datetime',
     ];
 
     public function spouse(): BelongsTo
@@ -73,6 +82,11 @@ class Member extends Model
         return trim(collect([$this->title, $this->first_name, $this->last_name])->filter()->implode(' '));
     }
 
+    public function enrollments(): HasMany
+    {
+        return $this->hasMany(CourseEnrollment::class);
+    }
+
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
@@ -81,5 +95,21 @@ class Member extends Model
     public function scopeByStatus($query, string $status)
     {
         return $query->where('membership_status', $status);
+    }
+
+    /**
+     * Generate a one-time password setup token (7-day expiry).
+     * Returns the raw token so it can be embedded in an email link.
+     */
+    public function generatePasswordSetupToken(): string
+    {
+        $token = Str::random(64);
+
+        $this->update([
+            'password_setup_token'             => $token,
+            'password_setup_token_expires_at'  => now()->addDays(7),
+        ]);
+
+        return $token;
     }
 }
