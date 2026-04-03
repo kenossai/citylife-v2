@@ -6,7 +6,7 @@
 @section('main_class', 'bg-white')
 
 @php
-    $heroImage = 'https://www.figma.com/api/mcp/asset/d0223afc-095b-4b45-a053-17cd427ee717';
+    $heroImage = asset('images/slide-1.png');
 
     $eventCategories = collect([
         'Worship',
@@ -17,169 +17,6 @@
         'Men',
         'Conference',
     ])->values();
-
-    $featuredEvents = collect([
-        [
-            'category' => 'Worship',
-            'title' => 'Good Friday Evening Service',
-            'description' => 'Join us for a moving Good Friday evening service of reflection, communion and worship as we remember the sacrifice of Jesus.',
-            'image' => 'https://www.figma.com/api/mcp/asset/c87fd1e2-f816-47d6-a76a-ef89cb59f634',
-            'day' => '28',
-            'month' => 'MAR',
-            'year' => '2026',
-            'time_label' => '7:00 PM',
-            'location' => 'City Life Church',
-            'route' => route('events.show', 'good-friday-evening-service'),
-        ],
-        [
-            'category' => 'Special',
-            'title' => 'Easter Sunday Celebration',
-            'description' => 'Celebrate the resurrection of Jesus. Bring your family and invite your friends to this powerful Easter Sunday celebration.',
-            'image' => 'https://www.figma.com/api/mcp/asset/c5dcbd66-9a6d-4733-a06e-140a17f29b09',
-            'day' => '5',
-            'month' => 'APR',
-            'year' => '2026',
-            'time_label' => '9:00 & 11:00 AM',
-            'location' => 'City Life Church',
-            'route' => route('events.show', 'easter-sunday-celebration'),
-        ],
-    ]);
-
-    $directoryEvents = collect([
-        [
-            'id' => 'good-friday-evening-service',
-            'category' => 'Worship',
-            'title' => 'Good Friday Evening Service',
-            'description' => 'Join us for a moving Good Friday evening service of reflection, communion and worship as we remember the sacrifice of Jesus.',
-            'image' => 'https://www.figma.com/api/mcp/asset/c87fd1e2-f816-47d6-a76a-ef89cb59f634',
-            'day' => '28',
-            'month' => 'MAR',
-            'year' => '2026',
-            'row_height' => 185.5,
-            'time_label' => '7:00 PM',
-            'location' => 'Main Sanctuary, Sheffield',
-            'route' => route('events.show', 'good-friday-evening-service'),
-        ],
-        [
-            'id' => 'easter-sunday-celebration',
-            'category' => 'Special',
-            'title' => 'Easter Sunday Celebration',
-            'description' => 'Celebrate the resurrection of Jesus. Bring your family and invite your friends to this powerful Easter Sunday celebration.',
-            'image' => 'https://www.figma.com/api/mcp/asset/c5dcbd66-9a6d-4733-a06e-140a17f29b09',
-            'day' => '5',
-            'month' => 'APR',
-            'year' => '2026',
-            'row_height' => 240,
-            'time_label' => '9:00 & 11:00 AM',
-            'location' => 'Main Sanctuary, Sheffield',
-            'route' => route('events.show', 'easter-sunday-celebration'),
-        ],
-        [
-            'id' => 'youth-and-kids-easter-bash',
-            'category' => 'Youth',
-            'title' => 'Youth & Kids Easter Bash',
-            'description' => 'A fun-packed afternoon for children and young people. Games, worship, food and a special Easter message.',
-            'image' => 'https://www.figma.com/api/mcp/asset/ef0db721-a07c-41c0-bca0-d5326d2b1506',
-            'day' => '5',
-            'month' => 'APR',
-            'year' => '2026',
-            'row_height' => 185.5,
-            'time_label' => '1:00 PM',
-            'location' => 'Youth Hall, Sheffield',
-            'route' => route('events.show', 'youth-and-kids-easter-bash'),
-        ],
-        [
-            'id' => 'community-outreach-day',
-            'category' => 'Outreach',
-            'title' => 'Community Outreach Day',
-            'description' => 'Join our city outreach team as we serve the homeless, distribute food and share the love of Jesus.',
-            'image' => 'https://www.figma.com/api/mcp/asset/0d3e9535-bdf4-4553-be00-145d0a17089a',
-            'day' => '12',
-            'month' => 'APR',
-            'year' => '2026',
-            'row_height' => 185.5,
-            'time_label' => '10:00 AM',
-            'location' => 'City Park, Sheffield',
-            'route' => route('events.show', 'community-outreach-day'),
-        ],
-        [
-            'id' => 'bible-school-module-3-launch',
-            'category' => 'Training',
-            'title' => 'Bible School: Module 3 Launch',
-            'description' => 'Our spring intensive programme returns with Module 3, equipping believers in doctrine, practice and Spirit-led ministry.',
-            'image' => 'https://www.figma.com/api/mcp/asset/74609ad8-9d58-479d-ade1-c1015dbd54d9',
-            'day' => '19',
-            'month' => 'APR',
-            'year' => '2026',
-            'row_height' => 185.5,
-            'time_label' => '7:00 PM',
-            'location' => 'Bible School Hall, Sheffield',
-            'route' => route('events.show', 'bible-school-module-3-launch'),
-        ],
-        [
-            'id' => 'men-of-valour-breakfast-meeting',
-            'category' => 'Men',
-            'title' => 'Men of Valour Breakfast Meeting',
-            'description' => 'Men, come out for breakfast and fellowship. Be practical, be powerful, be encouraged in faith and purpose.',
-            'image' => 'https://www.figma.com/api/mcp/asset/476972e7-c483-4d20-bc09-45cdf4725686',
-            'day' => '26',
-            'month' => 'APR',
-            'year' => '2026',
-            'row_height' => 185.5,
-            'time_label' => '8:30 AM',
-            'location' => 'Atrium Cafe, Sheffield',
-            'route' => route('events.show', 'men-of-valour-breakfast-meeting'),
-        ],
-        [
-            'id' => 'days-of-fire-conference-2026',
-            'category' => 'Conference',
-            'title' => 'Days of Fire Conference 2026',
-            'description' => 'Four spirit-filled days of powerful worship, prophetic ministry and teaching.',
-            'image' => 'https://www.figma.com/api/mcp/asset/433d6edd-2089-4a10-9332-a90163ab34ef',
-            'day' => '10',
-            'month' => 'MAY',
-            'year' => '2026',
-            'row_height' => 185.5,
-            'time_label' => '6:00 PM',
-            'location' => 'Main Sanctuary, Sheffield',
-            'route' => route('events.show', 'days-of-fire-conference-2026'),
-        ],
-        [
-            'id' => 'night-of-worship',
-            'category' => 'Worship',
-            'title' => 'Night of Worship',
-            'description' => 'A special evening dedicated entirely to worship, prayer and encountering God in a fresh way.',
-            'image' => 'https://www.figma.com/api/mcp/asset/b318489a-7750-492e-a84e-af20d067e39c',
-            'day' => '17',
-            'month' => 'MAY',
-            'year' => '2026',
-            'row_height' => 185.5,
-            'time_label' => '6:00 PM',
-            'location' => 'Main Sanctuary, Sheffield',
-            'route' => route('events.show', 'night-of-worship'),
-        ],
-    ])->values();
-
-    $serviceTimes = [
-        [
-            'icon' => '🙌',
-            'label' => 'Sunday',
-            'time' => '9:00 AM & 11:00 AM',
-            'note' => 'Main Services',
-        ],
-        [
-            'icon' => '📖',
-            'label' => 'Wednesday',
-            'time' => '7:00 PM',
-            'note' => 'Midweek Service',
-        ],
-        [
-            'icon' => '⚡',
-            'label' => 'Friday',
-            'time' => '7:00 PM',
-            'note' => 'Youth Night',
-        ],
-    ];
 
     $categoryStyles = [
         'Worship' => [
@@ -211,6 +48,27 @@
     $categoryClass = function (?string $category) use ($categoryStyles): array {
         return $categoryStyles[$category] ?? $categoryStyles['default'];
     };
+
+    $serviceTimes = [
+        [
+            'icon' => '🙌',
+            'label' => 'Sunday',
+            'time' => '9:00 AM & 11:00 AM',
+            'note' => 'Main Services',
+        ],
+        [
+            'icon' => '📖',
+            'label' => 'Wednesday',
+            'time' => '7:00 PM',
+            'note' => 'Midweek Service',
+        ],
+        [
+            'icon' => '⚡',
+            'label' => 'Friday',
+            'time' => '7:00 PM',
+            'note' => 'Youth Night',
+        ],
+    ];
 @endphp
 
 @push('head')
@@ -357,7 +215,7 @@
                                 </span>
 
                                 <span class="inline-flex items-center gap-1.5 text-[14px] font-semibold text-[#ff6900]">
-                                    Register
+                                    {{ $featuredEvent['requires_registration'] ? 'Register' : 'View Details' }}
                                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                                     </svg>
@@ -372,7 +230,7 @@
 
     <section class="bg-white py-16">
         <div
-            x-data="eventsDirectory(@js($directoryEvents->all()), @js($eventCategories), @js(collect($categoryStyles)->mapWithKeys(fn (array $styles, string $category) => [$category => $styles['badge']])->all()))"
+            x-data="eventsDirectory(@js($events->all()), @js($eventCategories), @js(collect($categoryStyles)->mapWithKeys(fn (array $styles, string $category) => [$category => $styles['badge']])->all()))"
             class="mx-auto max-w-[1143px] px-6"
         >
             <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -469,9 +327,8 @@
                                 <a
                                     :href="item.route"
                                     class="inline-flex h-9 w-[118.5625px] items-center justify-center rounded-full bg-[#101828] px-5 text-[12px] font-semibold text-white transition-colors hover:bg-[#1d2939]"
-                                >
-                                    Register Now
-                                </a>
+                                    x-text="item.requires_registration ? 'Register Now' : 'View Details'"
+                                ></a>
                             </div>
                         </div>
                     </article>

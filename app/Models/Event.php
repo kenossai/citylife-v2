@@ -12,14 +12,21 @@ class Event extends Model
         'image_path',
         'slug',
         'description',
+        'location',
+        'category',
+        'badge',
+        'is_featured',
+        'requires_registration',
         'sort_order',
         'is_active',
     ];
 
     protected $casts = [
-        'event_at'   => 'datetime',
-        'is_active'  => 'boolean',
-        'sort_order' => 'integer',
+        'event_at'               => 'datetime',
+        'is_active'              => 'boolean',
+        'is_featured'            => 'boolean',
+        'requires_registration'  => 'boolean',
+        'sort_order'             => 'integer',
     ];
 
     public function scopeActive($query)

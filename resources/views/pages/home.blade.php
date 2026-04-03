@@ -66,15 +66,15 @@
         <div class="space-y-2 text-sm">
             <div class="flex items-center gap-3">
                 <span class="w-2 h-2 rounded-full bg-[#e85d26] flex-shrink-0"></span>
-                <span><strong>Sunday</strong> — 9:00 AM &amp; 11:00 AM</span>
+                <span><strong>Sunday</strong> - 10:00 AM - 12:00 PM</span>
             </div>
             <div class="flex items-center gap-3">
                 <span class="w-2 h-2 rounded-full bg-yellow-400 flex-shrink-0"></span>
-                <span><strong>Wednesday</strong> — 7:00 PM</span>
+                <span><strong>Thursday Prayer</strong> - 7:30 PM</span>
             </div>
             <div class="flex items-center gap-3">
                 <svg class="w-4 h-4 text-gray-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
-                <span class="text-gray-300">123 City Life Ave, Your City</span>
+                <span class="text-gray-300">1 South Parade Shalesmoor, Sheffield, S3 8SS</span>
             </div>
         </div>
     </div>
