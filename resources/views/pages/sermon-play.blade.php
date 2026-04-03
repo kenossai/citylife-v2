@@ -168,8 +168,12 @@
                                 <span class="h-[2px] w-5 bg-[#e85d26]"></span>
                                 <h2 class="text-[12px] font-bold uppercase tracking-[0.1em] text-[#e85d26]">Sermon Notes</h2>
                             </div>
-                            <div class="prose prose-sm mt-4 max-w-none text-[#667085]">
-                                {!! nl2br(e($sermon->notes_content)) !!}
+                            <div class="prose prose-sm mt-4 max-w-none overflow-y-auto max-h-[480px] rounded-xl border border-[#f3f4f6] bg-white px-5 py-4 text-[#667085]">
+                                @if ($sermon->notes_format === 'plain')
+                                    {!! nl2br(e($sermon->notes_content)) !!}
+                                @else
+                                    {!! $sermon->notes_content !!}
+                                @endif
                             </div>
                         </div>
                     @endif

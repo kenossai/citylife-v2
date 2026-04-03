@@ -202,10 +202,10 @@
                     Grow in the<br>
                     <span class="text-[#e85d26]">Word of God</span>
                 </h2>
-                <p class="text-gray-500 italic mb-2 text-sm">"{{ $featuredSermon->title }}" — {{ $featuredSermon->speaker }}{{ $featuredSermon->scripture ? ' takes us through ' . $featuredSermon->scripture : '' }}{{ $featuredSermon->description ? '. ' . Str::limit($featuredSermon->description, 150) : '' }}</p>
+                <p class="text-gray-500 italic mb-2 text-sm">"{{ $featuredSermon->title }}" — {{ $featuredSermon->speaker_name }}{{ $featuredSermon->scripture ? ' takes us through ' . $featuredSermon->scripture : '' }}{{ $featuredSermon->description ? '. ' . Str::limit($featuredSermon->description, 150) : '' }}</p>
                 <p class="text-gray-400 text-xs mb-8 uppercase tracking-wider">{{ $featuredSermon->preached_at->format('F j, Y') }}{{ $featuredSermon->service_label ? ' · ' . $featuredSermon->service_label : '' }}</p>
                 <div class="flex flex-wrap gap-3">
-                    <a href="{{ $featuredSermon->video_url ?? route('media') }}"
+                    <a href="{{ $featuredSermon->slug ? route('media.show', $featuredSermon->slug) : route('media') }}"
                        class="inline-flex items-center gap-2 bg-gray-900 hover:bg-gray-700 text-white font-semibold px-6 py-3 rounded-full transition-colors text-sm">
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                         Watch Sermon
@@ -218,8 +218,16 @@
             </div>
 
             {{-- Video Thumbnail --}}
-            <div class="relative rounded-2xl overflow-hidden shadow-xl group cursor-pointer">
-                <img src="{{ $featuredSermon->thumbnail_path ?? 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80' }}"
+            <a href="{{ $featuredSermon->slug ? route('media.show', $featuredSermon->slug) : route('media') }}"
+               class="relative rounded-2xl overflow-hidden shadow-xl group cursor-pointer block">
+                @php
+                    $heroThumb = $featuredSermon->thumbnail_path
+                        ? (\Illuminate\Support\Str::startsWith($featuredSermon->thumbnail_path, ['http://', 'https://'])
+                            ? $featuredSermon->thumbnail_path
+                            : asset('storage/' . ltrim($featuredSermon->thumbnail_path, '/')))
+                        : 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80';
+                @endphp
+                <img src="{{ $heroThumb }}"
                      alt="{{ $featuredSermon->title }}"
                      class="w-full h-64 lg:h-80 object-cover group-hover:scale-105 transition-transform duration-500">
                 <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
@@ -227,7 +235,7 @@
                         <svg class="w-6 h-6 text-[#e85d26] ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                     </div>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
 </section>

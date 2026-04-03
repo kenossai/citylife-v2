@@ -1,0 +1,6 @@
+trix-editor.notes-editor-scroll {
+    height: 420px !important;
+    max-height: 420px !important;
+    overflow-y: auto !important;
+    resize: vertical;
+}

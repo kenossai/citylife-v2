@@ -30,6 +30,7 @@ class Sermon extends Model
         'video_url',
         'notes_path',
         'notes_content',
+        'notes_format',
         'is_featured',
         'is_upcoming',
         'is_live',

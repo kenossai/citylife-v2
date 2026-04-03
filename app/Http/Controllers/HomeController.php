@@ -17,7 +17,8 @@ class HomeController extends Controller
     {
         $heroSlides    = HeroSlide::active()->get();
         $ministries    = Ministry::active()->get();
-        $featuredSermon = Sermon::featured();
+        $featuredSermon = Sermon::featured()
+            ?? Sermon::active()->whereNotNull('slug')->latest('preached_at')->first();
         $upcomingEvents = Event::active()->upcoming()->take(2)->get();
         $aboutSection  = AboutSection::instance();
         $missionsSection = MissionsSection::instance();

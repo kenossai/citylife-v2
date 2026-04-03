@@ -3,8 +3,6 @@
 namespace App\Filament\Resources\SermonSeries\Schemas;
 
 use Filament\Forms\Components\ColorPicker;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
@@ -31,9 +29,6 @@ class SermonSeriesForm
                             ->maxLength(200)
                             ->helperText('Auto-generated from the title.')
                             ->columnSpanFull(),
-                        Textarea::make('description')
-                            ->rows(3)
-                            ->columnSpanFull(),
                         ColorPicker::make('color')
                             ->label('Accent Colour')
                             ->helperText('Used for the series badge on the frontend.')
@@ -42,15 +37,6 @@ class SermonSeriesForm
                             ->label('Sort Order')
                             ->numeric()
                             ->default(0),
-                    ]),
-
-                Section::make('Media')
-                    ->schema([
-                        FileUpload::make('thumbnail_path')
-                            ->label('Series Thumbnail')
-                            ->image()
-                            ->directory('series-thumbnails')
-                            ->columnSpanFull(),
                     ]),
 
                 Section::make('Visibility')

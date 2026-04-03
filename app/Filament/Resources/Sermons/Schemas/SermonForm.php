@@ -162,6 +162,15 @@ class SermonForm
 
                 Section::make('Sermon Notes Content (SEO Optimized)')
                     ->schema([
+                        Select::make('notes_format')
+                            ->label('Content Type')
+                            ->options([
+                                'html'  => 'Rich Text (HTML)',
+                                'plain' => 'Plain Text',
+                            ])
+                            ->default('html')
+                            ->helperText('Choose how the sermon notes content should be formatted')
+                            ->selectablePlaceholder(false),
                         RichEditor::make('notes_content')
                             ->label('')
                             ->helperText('Add typeable sermon notes content for better SEO visibility and search indexing.')
@@ -172,6 +181,7 @@ class SermonForm
                                 'bulletList', 'orderedList',
                                 'attachFiles', 'undo', 'redo',
                             ])
+                            ->extraInputAttributes(['class' => 'notes-editor-scroll'])
                             ->columnSpanFull(),
                     ]),
 
