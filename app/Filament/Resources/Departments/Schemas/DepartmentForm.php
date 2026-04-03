@@ -2,7 +2,8 @@
 
 namespace App\Filament\Resources\Departments\Schemas;
 
-use Filament\Forms\Components\FileUpload;
+use App\Models\Leader;
+use App\Models\Member;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -34,21 +35,28 @@ class DepartmentForm
                         Textarea::make('description')
                             ->rows(3)
                             ->columnSpanFull(),
-                        Select::make('leader_id')
-                            ->label('Department Head')
-                            ->relationship('leader', 'name')
-                            ->searchable()
-                            ->preload()
+                        Select::make('head_type')
+                            ->label('Department Head Type')
+                            ->options([
+                                'leader' => 'Leader',
+                                'member' => 'Member',
+                            ])
+                            ->live()
                             ->nullable()
-                            ->placeholder('Select a leader…')
-                            ->columnSpanFull(),
-                        FileUpload::make('image_path')
-                            ->label('Department Image')
-                            ->image()
-                            ->disk('public')
-                            ->directory('departments')
-                            ->maxSize(2048)
-                            ->columnSpanFull(),
+                            ->placeholder('Select type…')
+                            ->afterStateUpdated(fn (callable $set) => $set('head_id', null)),
+                        Select::make('head_id')
+                            ->label('Department Head')
+                            ->options(fn ($get) => match ($get('head_type')) {
+                                'leader' => Leader::orderBy('name')->pluck('name', 'id'),
+                                'member' => Member::orderBy('first_name')->get()
+                                    ->mapWithKeys(fn ($m) => [$m->id => trim("{$m->first_name} {$m->last_name}")]),
+                                default  => [],
+                            })
+                            ->searchable()
+                            ->nullable()
+                            ->placeholder('Select a person…')
+                            ->visible(fn ($get) => filled($get('head_type'))),
                     ]),
 
                 Section::make('Settings')
@@ -65,3 +73,4 @@ class DepartmentForm
             ]);
     }
 }
+

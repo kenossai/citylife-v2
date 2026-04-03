@@ -4,11 +4,22 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
 
 class Sermon extends Model
 {
+    protected static function booted(): void
+    {
+        static::creating(function (Sermon $sermon) {
+            if (empty($sermon->slug)) {
+                $sermon->slug = Str::slug($sermon->title);
+            }
+        });
+    }
     protected $fillable = [
         'title',
+        'slug',
+        'sermon_series_id',
         'leader_id',
         'guest_speaker_name',
         'scripture',
@@ -39,6 +50,11 @@ class Sermon extends Model
     public function leader(): BelongsTo
     {
         return $this->belongsTo(Leader::class);
+    }
+
+    public function series(): BelongsTo
+    {
+        return $this->belongsTo(SermonSeries::class, 'sermon_series_id');
     }
 
     public function getSpeakerNameAttribute(): string

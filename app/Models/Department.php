@@ -3,16 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Department extends Model
 {
     protected $fillable = [
-        'leader_id',
+        'head_type',
+        'head_id',
         'name',
         'slug',
         'description',
-        'image_path',
         'sort_order',
         'is_active',
     ];
@@ -22,9 +23,27 @@ class Department extends Model
         'sort_order' => 'integer',
     ];
 
-    public function leader(): BelongsTo
+    public function members(): BelongsToMany
     {
-        return $this->belongsTo(Leader::class);
+        return $this->belongsToMany(Member::class)
+            ->withPivot('role')
+            ->withTimestamps();
+    }
+
+    public function head(): MorphTo
+    {
+        return $this->morphTo();
+    }
+
+    public function getHeadNameAttribute(): ?string
+    {
+        if (! $this->head) {
+            return null;
+        }
+
+        return $this->head instanceof Member
+            ? trim("{$this->head->first_name} {$this->head->last_name}")
+            : $this->head->name;
     }
 
     public function scopeActive($query)

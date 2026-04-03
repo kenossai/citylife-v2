@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Sermons\Schemas;
 
 use App\Models\Leader;
+use App\Models\SermonSeries;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
@@ -27,6 +28,21 @@ class SermonForm
                         TextInput::make('title')
                             ->required()
                             ->maxLength(150)
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(fn ($state, callable $set) => $set('slug', \Illuminate\Support\Str::slug($state)))
+                            ->columnSpanFull(),
+                        TextInput::make('slug')
+                            ->required()
+                            ->unique(ignoreRecord: true)
+                            ->maxLength(200)
+                            ->helperText('Auto-generated from the title. Used in the URL.')
+                            ->columnSpanFull(),
+                        Select::make('sermon_series_id')
+                            ->label('Series')
+                            ->options(fn () => SermonSeries::where('is_active', true)->orderBy('title')->pluck('title', 'id'))
+                            ->searchable()
+                            ->nullable()
+                            ->placeholder('Not part of a series')
                             ->columnSpanFull(),
                         Select::make('leader_id')
                             ->label('Pastor / Speaker')

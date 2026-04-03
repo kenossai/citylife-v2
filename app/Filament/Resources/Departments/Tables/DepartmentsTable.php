@@ -6,7 +6,6 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
-use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
@@ -18,13 +17,8 @@ class DepartmentsTable
         return $table
             ->columns([
                 TextColumn::make('sort_order')->label('#')->sortable()->width('60px'),
-                ImageColumn::make('image_path')
-                    ->label('Image')
-                    ->disk('public')
-                    ->square()
-                    ->size(48),
                 TextColumn::make('name')->searchable()->sortable(),
-                TextColumn::make('leader.name')->label('Department Head')->searchable()->sortable(),
+                TextColumn::make('head_name')->label('Department Head'),
                 IconColumn::make('is_active')->label('Active')->boolean(),
             ])
             ->filters([

@@ -55,11 +55,11 @@
 
         return [
             'id' => 'sermon-' . ($sermon->id ?? $index),
-            'slug' => \Illuminate\Support\Str::slug($sermon->title ?? 'walking-in-the-spirit'),
+            'slug' => $sermon->slug ?? \Illuminate\Support\Str::slug($sermon->title ?? 'walking-in-the-spirit'),
             'title' => $sermon->title ?? 'Walking In The Spirit',
-            'speaker' => $sermon->speaker ?? 'Pastor James Maxwell',
+            'speaker' => $sermon->speaker_name ?? 'Pastor',
             'date' => optional($sermon->preached_at)->format('F d, Y') ?: 'March 23, 2026',
-            'meta' => trim(($sermon->speaker ?? 'Pastor James Maxwell') . ' • ' . (optional($sermon->preached_at)->format('M d, Y') ?: 'Mar 23, 2026')),
+            'meta' => trim(($sermon->speaker_name ?? 'Pastor') . ' • ' . (optional($sermon->preached_at)->format('M d, Y') ?: 'Mar 23, 2026')),
             'tag' => \Illuminate\Support\Str::upper(\Illuminate\Support\Str::limit($sermon->service_label ?: $tagFallbacks[$index % count($tagFallbacks)], 18, '')),
             'type' => $type,
             'duration' => $durationFallbacks[$index % count($durationFallbacks)],

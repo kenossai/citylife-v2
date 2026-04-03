@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Sermons\Tables;
 
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
@@ -25,6 +26,7 @@ class SermonsTable
                               ->orWhereHas('leader', fn ($q) => $q->where('name', 'like', "%{$search}%"));
                         });
                     }),
+                TextColumn::make('series.title')->label('Series')->limit(30)->placeholder('—'),
                 TextColumn::make('preached_at')->label('Date')->date('M j, Y')->sortable(),
                 TextColumn::make('service_label')->label('Service')->limit(30),
                 IconColumn::make('is_featured')->label('Featured')->boolean(),
@@ -34,6 +36,7 @@ class SermonsTable
             ->defaultSort('preached_at', 'desc')
             ->recordActions([
                 EditAction::make(),
+                DeleteAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

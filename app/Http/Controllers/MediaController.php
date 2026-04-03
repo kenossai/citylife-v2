@@ -22,6 +22,16 @@ class MediaController extends Controller
 
     public function show(string $slug): View
     {
-        return view('pages.sermon-play', ['slug' => $slug]);
+        $sermon = Sermon::where('slug', $slug)
+            ->where('is_active', true)
+            ->firstOrFail();
+
+        $related = Sermon::active()
+            ->where('id', '!=', $sermon->id)
+            ->orderByDesc('preached_at')
+            ->take(6)
+            ->get();
+
+        return view('pages.sermon-play', compact('sermon', 'related'));
     }
 }

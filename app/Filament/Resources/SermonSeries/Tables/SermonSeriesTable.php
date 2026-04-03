@@ -1,25 +1,29 @@
 <?php
 
-namespace App\Filament\Resources\Ministries\Tables;
+namespace App\Filament\Resources\SermonSeries\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Tables\Columns\ColorColumn;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
-class MinistriesTable
+class SermonSeriesTable
 {
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
                 TextColumn::make('sort_order')->label('#')->sortable()->width('60px'),
-                TextColumn::make('name')->searchable()->sortable(),
-                TextColumn::make('category_label')->label('Category'),
-                TextColumn::make('leader_name')->label('Leader'),
+                ColorColumn::make('color')->label('Colour')->width('60px'),
+                TextColumn::make('title')->searchable()->sortable(),
+                TextColumn::make('sermons_count')
+                    ->label('Sermons')
+                    ->counts('sermons')
+                    ->sortable(),
                 IconColumn::make('is_active')->label('Active')->boolean(),
             ])
             ->filters([])
