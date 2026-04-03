@@ -18,9 +18,12 @@ use App\Http\Controllers\SessionAccessController;
 use App\Http\Controllers\GivingController;
 use App\Http\Controllers\LeadershipController;
 use App\Http\Controllers\MinistryController;
+use App\Http\Controllers\ContactController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/give', [GivingController::class, 'index'])->name('give');
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 Route::post('/give/gift-aid', [GivingController::class, 'storeGiftAid'])->name('give.gift-aid');
 Route::get('/about-citylife', [AboutController::class, 'index'])->name('about');
 Route::get('/leadership', [LeadershipController::class, 'index'])->name('leadership');
