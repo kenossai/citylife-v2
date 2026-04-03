@@ -6,6 +6,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
@@ -47,7 +48,8 @@ class BibleSchoolSessionsTable
 
                 IconColumn::make('is_locked')
                     ->label('Locked')
-                    ->boolean()
+                    ->trueIcon(Heroicon::OutlinedLockClosed)
+                    ->falseIcon(Heroicon::OutlinedLockOpen)
                     ->trueColor('warning')
                     ->falseColor('success'),
 
