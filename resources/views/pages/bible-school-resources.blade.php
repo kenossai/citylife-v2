@@ -221,58 +221,8 @@ function speakersPage() {
         search: '',
         activeYear: 'all',
 
-        speakers: [
-            {
-                slug: 'bishop-robert-clarke',
-                name: 'Bishop Robert Clarke',
-                role: 'Senior Bishop & Principal',
-                church: 'City Life International Church',
-                image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=600&h=700&q=80',
-                years: [2024, 2025],
-                videos: 3,
-                audios: 2,
-                locked: false,
-            },
-            {
-                slug: 'pastor-james-okafor',
-                name: 'Pastor James Okafor',
-                role: 'Senior Pastor & Evangelist',
-                church: 'City Life International Church',
-                image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=600&h=700&q=80',
-                years: [2025, 2026],
-                videos: 3,
-                audios: 1,
-                locked: true,
-            },
-            {
-                slug: 'pastor-michael-adisa',
-                name: 'Pastor Michael Adisa',
-                role: 'Evangelism Director',
-                church: 'City Life International Church',
-                image: 'https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?auto=format&fit=crop&w=600&h=700&q=80',
-                years: [2025, 2026],
-                videos: 2,
-                audios: 1,
-                locked: true,
-            },
-            {
-                slug: 'pastor-grace-mensah',
-                name: 'Pastor Grace Mensah',
-                role: "Women's Ministry Leader",
-                church: 'City Life International Church',
-                image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=600&h=700&q=80',
-                years: [2024, 2026],
-                videos: 2,
-                audios: 1,
-                locked: true,
-            },
-        ],
-
-        years: [
-            { value: 2026, sessions: 7 },
-            { value: 2025, sessions: 5 },
-            { value: 2024, sessions: 3 },
-        ],
+        speakers: @json($speakers),
+        years: @json($years),
 
         get totalSessions() {
             return this.years.reduce((sum, y) => sum + y.sessions, 0);
@@ -281,12 +231,10 @@ function speakersPage() {
         get filteredSpeakers() {
             let result = this.speakers;
 
-            // Filter by year
             if (this.activeYear !== 'all') {
                 result = result.filter(s => s.years.includes(this.activeYear));
             }
 
-            // Filter by search
             if (this.search.trim()) {
                 const q = this.search.toLowerCase();
                 result = result.filter(s =>
