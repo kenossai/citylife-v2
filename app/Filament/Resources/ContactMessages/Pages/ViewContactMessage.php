@@ -75,7 +75,7 @@ class ViewContactMessage extends ViewRecord
                 ->requiresConfirmation()
                 ->action(function () {
                     $this->record->update(['replied_at' => now()]);
-                    $this->refreshRecord();
+                    $this->redirect(request()->header('Referer') ?: static::getResource()::getUrl('view', ['record' => $this->record]));
                 }),
 
             Action::make('reply_email')

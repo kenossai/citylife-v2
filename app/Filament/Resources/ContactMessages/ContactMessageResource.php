@@ -6,11 +6,14 @@ use App\Filament\Resources\ContactMessages\Pages\ListContactMessages;
 use App\Filament\Resources\ContactMessages\Pages\ViewContactMessage;
 use App\Models\ContactMessage;
 use BackedEnum;
+use Filament\Actions\BulkAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\ViewAction;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables;
-use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -122,16 +125,18 @@ class ContactMessageResource extends Resource
                     ]),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                ViewAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkAction::make('mark_read')
-                    ->label('Mark as Read')
-                    ->icon(Heroicon::OutlinedEnvelopeOpen)
-                    ->action(fn ($records) => $records->each->markAsRead())
-                    ->deselectRecordsAfterCompletion(),
+                BulkActionGroup::make([
+                    BulkAction::make('mark_read')
+                        ->label('Mark as Read')
+                        ->icon(Heroicon::OutlinedEnvelopeOpen)
+                        ->action(fn ($records) => $records->each->markAsRead())
+                        ->deselectRecordsAfterCompletion(),
 
-                Tables\Actions\DeleteBulkAction::make(),
+                    DeleteBulkAction::make(),
+                ]),
             ]);
     }
 
