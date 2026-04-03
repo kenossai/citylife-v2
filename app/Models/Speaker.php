@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
@@ -46,6 +47,11 @@ class Speaker extends Model
     public function sessions(): HasMany
     {
         return $this->hasMany(BibleSchoolSession::class);
+    }
+
+    public function events(): BelongsToMany
+    {
+        return $this->belongsToMany(BibleSchoolEvent::class, 'bible_school_event_speaker');
     }
 
     public function scopeActive($query)
