@@ -39,6 +39,7 @@ class SessionAccessCodeResource extends Resource
                 TextColumn::make('code')->label('Code')->fontFamily('mono'),
                 IconColumn::make('verified')->boolean()->trueColor('success')->falseColor('gray'),
                 TextColumn::make('expires_at')->label('Expires')->dateTime()->sortable(),
+                TextColumn::make('last_used_at')->label('Last Used')->since()->placeholder('Never')->sortable(),
                 TextColumn::make('created_at')->label('Requested')->since()->sortable(),
             ])
             ->defaultSort('created_at', 'desc')

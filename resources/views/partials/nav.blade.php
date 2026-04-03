@@ -51,7 +51,7 @@
 
             {{-- Give Button --}}
             <div class="hidden lg:flex items-center gap-3">
-                <a href="{{ url('/giving') }}"
+                <a href="{{ url('/give') }}"
                    class="bg-[#e85d26] hover:bg-[#cf4f1e] text-white text-sm font-semibold px-5 py-2 rounded-full transition-colors">
                     Give Online
                 </a>
@@ -79,7 +79,7 @@
         <a href="{{ url('/events') }}" class="block text-gray-300 hover:text-white py-1">Events</a>
         <a href="{{ url('/bible-school') }}" class="block text-gray-300 hover:text-white py-1">Bible School</a>
         <a href="{{ url('/contact') }}" class="block text-gray-300 hover:text-white py-1">Contact Us</a>
-        <a href="{{ url('/giving') }}" class="inline-block mt-2 bg-[#e85d26] text-white font-semibold px-5 py-2 rounded-full">Give Online</a>
+        <a href="{{ url('/give') }}" class="inline-block mt-2 bg-[#e85d26] text-white font-semibold px-5 py-2 rounded-full">Give Online</a>
     </div>
 </nav>
 

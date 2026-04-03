@@ -20,7 +20,7 @@ class SessionAccessController extends Controller
             'speaker_slug' => ['required', 'string', 'max:100'],
         ]);
 
-        $code = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+        $code = 'BS' . str_pad((string) random_int(0, 9999), 4, '0', STR_PAD_LEFT);
 
         // Expire any previous unused codes for this email + speaker
         SessionAccessCode::where('email', $validated['email'])
@@ -50,7 +50,7 @@ class SessionAccessController extends Controller
     {
         $validated = $request->validate([
             'email' => ['required', 'email', 'max:255'],
-            'code' => ['required', 'string', 'size:6'],
+            'code' => ['required', 'string', 'size:6', 'regex:/^BS\d{4}$/'],
             'speaker_slug' => ['required', 'string', 'max:100'],
         ]);
 
@@ -68,7 +68,7 @@ class SessionAccessController extends Controller
             ], 422);
         }
 
-        $accessCode->update(['verified' => true]);
+        $accessCode->update(['verified' => true, 'last_used_at' => now()]);
 
         // Store verified access in the user's session
         $unlocked = session('unlocked_speakers', []);

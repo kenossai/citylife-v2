@@ -12,10 +12,12 @@ class SessionAccessCode extends Model
         'speaker_slug',
         'verified',
         'expires_at',
+        'last_used_at',
     ];
 
     protected $casts = [
-        'verified' => 'boolean',
-        'expires_at' => 'datetime',
+        'verified'     => 'boolean',
+        'expires_at'   => 'datetime',
+        'last_used_at' => 'datetime',
     ];
 }

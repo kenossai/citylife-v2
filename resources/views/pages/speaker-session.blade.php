@@ -209,7 +209,7 @@
 
                                         <h3 class="mt-5 text-[22px] font-extrabold text-white">Check Your Inbox</h3>
                                         <p class="mx-auto mt-2 max-w-sm text-[13px] leading-relaxed text-white/50">
-                                            We sent a 6-digit code to <strong class="text-white/80" x-text="email"></strong>
+                                            We sent an access code to <strong class="text-white/80" x-text="email"></strong>
                                         </p>
 
                                         {{-- Code input --}}
@@ -218,9 +218,9 @@
                                                 x-model="code"
                                                 type="text"
                                                 maxlength="6"
-                                                inputmode="numeric"
-                                                placeholder="Enter 6-digit code"
-                                                class="h-[52px] w-full rounded-xl border border-white/10 bg-white/5 px-4 text-center font-mono text-[18px] tracking-[0.25em] text-white placeholder-white/30 outline-none focus:border-[#16a34a]/50 focus:ring-2 focus:ring-[#16a34a]/20"
+                                                inputmode="text"
+                                                placeholder="e.g. BS1234"
+                                                class="h-[52px] w-full rounded-xl border border-white/10 bg-white/5 px-4 text-center font-mono text-[18px] tracking-[0.25em] text-white uppercase placeholder-white/30 outline-none focus:border-[#16a34a]/50 focus:ring-2 focus:ring-[#16a34a]/20"
                                                 @keydown.enter="code.length === 6 ? verifyCode() : null"
                                             >
                                         </div>
