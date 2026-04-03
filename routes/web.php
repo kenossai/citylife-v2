@@ -15,10 +15,13 @@ use App\Http\Controllers\Member\MemberDashboardController;
 use App\Http\Controllers\Member\MemberLessonController;
 use App\Http\Controllers\Member\MemberSettingsController;
 use App\Http\Controllers\SessionAccessController;
+use App\Http\Controllers\GivingController;
 use App\Http\Controllers\LeadershipController;
 use App\Http\Controllers\MinistryController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/give', [GivingController::class, 'index'])->name('give');
+Route::post('/give/gift-aid', [GivingController::class, 'storeGiftAid'])->name('give.gift-aid');
 Route::get('/about-citylife', [AboutController::class, 'index'])->name('about');
 Route::get('/leadership', [LeadershipController::class, 'index'])->name('leadership');
 Route::get('/our-ministries', [MinistryController::class, 'index'])->name('ministries');
