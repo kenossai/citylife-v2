@@ -67,6 +67,8 @@
             'watch_url' => route('media.show', \Illuminate\Support\Str::slug($sermon->title ?? 'walking-in-the-spirit')),
             'listen_url' => route('media.show', \Illuminate\Support\Str::slug($sermon->title ?? 'walking-in-the-spirit')),
             'description' => $sermon->description ?: 'An encouraging message to help you live with faith, clarity, and spiritual boldness in everyday life.',
+            'is_upcoming' => (bool) ($sermon->is_upcoming ?? false),
+            'upcoming_date' => optional($sermon->preached_at)->isFuture() ? optional($sermon->preached_at)->format('D, M j · g:i A') : null,
         ];
     };
 
@@ -238,6 +240,55 @@
         </div>
     </section>
 
+    {{-- ============================================================
+         LIVE BANNER — shown only when a sermon has is_live = true
+    ============================================================ --}}
+    @if (!empty($liveSermon))
+    @php
+        $liveChannelId = $liveSermon->youtube_channel_id;
+        $liveEmbedUrl  = $liveChannelId
+            ? 'https://www.youtube.com/embed/live_stream?channel=' . $liveChannelId . '&autoplay=1'
+            : null;
+    @endphp
+    <section class="bg-[#0f0c14] py-10">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+            <div class="mb-5 flex items-center gap-3">
+                <span class="relative flex h-3 w-3">
+                    <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75"></span>
+                    <span class="relative inline-flex h-3 w-3 rounded-full bg-red-600"></span>
+                </span>
+                <span class="text-[11px] font-bold uppercase tracking-[0.28em] text-red-400">We Are Live Now</span>
+                <span class="ml-auto text-[12px] text-white/40">{{ $liveSermon->title }}</span>
+            </div>
+            @if ($liveEmbedUrl)
+                <div class="aspect-video w-full overflow-hidden rounded-2xl shadow-[0_24px_60px_rgba(0,0,0,0.5)]">
+                    <iframe
+                        src="{{ $liveEmbedUrl }}"
+                        class="h-full w-full"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen
+                    ></iframe>
+                </div>
+            @else
+                <div class="flex items-center justify-center rounded-2xl border border-red-500/20 bg-red-500/5 py-14 text-center">
+                    <div>
+                        <p class="text-[16px] font-bold text-white">{{ $liveSermon->title }}</p>
+                        <p class="mt-1 text-[13px] text-white/50">{{ $liveSermon->speakerName ?? '' }}</p>
+                        @if ($liveSermon->video_url)
+                            <a href="{{ $liveSermon->video_url }}" target="_blank" rel="noopener"
+                               class="mt-5 inline-flex items-center gap-2 rounded-full bg-red-600 px-6 py-2.5 text-[13px] font-semibold text-white hover:bg-red-700">
+                                Watch on YouTube
+                                <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </a>
+                        @endif
+                    </div>
+                </div>
+            @endif
+        </div>
+    </section>
+    @endif
+
     <section class="bg-[#161822] py-9 sm:py-10">
         <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
             <div class="mb-4 flex items-center gap-2">
@@ -347,12 +398,24 @@
                                 class="h-[172px] w-full object-cover transition-transform duration-700 group-hover:scale-105"
                             >
                             <span class="absolute bottom-4 right-4 rounded-full bg-black/72 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-white" x-text="item.duration"></span>
+                            <template x-if="item.is_upcoming">
+                                <span class="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-[#e85d26] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white shadow">
+                                    <svg class="h-2.5 w-2.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg>
+                                    Upcoming
+                                </span>
+                            </template>
                         </a>
 
                         <div class="px-4 py-4 sm:px-5">
                             <p class="text-[10px] font-bold uppercase tracking-[0.24em] text-[#e85d26]" x-text="item.tag"></p>
                             <h3 class="mt-2 text-[18px] font-extrabold leading-tight text-[#1f1b22]" x-text="item.title"></h3>
                             <p class="mt-3 text-[12px] text-[#8a8177]" x-text="item.meta"></p>
+                            <template x-if="item.is_upcoming && item.upcoming_date">
+                                <p class="mt-1 inline-flex items-center gap-1 text-[11px] font-semibold text-[#e85d26]">
+                                    <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                    <span x-text="item.upcoming_date"></span>
+                                </p>
+                            </template>
                         </div>
                     </article>
                 </template>

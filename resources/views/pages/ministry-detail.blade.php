@@ -9,6 +9,10 @@
         : [];
 
     $galleryImages = is_array($ministry->gallery_images) ? $ministry->gallery_images : [];
+
+    $leaderName  = $ministry->leader?->name       ?? $ministry->leader_name;
+    $leaderRole  = $ministry->leader?->role       ?? $ministry->leader_role;
+    $leaderImage = $ministry->leader?->image_path ?? $ministry->leader_image;
 @endphp
 
 @section('content')
@@ -75,10 +79,10 @@
                                 {{ $ministry->location }}
                             </span>
                         @endif
-                        @if ($ministry->leader_name)
+                        @if ($leaderName)
                             <span class="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/8 px-4 py-2">
                                 <svg class="h-4 w-4 text-[#e85d26]" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6.75a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
-                                {{ $ministry->leader_name }}
+                                {{ $leaderName }}
                             </span>
                         @endif
                     </div>
@@ -188,7 +192,7 @@
     {{-- ================================================================
          MINISTRY LEADER
     ================================================================ --}}
-    @if ($ministry->leader_name)
+    @if ($leaderName)
     <section class="bg-[#f9fafb] py-16 lg:py-24">
         <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
             <div class="mb-10 text-center">
@@ -204,16 +208,16 @@
 
             <div class="mx-auto max-w-sm">
                 <div class="rounded-2xl border border-[#f3f4f6] bg-white p-6 text-center shadow-sm">
-                    @if ($ministry->leader_image)
+                    @if ($leaderImage)
                         <img
-                            src="{{ $ministry->leader_image }}"
-                            alt="{{ $ministry->leader_name }}"
+                            src="{{ $leaderImage }}"
+                            alt="{{ $leaderName }}"
                             class="mx-auto h-24 w-24 rounded-full object-cover ring-4 ring-[#e85d26]/10"
                         >
                     @endif
-                    <h3 class="mt-4 text-[16px] font-bold text-[#101828]">{{ $ministry->leader_name }}</h3>
-                    @if ($ministry->leader_role)
-                        <p class="mt-1 text-[13px] font-medium text-[#e85d26]">{{ $ministry->leader_role }}</p>
+                    <h3 class="mt-4 text-[16px] font-bold text-[#101828]">{{ $leaderName }}</h3>
+                    @if ($leaderRole)
+                        <p class="mt-1 text-[13px] font-medium text-[#e85d26]">{{ $leaderRole }}</p>
                     @endif
                 </div>
             </div>
@@ -268,14 +272,14 @@
                                 </div>
                             </div>
                         @endif
-                        @if ($ministry->leader_name)
+                        @if ($leaderName)
                             <div class="flex items-center gap-4">
                                 <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/8">
                                     <svg class="h-5 w-5 text-[#e85d26]" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6.75a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
                                 </div>
                                 <div>
                                     <p class="text-[12px] font-bold uppercase tracking-wider text-white/40">Leader</p>
-                                    <p class="text-sm text-white/80">{{ $ministry->leader_name }}@if ($ministry->leader_role) · {{ $ministry->leader_role }}@endif</p>
+                                    <p class="text-sm text-white/80">{{ $leaderName }}@if ($leaderRole) · {{ $leaderRole }}@endif</p>
                                 </div>
                             </div>
                         @endif

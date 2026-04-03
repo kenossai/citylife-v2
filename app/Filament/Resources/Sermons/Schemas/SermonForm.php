@@ -10,8 +10,10 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Notifications\Notification;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Illuminate\Support\HtmlString;
 
 class SermonForm
 {
@@ -55,15 +57,83 @@ class SermonForm
                             ->maxLength(100),
                     ]),
 
-                Section::make('Media')
+                Section::make('Media Links')
                     ->columns(2)
                     ->schema([
                         TextInput::make('thumbnail_path')
                             ->label('Thumbnail Path / URL')
                             ->maxLength(300),
+                        Toggle::make('auto_fetch_live')
+                            ->label('Auto-Fetch Live Stream')
+                            ->helperText('Automatically get YouTube live stream URL on Sundays at 11:15 AM.')
+                            ->columnSpanFull()
+                            ->reactive()
+                            ->afterStateUpdated(function (bool $state, callable $set) {
+                                if (! $state) {
+                                    return;
+                                }
+
+                                $apiKey    = config('services.youtube.api_key');
+                                $channelId = config('services.youtube.channel_id');
+
+                                if (! $apiKey || ! $channelId) {
+                                    $set('auto_fetch_live', false);
+                                    Notification::make()
+                                        ->title('YouTube API not configured')
+                                        ->body('YOUTUBE_API_KEY or YOUTUBE_CHANNEL_ID is missing in your .env file.')
+                                        ->warning()
+                                        ->send();
+                                    return;
+                                }
+
+                                try {
+                                    $client = new \Google\Client();
+                                    $client->setDeveloperKey($apiKey);
+                                    $youtube  = new \Google\Service\YouTube($client);
+                                    $response = $youtube->search->listSearch('id,snippet', [
+                                        'channelId'  => $channelId,
+                                        'eventType'  => 'live',
+                                        'type'       => 'video',
+                                        'maxResults' => 1,
+                                    ]);
+
+                                    $items = $response->getItems();
+
+                                    if (empty($items)) {
+                                        $set('auto_fetch_live', false);
+                                        Notification::make()
+                                            ->title('No live stream found')
+                                            ->body('No live or upcoming stream found at this time. Make sure your channel has an active live stream.')
+                                            ->warning()
+                                            ->send();
+                                        return;
+                                    }
+
+                                    $videoId = $items[0]->getId()->getVideoId();
+                                    $set('video_url', 'https://www.youtube.com/watch?v=' . $videoId);
+
+                                    Notification::make()
+                                        ->title('Live stream found!')
+                                        ->body('Video URL has been populated automatically.')
+                                        ->success()
+                                        ->send();
+                                } catch (\Throwable $e) {
+                                    $set('auto_fetch_live', false);
+                                    Notification::make()
+                                        ->title('YouTube API error')
+                                        ->body($e->getMessage())
+                                        ->danger()
+                                        ->send();
+                                }
+                            }),
                         TextInput::make('video_url')
                             ->label('Video URL')
-                            ->maxLength(300),
+                            ->placeholder('https://youtube.com/watch?v=...')
+                            ->helperText('Enter YouTube or video URL manually.')
+                            ->maxLength(300)
+                            ->columnSpanFull()
+                            ->disabled(fn ($get) => (bool) $get('auto_fetch_live'))
+                            ->dehydrated(true),
                         FileUpload::make('notes_path')
                             ->label('Sermon Notes (PDF)')
                             ->disk('public')
@@ -98,6 +168,9 @@ class SermonForm
                         Toggle::make('is_active')
                             ->label('Active')
                             ->default(true),
+                        Toggle::make('is_upcoming')
+                            ->label('Upcoming Sermon')
+                            ->helperText('Mark as upcoming to show a scheduled badge on the frontend.'),
                     ]),
             ]);
     }

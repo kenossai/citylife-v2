@@ -15,7 +15,7 @@ class MinistryController extends Controller
 
     public function show(string $slug)
     {
-        $ministry = Ministry::where('slug', $slug)->where('is_active', true)->first();
+        $ministry = Ministry::with('leader')->where('slug', $slug)->where('is_active', true)->first();
         $otherMinistries = $ministry
             ? Ministry::active()->where('id', '!=', $ministry->id)->take(3)->get()
             : collect();

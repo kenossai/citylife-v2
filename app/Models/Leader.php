@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Leader extends Model
 {
@@ -47,5 +48,10 @@ class Leader extends Model
         }
 
         return array_filter(array_map('trim', preg_split('/\n{2,}/', $this->bio)));
+    }
+
+    public function ministries(): HasMany
+    {
+        return $this->hasMany(Ministry::class);
     }
 }

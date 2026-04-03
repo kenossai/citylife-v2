@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Ministries\Schemas;
 
+use App\Models\Leader;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -68,17 +70,29 @@ class MinistryForm
                             ->label('Location / Venue')
                             ->placeholder('Main Auditorium')
                             ->maxLength(150),
+                        Select::make('leader_id')
+                            ->label('Ministry Leader')
+                            ->relationship('leader', 'name')
+                            ->searchable()
+                            ->preload()
+                            ->nullable()
+                            ->placeholder('Select a leader…')
+                            ->helperText('Link to a leader in the system. If set, this overrides the manual name/image fields below.')
+                            ->columnSpanFull(),
                         TextInput::make('leader_name')
-                            ->label('Leader Name')
+                            ->label('Leader Name (manual fallback)')
                             ->placeholder('Ps. Daniel Wright')
-                            ->maxLength(100),
+                            ->maxLength(100)
+                            ->helperText('Used only if no leader is selected above.'),
                         TextInput::make('leader_role')
-                            ->label('Leader Role')
+                            ->label('Leader Role (manual fallback)')
                             ->placeholder('Ministry Lead')
-                            ->maxLength(100),
+                            ->maxLength(100)
+                            ->helperText('Used only if no leader is selected above.'),
                         TextInput::make('leader_image')
-                            ->label('Leader Image URL')
+                            ->label('Leader Image URL (manual fallback)')
                             ->maxLength(300)
+                            ->helperText('Used only if no leader is selected above.')
                             ->columnSpanFull(),
                     ]),
 

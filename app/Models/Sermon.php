@@ -20,13 +20,20 @@ class Sermon extends Model
         'notes_path',
         'notes_content',
         'is_featured',
+        'is_upcoming',
+        'is_live',
+        'auto_fetch_live',
+        'youtube_channel_id',
         'is_active',
     ];
 
     protected $casts = [
-        'preached_at' => 'date',
-        'is_featured' => 'boolean',
-        'is_active'   => 'boolean',
+        'preached_at'     => 'date',
+        'is_featured'     => 'boolean',
+        'is_upcoming'     => 'boolean',
+        'is_live'         => 'boolean',
+        'auto_fetch_live' => 'boolean',
+        'is_active'       => 'boolean',
     ];
 
     public function leader(): BelongsTo

@@ -15,7 +15,9 @@ class MediaController extends Controller
 
         $featuredSermon = Sermon::featured() ?? $sermons->first();
 
-        return view('pages.media', compact('sermons', 'featuredSermon'));
+        $liveSermon = Sermon::where('is_live', true)->where('is_active', true)->first();
+
+        return view('pages.media', compact('sermons', 'featuredSermon', 'liveSermon'));
     }
 
     public function show(string $slug): View

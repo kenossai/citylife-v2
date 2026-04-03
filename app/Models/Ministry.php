@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Ministry extends Model
 {
     protected $fillable = [
+        'leader_id',
         'name',
         'slug',
         'subtitle',
@@ -34,5 +36,10 @@ class Ministry extends Model
     public function scopeActive($query)
     {
         return $query->where('is_active', true)->orderBy('sort_order');
+    }
+
+    public function leader(): BelongsTo
+    {
+        return $this->belongsTo(Leader::class);
     }
 }

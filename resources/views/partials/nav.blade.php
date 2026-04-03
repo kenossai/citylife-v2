@@ -40,7 +40,7 @@
                     </button>
                     <div x-show="resOpen" x-transition class="absolute top-full left-0 mt-1 w-44 bg-white text-gray-800 rounded shadow-lg py-2 text-sm">
                         <a href="{{ url('/courses') }}" class="block px-4 py-2 hover:bg-gray-50">Courses</a>
-                        <a href="{{ url('/giving') }}" class="block px-4 py-2 hover:bg-gray-50">Giving</a>
+                        <a href="{{ url('/books') }}" class="block px-4 py-2 hover:bg-gray-50">Books</a>
                         <a href="{{ url('/bible-school') }}" class="block px-4 py-2 hover:bg-gray-50">Bible School</a>
                     </div>
                 </div>
