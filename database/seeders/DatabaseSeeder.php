@@ -18,9 +18,9 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+            'name'  => 'Admin',
+            'email' => 'admin@citylife.com',
+        ])->assignRole('super_admin');
 
         $this->call(HomepageSeeder::class);
         $this->call(AboutPageSeeder::class);
@@ -30,5 +30,6 @@ class DatabaseSeeder extends Seeder
         $this->call(CourseSeeder::class);
         $this->call(BookSeeder::class);
         $this->call(EventSeeder::class);
+        $this->call(RoleSeeder::class);
     }
 }
