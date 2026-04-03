@@ -6,7 +6,7 @@ use App\Http\Controllers\AboutController;
 use App\Http\Controllers\EventsController;
 use App\Http\Controllers\MissionsController;
 use App\Http\Controllers\MediaController;
-use App\Http\Controllers\ResourcesController;
+use App\Http\Controllers\BooksController;
 use App\Http\Controllers\CoursesController;
 use App\Http\Controllers\BibleSchoolController;
 use App\Http\Controllers\BibleSchoolResourceController;
@@ -29,7 +29,8 @@ Route::get('/events/{slug}', [EventsController::class, 'show'])->name('events.sh
 Route::get('/media', [MediaController::class, 'index'])->name('media');
 Route::get('/media/{slug}', [MediaController::class, 'show'])->name('media.show');
 Route::get('/sermons', [MediaController::class, 'index'])->name('sermons');
-Route::get('/resources', [ResourcesController::class, 'index'])->name('resources');
+Route::get('/books', [BooksController::class, 'index'])->name('books.index');
+Route::get('/books/{slug}', [BooksController::class, 'show'])->name('books.show');
 Route::get('/courses', [CoursesController::class, 'index'])->name('courses');
 Route::get('/courses/{slug}', [CoursesController::class, 'show'])->name('courses.show');
 Route::post('/courses/{slug}/enrol', [CoursesController::class, 'enrol'])->name('courses.enrol');

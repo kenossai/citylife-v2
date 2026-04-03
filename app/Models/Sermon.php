@@ -17,6 +17,8 @@ class Sermon extends Model
         'service_label',
         'thumbnail_path',
         'video_url',
+        'notes_path',
+        'notes_content',
         'is_featured',
         'is_active',
     ];

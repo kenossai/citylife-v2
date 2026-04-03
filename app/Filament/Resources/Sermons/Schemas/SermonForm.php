@@ -4,6 +4,8 @@ namespace App\Filament\Resources\Sermons\Schemas;
 
 use App\Models\Leader;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -62,6 +64,29 @@ class SermonForm
                         TextInput::make('video_url')
                             ->label('Video URL')
                             ->maxLength(300),
+                        FileUpload::make('notes_path')
+                            ->label('Sermon Notes (PDF)')
+                            ->disk('public')
+                            ->directory('sermon-notes')
+                            ->acceptedFileTypes(['application/pdf'])
+                            ->maxSize(10240)
+                            ->helperText('Upload a PDF of the sermon notes (max 10 MB).')
+                            ->columnSpanFull(),
+                    ]),
+
+                Section::make('Sermon Notes Content (SEO Optimized)')
+                    ->schema([
+                        RichEditor::make('notes_content')
+                            ->label('')
+                            ->helperText('Add typeable sermon notes content for better SEO visibility and search indexing.')
+                            ->toolbarButtons([
+                                'bold', 'italic', 'underline', 'strike',
+                                'link', 'h2', 'h3',
+                                'blockquote', 'codeBlock',
+                                'bulletList', 'orderedList',
+                                'attachFiles', 'undo', 'redo',
+                            ])
+                            ->columnSpanFull(),
                     ]),
 
                 Section::make('Visibility')
