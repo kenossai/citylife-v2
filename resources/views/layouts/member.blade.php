@@ -21,7 +21,6 @@
     {{-- ── Mobile overlay ── --}}
     <div
         x-show="sidebarOpen"
-        x-transition.opacity
         @click="sidebarOpen = false"
         class="fixed inset-0 z-20 bg-black/60 lg:hidden"
     ></div>
