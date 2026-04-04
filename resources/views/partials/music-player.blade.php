@@ -59,15 +59,9 @@
     </button>
 
     {{-- Hidden audio element --}}
-    <audio
-        x-ref="audio"
-        src="{{ $music->url }}"
-        loop
-        preload="none"
-    ></audio>
+    <audio x-ref="audio" src="{{ $music->url }}" loop preload="auto"></audio>
 </div>
 
-@push('scripts')
 <script>
 function musicPlayer(autoplay) {
     return {
@@ -76,25 +70,36 @@ function musicPlayer(autoplay) {
         muted: false,
         needsInteraction: true,
         audio: null,
+        _clickHandler: null,
 
         init() {
             this.audio = this.$refs.audio;
 
-            this.audio.addEventListener('play',  () => this.playing = true);
-            this.audio.addEventListener('pause', () => this.playing = false);
+            this.audio.addEventListener('play',  () => { this.playing = true; });
+            this.audio.addEventListener('pause', () => { this.playing = false; });
 
-            if (autoplay) {
-                // Try silent autoplay — browsers allow muted autoplay
-                this.audio.muted = true;
-                this.muted = true;
-                this.audio.play().then(() => {
-                    this.needsInteraction = false;
-                    this.playing = true;
-                }).catch(() => {
-                    // Blocked — show the "Play" button prompt
-                    this.needsInteraction = true;
-                });
-            }
+            if (!autoplay) return;
+
+            // Try muted autoplay first (Chrome/Edge allow this)
+            this.audio.muted = true;
+            this.muted = true;
+            this.audio.play().then(() => {
+                this.needsInteraction = false;
+                this.playing = true;
+            }).catch(() => {
+                // Fully blocked — start on the visitor's first interaction with the page
+                this._clickHandler = () => {
+                    this.audio.muted = false;
+                    this.muted = false;
+                    this.audio.play().then(() => {
+                        this.needsInteraction = false;
+                        this.playing = true;
+                    }).catch(() => {});
+                };
+                document.addEventListener('click',      this._clickHandler, { once: true });
+                document.addEventListener('keydown',    this._clickHandler, { once: true });
+                document.addEventListener('touchstart', this._clickHandler, { once: true });
+            });
         },
 
         start() {
@@ -107,11 +112,7 @@ function musicPlayer(autoplay) {
         },
 
         togglePlay() {
-            if (this.audio.paused) {
-                this.audio.play();
-            } else {
-                this.audio.pause();
-            }
+            this.audio.paused ? this.audio.play() : this.audio.pause();
         },
 
         toggleMute() {
@@ -121,4 +122,3 @@ function musicPlayer(autoplay) {
     };
 }
 </script>
-@endpush
