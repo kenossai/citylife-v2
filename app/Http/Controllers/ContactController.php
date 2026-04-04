@@ -20,6 +20,11 @@ class ContactController extends Controller
 
     public function store(Request $request)
     {
+        // Honeypot check — bots fill hidden fields, humans don't
+        if ($request->filled('website')) {
+            return back()->with('success', 'Thank you! Your message has been received.');
+        }
+
         $key = 'contact:' . $request->ip();
 
         if (RateLimiter::tooManyAttempts($key, 3)) {

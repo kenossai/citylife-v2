@@ -121,6 +121,12 @@
                 <form method="POST" action="{{ route('contact.store') }}" novalidate>
                     @csrf
 
+                    {{-- Honeypot: hidden from real users, bots will fill it --}}
+                    <div style="display:none" aria-hidden="true">
+                        <label for="website">Website</label>
+                        <input type="text" name="website" id="website" value="" autocomplete="off" tabindex="-1">
+                    </div>
+
                     <div class="grid gap-4 sm:grid-cols-2">
                         <div>
                             <label class="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-[#66615b]">Full Name <span class="text-[#e85d26]">*</span></label>
