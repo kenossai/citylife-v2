@@ -6,6 +6,7 @@ use App\Mail\ContactMessageMail;
 use App\Models\ContactMessage;
 use App\Models\WorshipCentre;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\RateLimiter;
 
@@ -23,6 +24,19 @@ class ContactController extends Controller
         // Honeypot check — bots fill hidden fields, humans don't
         if ($request->filled('website')) {
             return back()->with('success', 'Thank you! Your message has been received.');
+        }
+
+        // Cloudflare Turnstile verification
+        $turnstileResponse = Http::asForm()->post('https://challenges.cloudflare.com/turnstile/v0/siteverify', [
+            'secret'   => config('services.turnstile.secret_key'),
+            'response' => $request->input('cf-turnstile-response'),
+            'remoteip' => $request->ip(),
+        ]);
+
+        if (! $turnstileResponse->successful() || ! $turnstileResponse->json('success')) {
+            return back()
+                ->withInput()
+                ->withErrors(['cf-turnstile-response' => 'Human verification failed. Please try again.']);
         }
 
         $key = 'contact:' . $request->ip();

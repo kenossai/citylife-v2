@@ -175,7 +175,17 @@
                         </div>
                     </div>
 
-                    <div class="mt-6">
+                    <div class="mt-6 space-y-4">
+                        {{-- Cloudflare Turnstile --}}
+                        <div
+                            class="cf-turnstile"
+                            data-sitekey="{{ config('services.turnstile.site_key') }}"
+                            data-theme="light"
+                        ></div>
+                        @error('cf-turnstile-response')
+                            <p class="text-xs text-red-500">{{ $message }}</p>
+                        @enderror
+
                         <button type="submit"
                             class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#18151a] px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-[#e85d26] sm:w-auto">
                             Send Message
@@ -302,3 +312,7 @@
 
 </div>
 @endsection
+
+@push('scripts')
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+@endpush
