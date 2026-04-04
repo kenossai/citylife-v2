@@ -28,32 +28,34 @@ class BibleSchoolEventsTable
                     ->sortable()
                     ->limit(45),
 
-                TextColumn::make('speakers.name')
-                    ->label('Speakers')
+                TextColumn::make('year')
                     ->badge()
-                    ->color('primary')
-                    ->limitList(3)
-                    ->separator(','),
+                    ->color('success')
+                    ->sortable(),
 
                 TextColumn::make('start_date')
                     ->label('Start')
                     ->date('d M Y')
-                    ->sortable(),
+                    ->sortable()
+                    ->placeholder('—'),
 
-                TextColumn::make('end_date')
-                    ->label('End')
-                    ->date('d M Y')
-                    ->placeholder('—')
-                    ->toggleable(isToggledHiddenByDefault: true),
-
-                TextColumn::make('year')
+                TextColumn::make('speakers_count')
+                    ->label('Speakers')
                     ->badge()
-                    ->color('gray')
-                    ->sortable(),
+                    ->color('primary')
+                    ->counts('speakers'),
 
-                TextColumn::make('location')
-                    ->limit(30)
-                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('videos_count')
+                    ->label('Videos')
+                    ->badge()
+                    ->color('warning')
+                    ->counts('videos'),
+
+                TextColumn::make('audios_count')
+                    ->label('Audios')
+                    ->badge()
+                    ->color('warning')
+                    ->counts('audios'),
 
                 TextColumn::make('status')
                     ->badge()
@@ -63,7 +65,18 @@ class BibleSchoolEventsTable
                         'past'     => 'gray',
                         default    => 'gray',
                     })
-                    ->formatStateUsing(fn (string $state) => ucfirst($state)),
+                    ->formatStateUsing(fn (string $state) => ucfirst($state))
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                TextColumn::make('end_date')
+                    ->label('End')
+                    ->date('d M Y')
+                    ->placeholder('—')
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                TextColumn::make('location')
+                    ->limit(30)
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->defaultSort('start_date', 'desc')
             ->filters([

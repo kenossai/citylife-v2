@@ -20,9 +20,7 @@ class BibleSchoolSessionResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedAcademicCap;
 
-    public static function getNavigationGroup(): ?string { return 'Bible School'; }
-    public static function getNavigationLabel(): string  { return 'Sessions'; }
-    public static function getNavigationSort(): ?int     { return 3; }
+    protected static bool $shouldRegisterNavigation = false;
 
     public static function form(Schema $schema): Schema
     {

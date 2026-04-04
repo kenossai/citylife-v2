@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 class Speaker extends Model
@@ -42,11 +41,6 @@ class Speaker extends Model
     public function getFirstNameAttribute(): string
     {
         return explode(' ', $this->name)[0];
-    }
-
-    public function sessions(): HasMany
-    {
-        return $this->hasMany(BibleSchoolSession::class);
     }
 
     public function events(): BelongsToMany

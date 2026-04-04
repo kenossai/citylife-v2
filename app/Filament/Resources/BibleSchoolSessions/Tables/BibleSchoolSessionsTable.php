@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\BibleSchoolSessions\Tables;
 
+use App\Models\BibleSchoolEvent;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -18,11 +19,11 @@ class BibleSchoolSessionsTable
     {
         return $table
             ->columns([
-                TextColumn::make('speaker.name')
-                    ->label('Speaker')
+                TextColumn::make('event.title')
+                    ->label('Event')
                     ->searchable()
                     ->sortable()
-                    ->limit(30),
+                    ->limit(35),
 
                 TextColumn::make('title')
                     ->searchable()
@@ -61,12 +62,9 @@ class BibleSchoolSessionsTable
             ->filters([
                 SelectFilter::make('type')
                     ->options(['video' => 'Video', 'audio' => 'Audio']),
-
-                SelectFilter::make('speaker_id')
-                    ->label('Speaker')
-                    ->relationship('speaker', 'name')
-                    ->searchable()
-                    ->preload(),
+                SelectFilter::make('bible_school_event_id')
+                    ->label('Event')
+                    ->options(fn () => BibleSchoolEvent::orderByDesc('year')->pluck('title', 'id')),
             ])
             ->recordActions([
                 EditAction::make(),

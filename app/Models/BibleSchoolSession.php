@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class BibleSchoolSession extends Model
 {
     protected $fillable = [
-        'speaker_id',
+        'bible_school_event_id',
         'title',
         'slug',
         'type',
@@ -31,9 +31,9 @@ class BibleSchoolSession extends Model
         'sort_order' => 'integer',
     ];
 
-    public function speaker(): BelongsTo
+    public function event(): BelongsTo
     {
-        return $this->belongsTo(Speaker::class);
+        return $this->belongsTo(BibleSchoolEvent::class);
     }
 
     public function scopeActive($query)

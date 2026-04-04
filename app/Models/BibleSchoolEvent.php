@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 class BibleSchoolEvent extends Model
@@ -42,6 +43,21 @@ class BibleSchoolEvent extends Model
     public function speakers(): BelongsToMany
     {
         return $this->belongsToMany(Speaker::class, 'bible_school_event_speaker');
+    }
+
+    public function sessions(): HasMany
+    {
+        return $this->hasMany(BibleSchoolSession::class);
+    }
+
+    public function videos(): HasMany
+    {
+        return $this->hasMany(BibleSchoolSession::class)->where('type', 'video');
+    }
+
+    public function audios(): HasMany
+    {
+        return $this->hasMany(BibleSchoolSession::class)->where('type', 'audio');
     }
 
     public function scopeUpcoming($query)

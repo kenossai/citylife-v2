@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\BibleSchoolSessions\Schemas;
 
-use App\Models\Speaker;
+use App\Models\BibleSchoolEvent;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -19,9 +19,9 @@ class BibleSchoolSessionForm
             Section::make('Session Details')
                 ->columns(2)
                 ->schema([
-                    Select::make('speaker_id')
-                        ->label('Speaker')
-                        ->options(fn () => Speaker::active()->ordered()->pluck('name', 'id'))
+                    Select::make('bible_school_event_id')
+                        ->label('Event')
+                        ->options(fn () => BibleSchoolEvent::orderByDesc('year')->orderBy('title')->pluck('title', 'id'))
                         ->searchable()
                         ->required()
                         ->columnSpanFull(),
@@ -36,7 +36,7 @@ class BibleSchoolSessionForm
                     TextInput::make('slug')
                         ->required()
                         ->maxLength(255)
-                        ->helperText('Auto-generated. Must be unique per speaker.')
+                        ->helperText('Auto-generated. Must be unique per event.')
                         ->columnSpanFull(),
 
                     Select::make('type')
@@ -78,36 +78,34 @@ class BibleSchoolSessionForm
 
                     Textarea::make('about')
                         ->label('Session Description')
-                        ->rows(5)
+                        ->rows(4)
                         ->columnSpanFull(),
-                ]),
 
-            Section::make('Media')
-                ->columns(2)
-                ->schema([
                     TextInput::make('youtube_id')
-                        ->label('YouTube Video ID')
+                        ->label('YouTube ID')
                         ->placeholder('dQw4w9WgXcQ')
                         ->maxLength(50)
-                        ->helperText('The part after "watch?v=" in the YouTube URL.')
-                        ->visible(fn ($get) => $get('type') !== 'audio'),
+                        ->helperText('The part after youtube.com/watch?v=')
+                        ->visible(fn ($get) => $get('type') === 'video')
+                        ->columnSpanFull(),
 
                     FileUpload::make('audio_file')
                         ->label('Audio File')
-                        ->acceptedFileTypes(['audio/mpeg', 'audio/mp3', 'audio/wav', 'audio/ogg', 'audio/aac'])
                         ->disk('public')
                         ->directory('bible-school/audio')
+                        ->acceptedFileTypes(['audio/mpeg', 'audio/mp3', 'audio/wav', 'audio/ogg'])
                         ->maxSize(102400)
-                        ->helperText('MP3 or similar. Max 100MB.')
-                        ->visible(fn ($get) => $get('type') === 'audio'),
+                        ->visible(fn ($get) => $get('type') === 'audio')
+                        ->columnSpanFull(),
                 ]),
 
             Section::make('Visibility')
                 ->columns(2)
                 ->schema([
                     Toggle::make('is_locked')
-                        ->label('Locked (requires email unlock)')
+                        ->label('Requires Access Code')
                         ->default(true),
+
                     Toggle::make('is_active')
                         ->label('Active')
                         ->default(true),
