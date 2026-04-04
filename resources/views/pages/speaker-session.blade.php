@@ -327,7 +327,7 @@
                                     </div>
                                     <div>
                                         <p class="text-[13px] font-semibold text-[#101828]">{{ $other->name }}</p>
-                                        <p class="text-[12px] text-[#98a2b3]">{{ $other->sessions()->active()->count() }} sessions</p>
+                                        <p class="text-[12px] text-[#98a2b3]">{{ $other->sessions_count }} sessions</p>
                                     </div>
                                 </a>
                             @endforeach

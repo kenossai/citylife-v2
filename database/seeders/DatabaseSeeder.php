@@ -31,6 +31,8 @@ class DatabaseSeeder extends Seeder
         $this->call(BookSeeder::class);
         $this->call(EventSeeder::class);
         $this->call(SpeakerSeeder::class);
+        $this->call(BibleSchoolEventSeeder::class);
+        $this->call(BibleSchoolSessionSeeder::class);
         $this->call(RoleSeeder::class);
     }
 }

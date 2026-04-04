@@ -27,9 +27,9 @@ class SpeakersTable
                 TextColumn::make('name')->searchable()->sortable()->limit(40),
                 TextColumn::make('role')->searchable()->limit(40)->toggleable(),
                 TextColumn::make('church')->limit(35)->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('sessions_count')
-                    ->label('Sessions')
-                    ->counts('sessions')
+                TextColumn::make('events_count')
+                    ->label('Events')
+                    ->counts('events')
                     ->badge()
                     ->color('primary'),
                 IconColumn::make('is_active')->label('Active')->boolean(),

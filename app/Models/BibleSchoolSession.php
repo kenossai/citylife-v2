@@ -33,7 +33,7 @@ class BibleSchoolSession extends Model
 
     public function event(): BelongsTo
     {
-        return $this->belongsTo(BibleSchoolEvent::class);
+        return $this->belongsTo(BibleSchoolEvent::class, 'bible_school_event_id');
     }
 
     public function scopeActive($query)

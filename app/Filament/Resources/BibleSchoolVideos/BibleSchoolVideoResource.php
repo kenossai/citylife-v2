@@ -2,10 +2,10 @@
 
 namespace App\Filament\Resources\BibleSchoolVideos;
 
-use App\Filament\Resources\BibleSchoolSessions\Pages\CreateBibleSchoolSession;
-use App\Filament\Resources\BibleSchoolSessions\Pages\EditBibleSchoolSession;
 use App\Filament\Resources\BibleSchoolSessions\Schemas\BibleSchoolSessionForm;
 use App\Filament\Resources\BibleSchoolSessions\Tables\BibleSchoolSessionsTable;
+use App\Filament\Resources\BibleSchoolVideos\Pages\CreateBibleSchoolVideo;
+use App\Filament\Resources\BibleSchoolVideos\Pages\EditBibleSchoolVideo;
 use App\Filament\Resources\BibleSchoolVideos\Pages\ListBibleSchoolVideos;
 use App\Models\BibleSchoolSession;
 use BackedEnum;
@@ -49,8 +49,8 @@ class BibleSchoolVideoResource extends Resource
     {
         return [
             'index'  => ListBibleSchoolVideos::route('/'),
-            'create' => CreateBibleSchoolSession::route('/create'),
-            'edit'   => EditBibleSchoolSession::route('/{record}/edit'),
+            'create' => CreateBibleSchoolVideo::route('/create'),
+            'edit'   => EditBibleSchoolVideo::route('/{record}/edit'),
         ];
     }
 }

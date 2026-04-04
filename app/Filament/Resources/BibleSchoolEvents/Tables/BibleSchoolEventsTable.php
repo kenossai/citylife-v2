@@ -20,8 +20,7 @@ class BibleSchoolEventsTable
                 ImageColumn::make('image')
                     ->label('')
                     ->square()
-                    ->size(48)
-                    ->defaultImageUrl(asset('images/slide-1.png')),
+                    ->disk('public'),
 
                 TextColumn::make('title')
                     ->searchable()

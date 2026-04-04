@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources\BibleSchoolAudios;
 
+use App\Filament\Resources\BibleSchoolAudios\Pages\CreateBibleSchoolAudio;
+use App\Filament\Resources\BibleSchoolAudios\Pages\EditBibleSchoolAudio;
 use App\Filament\Resources\BibleSchoolAudios\Pages\ListBibleSchoolAudios;
-use App\Filament\Resources\BibleSchoolSessions\Pages\CreateBibleSchoolSession;
-use App\Filament\Resources\BibleSchoolSessions\Pages\EditBibleSchoolSession;
 use App\Filament\Resources\BibleSchoolSessions\Schemas\BibleSchoolSessionForm;
 use App\Filament\Resources\BibleSchoolSessions\Tables\BibleSchoolSessionsTable;
 use App\Models\BibleSchoolSession;
@@ -49,8 +49,8 @@ class BibleSchoolAudioResource extends Resource
     {
         return [
             'index'  => ListBibleSchoolAudios::route('/'),
-            'create' => CreateBibleSchoolSession::route('/create'),
-            'edit'   => EditBibleSchoolSession::route('/{record}/edit'),
+            'create' => CreateBibleSchoolAudio::route('/create'),
+            'edit'   => EditBibleSchoolAudio::route('/{record}/edit'),
         ];
     }
 }
