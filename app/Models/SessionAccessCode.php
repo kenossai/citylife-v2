@@ -10,12 +10,14 @@ class SessionAccessCode extends Model
         'email',
         'code',
         'speaker_slug',
+        'year',
         'verified',
         'expires_at',
         'last_used_at',
     ];
 
     protected $casts = [
+        'year'         => 'integer',
         'verified'     => 'boolean',
         'expires_at'   => 'datetime',
         'last_used_at' => 'datetime',

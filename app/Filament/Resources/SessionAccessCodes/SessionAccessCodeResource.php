@@ -36,6 +36,7 @@ class SessionAccessCodeResource extends Resource
             ->columns([
                 TextColumn::make('email')->searchable()->copyable()->limit(40),
                 TextColumn::make('speaker_slug')->label('Speaker')->searchable()->limit(35),
+                TextColumn::make('year')->label('Year')->sortable()->placeholder('—'),
                 TextColumn::make('code')->label('Code')->fontFamily('mono'),
                 IconColumn::make('verified')->boolean()->trueColor('success')->falseColor('gray'),
                 TextColumn::make('expires_at')->label('Expires')->dateTime()->sortable(),
@@ -46,6 +47,8 @@ class SessionAccessCodeResource extends Resource
             ->filters([
                 SelectFilter::make('verified')
                     ->options(['1' => 'Verified', '0' => 'Pending']),
+                SelectFilter::make('year')
+                    ->options(fn () => SessionAccessCode::query()->distinct()->orderByDesc('year')->pluck('year', 'year')->filter()->toArray()),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

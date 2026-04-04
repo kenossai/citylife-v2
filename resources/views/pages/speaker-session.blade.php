@@ -10,7 +10,9 @@
 @endpush
 
 @section('content')
-@php $isLocked = !$unlocked; @endphp
+@php
+    $totalSessions = $sessionsByYear->flatten()->count();
+@endphp
 
 <div x-data="speakerSession()" class="bg-[#f9fafb] text-[#101828]">
 
@@ -66,7 +68,7 @@
                         </span>
                         <span class="flex items-center gap-1.5">
                             <svg class="h-4 w-4 text-[#e85d26]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                            <strong class="text-[#101828]">{{ $sessions->count() }}</strong> Sessions
+                            <strong class="text-[#101828]">{{ $totalSessions }}</strong> Sessions
                         </span>
                     </div>
                 </div>
@@ -95,220 +97,177 @@
                         </p>
                     </div>
 
-                    {{-- Teaching Sessions --}}
-                    <div class="mt-10">
-                        <div class="flex items-center gap-3">
-                            <span class="h-[2px] w-5 bg-[#e85d26]"></span>
-                            <h2 class="text-[12px] font-bold uppercase tracking-[0.1em] text-[#e85d26]">Teaching Sessions</h2>
-                            @if ($isLocked)
-                                <span class="inline-flex h-[24px] items-center gap-1.5 rounded-md bg-[#fff7ed] px-2.5 text-[11px] font-bold text-[#e85d26]">
-                                    <svg class="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
-                                    Locked
-                                </span>
-                            @endif
-                        </div>
+                    {{-- Teaching Sessions — grouped by year --}}
+                    <div class="mt-10 space-y-4">
 
-                        @if ($isLocked)
-                            {{-- Locked state — two-step unlock card --}}
-                            <div class="mt-6 overflow-hidden rounded-2xl bg-[#13131f] p-8 text-center shadow-xl"
-                                 x-data="unlockFlow('{{ $speaker->first_name }}', '{{ $speaker->slug }}')"
-                            >
-                                {{-- ===== STEP 1: Enter email ===== --}}
-                                <template x-if="step === 'email'">
-                                    <div>
-                                        {{-- Lock icon --}}
-                                        <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#ff8904]/30 to-[#e85d26]/30 ring-1 ring-[#ff8904]/20">
-                                            <svg class="h-7 w-7 text-[#ff8904]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
+                        @foreach ($sessionsByYear as $year => $yearSessions)
+                        @php
+                            $yearIsUnlocked = in_array($year, $unlockedYears);
+                            $sessionCount   = $yearSessions->count();
+                        @endphp
+
+                        <div x-data="unlockFlow('{{ $speaker->first_name }}', '{{ $speaker->slug }}', {{ $year }})"
+                             class="overflow-hidden rounded-2xl border border-[#f3f4f6] bg-white shadow-sm">
+
+                            @if ($yearIsUnlocked)
+
+                                {{-- ── UNLOCKED: year header + sessions list ── --}}
+                                <div class="flex items-center justify-between border-b border-[#f3f4f6] px-5 py-4">
+                                    <div class="flex items-center gap-2.5">
+                                        <span class="h-[2px] w-4 bg-[#e85d26]"></span>
+                                        <h2 class="text-[13px] font-bold uppercase tracking-[0.08em] text-[#101828]">{{ $year }} Sessions</h2>
+                                        <span class="rounded-full bg-[#f3f4f6] px-2 py-0.5 text-[11px] font-semibold text-[#667085]">{{ $sessionCount }}</span>
+                                    </div>
+                                    <span class="inline-flex items-center gap-1.5 rounded-full bg-[#dcfce7] px-2.5 py-1 text-[11px] font-bold text-[#16a34a]">
+                                        <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                                        Unlocked
+                                    </span>
+                                </div>
+                                <div class="divide-y divide-[#f9fafb] px-5 py-2">
+                                    @foreach ($yearSessions as $session)
+                                        <div class="flex items-center gap-4 py-3">
+                                            <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg {{ $session->type === 'video' ? 'bg-[#fff7ed] text-[#e85d26]' : 'bg-[#f0f9ff] text-[#2563eb]' }}">
+                                                @if ($session->type === 'video')
+                                                    <svg class="h-4.5 w-4.5" fill="currentColor" viewBox="0 0 20 20"><path d="M6.3 2.84A1.5 1.5 0 004 4.11v11.78a1.5 1.5 0 002.3 1.27l9.344-5.891a1.5 1.5 0 000-2.538L6.3 2.84z"/></svg>
+                                                @else
+                                                    <svg class="h-4.5 w-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072M12 12h.01M18.364 5.636a9 9 0 010 12.728"/></svg>
+                                                @endif
+                                            </div>
+                                            <div class="flex-1 min-w-0">
+                                                <h4 class="truncate text-[14px] font-semibold text-[#101828]">{{ $session->title }}</h4>
+                                                <div class="mt-0.5 flex items-center gap-2 text-[12px] text-[#98a2b3]">
+                                                    <span>{{ ucfirst($session->type) }}</span>
+                                                    @if ($session->duration)
+                                                        <span>·</span><span>{{ $session->duration }}</span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <a href="{{ route('bible-school.resources.play', [$speaker->slug, $session->slug]) }}"
+                                               class="flex h-8 shrink-0 items-center gap-1.5 rounded-lg bg-[#e85d26] px-3.5 text-[12px] font-semibold text-white transition-colors hover:bg-[#d14f1e]">
+                                                @if ($session->type === 'video')
+                                                    <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20"><path d="M6.3 2.84A1.5 1.5 0 004 4.11v11.78a1.5 1.5 0 002.3 1.27l9.344-5.891a1.5 1.5 0 000-2.538L6.3 2.84z"/></svg>Watch
+                                                @else
+                                                    <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072M12 12h.01M18.364 5.636a9 9 0 010 12.728"/></svg>Listen
+                                                @endif
+                                            </a>
                                         </div>
+                                    @endforeach
+                                </div>
 
-                                        {{-- Badge --}}
-                                        <div class="mt-5 inline-flex h-[26px] items-center gap-1.5 rounded-full border border-[#ff8904]/30 bg-[#ff8904]/10 px-3 text-[10px] font-bold uppercase tracking-[0.1em] text-[#ff8904]">
-                                            <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20"><path d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.381z"/></svg>
-                                            Bible School International
-                                        </div>
+                            @else
 
-                                        <h3 class="mt-4 text-[22px] font-extrabold text-white">Access Teaching Resources</h3>
-                                        <p class="mx-auto mt-2 max-w-sm text-[13px] leading-relaxed text-white/50">
-                                            Enter your email to receive a one-time code and unlock all of <strong class="text-white/80">{{ $speaker['firstName'] }}</strong>'s sessions.
-                                        </p>
+                                {{-- ── LOCKED: compact row + expandable form ── --}}
+                                <div class="flex items-center justify-between px-5 py-4"
+                                     :class="step !== 'closed' ? 'border-b border-[#f3f4f6]' : ''">
+                                    <div class="flex items-center gap-2.5">
+                                        <svg class="h-4 w-4 shrink-0 text-[#e85d26]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
+                                        <h2 class="text-[13px] font-bold uppercase tracking-[0.08em] text-[#101828]">{{ $year }} Sessions</h2>
+                                        <span class="rounded-full bg-[#f3f4f6] px-2 py-0.5 text-[11px] font-semibold text-[#667085]">{{ $sessionCount }}</span>
+                                    </div>
+                                    <button
+                                        x-show="step === 'closed'"
+                                        @click="step = 'email'"
+                                        class="inline-flex h-8 items-center gap-1.5 rounded-lg bg-[#e85d26] px-3.5 text-[12px] font-semibold text-white transition-colors hover:bg-[#d14f1e]">
+                                        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
+                                        Request Access Code
+                                    </button>
+                                    <button
+                                        x-show="step !== 'closed' && step !== 'unlocked'"
+                                        x-cloak
+                                        @click="step = 'closed'"
+                                        class="text-[12px] text-[#98a2b3] hover:text-[#667085]">
+                                        Cancel
+                                    </button>
+                                </div>
 
-                                        {{-- Email input --}}
-                                        <div class="mx-auto mt-6 max-w-sm">
-                                            <input
-                                                x-model="email"
-                                                type="email"
-                                                placeholder="Enter your email address"
-                                                class="h-[46px] w-full rounded-xl border border-white/10 bg-white/5 px-4 text-[14px] text-white placeholder-white/30 outline-none focus:border-[#e85d26]/50 focus:ring-2 focus:ring-[#e85d26]/20"
-                                                @keydown.enter="consent && email ? sendCode() : null"
-                                            >
-                                        </div>
+                                {{-- Expandable unlock form --}}
+                                <div x-show="step !== 'closed'" x-cloak class="px-6 py-6 text-center">
 
-                                        {{-- Data consent checkbox --}}
-                                        <div class="mx-auto mt-4 max-w-sm">
-                                            <label class="flex items-start gap-2.5 text-left">
+                                    {{-- STEP 1: Email --}}
+                                    <template x-if="step === 'email'">
+                                        <div>
+                                            <h3 class="text-[17px] font-extrabold text-[#101828]">Unlock {{ $year }} Sessions</h3>
+                                            <p class="mx-auto mt-1.5 max-w-sm text-[13px] leading-relaxed text-[#667085]">
+                                                Enter your email to receive a one-time code for <strong class="text-[#101828]">{{ $speaker->first_name }}'s {{ $year }}</strong> sessions.
+                                            </p>
+                                            <div class="mx-auto mt-5 max-w-sm space-y-3">
                                                 <input
-                                                    x-model="consent"
-                                                    type="checkbox"
-                                                    class="mt-0.5 h-4 w-4 shrink-0 rounded border-white/20 bg-white/5 text-[#e85d26] focus:ring-[#e85d26]/30"
+                                                    x-model="email"
+                                                    type="email"
+                                                    placeholder="Enter your email address"
+                                                    class="h-[44px] w-full rounded-xl border border-[#e5e7eb] bg-[#f9fafb] px-4 text-[14px] text-[#101828] placeholder-[#98a2b3] outline-none focus:border-[#e85d26] focus:ring-2 focus:ring-[#e85d26]/15"
+                                                    @keydown.enter="consent && email ? sendCode() : null"
                                                 >
-                                                <span class="text-[12px] leading-relaxed text-white/45">
-                                                    I consent to my email being used to send a one-time access code and agree to the <a href="#" class="text-[#ff8904] underline hover:text-[#e85d26]">Privacy Policy</a>.
-                                                </span>
-                                            </label>
-                                        </div>
-
-                                        {{-- Error message --}}
-                                        <template x-if="error">
-                                            <p class="mx-auto mt-3 max-w-sm text-[12px] text-red-400" x-text="error"></p>
-                                        </template>
-
-                                        {{-- Unlock button --}}
-                                        <div class="mx-auto mt-4 max-w-sm">
-                                            <button
-                                                @click="sendCode()"
-                                                :disabled="!consent || !email || loading"
-                                                :class="consent && email && !loading ? 'opacity-100 hover:shadow-[#e85d26]/25 hover:brightness-110' : 'opacity-50 cursor-not-allowed'"
-                                                class="flex h-[46px] w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#e85d26] to-[#ff8904] text-[14px] font-bold text-white shadow-lg transition-all"
-                                            >
-                                                <template x-if="!loading">
-                                                    <span class="flex items-center gap-2">
-                                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                                                        Unlock Sessions
+                                                <label class="flex cursor-pointer items-start gap-2.5 text-left">
+                                                    <input x-model="consent" type="checkbox" class="mt-0.5 h-4 w-4 shrink-0 rounded border-[#d1d5db] text-[#e85d26]">
+                                                    <span class="text-[12px] leading-relaxed text-[#667085]">
+                                                        I consent to my email being used to send a one-time access code.
                                                     </span>
+                                                </label>
+                                                <button
+                                                    @click="sendCode()"
+                                                    :disabled="!consent || !email || loading"
+                                                    class="inline-flex h-[44px] w-full items-center justify-center gap-2 rounded-xl bg-[#e85d26] text-[14px] font-semibold text-white transition-colors hover:bg-[#d14f1e] disabled:opacity-40">
+                                                    <span x-show="!loading">Send Access Code</span>
+                                                    <span x-show="loading" x-cloak>Sending…</span>
+                                                </button>
+                                                <template x-if="error">
+                                                    <p class="text-[12px] text-red-500" x-text="error"></p>
                                                 </template>
-                                                <template x-if="loading">
-                                                    <span class="flex items-center gap-2">
-                                                        <svg class="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
-                                                        Sending…
-                                                    </span>
-                                                </template>
-                                            </button>
-                                        </div>
-
-                                        {{-- Trust badges --}}
-                                        <div class="mt-5 flex items-center justify-center gap-4 text-[11px] text-white/35">
-                                            <span class="flex items-center gap-1">
-                                                <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                                                Secure
-                                            </span>
-                                            <span>·</span>
-                                            <span>One-time code</span>
-                                            <span>·</span>
-                                            <span>Free access</span>
-                                        </div>
-                                    </div>
-                                </template>
-
-                                {{-- ===== STEP 2: Verify code ===== --}}
-                                <template x-if="step === 'verify'">
-                                    <div>
-                                        {{-- Check icon --}}
-                                        <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#0d3320] ring-1 ring-[#16a34a]/30">
-                                            <svg class="h-7 w-7 text-[#16a34a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                        </div>
-
-                                        <h3 class="mt-5 text-[22px] font-extrabold text-white">Check Your Inbox</h3>
-                                        <p class="mx-auto mt-2 max-w-sm text-[13px] leading-relaxed text-white/50">
-                                            We sent an access code to <strong class="text-white/80" x-text="email"></strong>
-                                        </p>
-
-                                        {{-- Code input --}}
-                                        <div class="mx-auto mt-5 max-w-sm">
-                                            <input
-                                                x-model="code"
-                                                type="text"
-                                                maxlength="6"
-                                                inputmode="text"
-                                                placeholder="e.g. BS1234"
-                                                class="h-[52px] w-full rounded-xl border border-white/10 bg-white/5 px-4 text-center font-mono text-[18px] tracking-[0.25em] text-white uppercase placeholder-white/30 outline-none focus:border-[#16a34a]/50 focus:ring-2 focus:ring-[#16a34a]/20"
-                                                @keydown.enter="code.length === 6 ? verifyCode() : null"
-                                            >
-                                        </div>
-
-                                        {{-- Error message --}}
-                                        <template x-if="error">
-                                            <p class="mx-auto mt-3 max-w-sm text-[12px] text-red-400" x-text="error"></p>
-                                        </template>
-
-                                        {{-- Verify button --}}
-                                        <div class="mx-auto mt-4 max-w-sm">
-                                            <button
-                                                @click="verifyCode()"
-                                                :disabled="code.length !== 6 || loading"
-                                                :class="code.length === 6 && !loading ? 'opacity-100 hover:brightness-110' : 'opacity-50 cursor-not-allowed'"
-                                                class="flex h-[46px] w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#16a34a] to-[#22d3ee] text-[14px] font-bold text-white shadow-lg transition-all"
-                                            >
-                                                <template x-if="!loading">
-                                                    <span class="flex items-center gap-2">
-                                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                                        Verify & Unlock
-                                                    </span>
-                                                </template>
-                                                <template x-if="loading">
-                                                    <span class="flex items-center gap-2">
-                                                        <svg class="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
-                                                        Verifying…
-                                                    </span>
-                                                </template>
-                                            </button>
-                                        </div>
-
-                                        {{-- Go back link --}}
-                                        <p class="mt-5 text-[12px] text-white/35">
-                                            Didn't receive it? <button @click="step = 'email'; code = ''; error = ''" class="text-white/50 underline hover:text-white/70">Go back and resend</button>
-                                        </p>
-                                    </div>
-                                </template>
-
-                                {{-- ===== STEP 3: Unlocked ===== --}}
-                                <template x-if="step === 'unlocked'">
-                                    <div>
-                                        <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#0d3320] ring-1 ring-[#16a34a]/30">
-                                            <svg class="h-7 w-7 text-[#16a34a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                                        </div>
-                                        <h3 class="mt-5 text-[22px] font-extrabold text-white">Sessions Unlocked!</h3>
-                                        <p class="mx-auto mt-2 max-w-sm text-[13px] text-white/50">Refreshing the page…</p>
-                                    </div>
-                                </template>
-                            </div>
-                        @else
-                            {{-- Unlocked sessions list --}}
-                            <div class="mt-6 space-y-3">
-                                @foreach ($sessions as $session)
-                                    <div class="flex items-center gap-4 rounded-xl border border-[#f3f4f6] bg-white px-4 py-3.5 shadow-sm transition-shadow hover:shadow-md">
-                                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg {{ $session->type === 'video' ? 'bg-[#fff7ed] text-[#e85d26]' : 'bg-[#f0f9ff] text-[#2563eb]' }}">
-                                            @if ($session->type === 'video')
-                                                <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path d="M6.3 2.84A1.5 1.5 0 004 4.11v11.78a1.5 1.5 0 002.3 1.27l9.344-5.891a1.5 1.5 0 000-2.538L6.3 2.84z"/></svg>
-                                            @else
-                                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072M12 12h.01M18.364 5.636a9 9 0 010 12.728"/></svg>
-                                            @endif
-                                        </div>
-                                        <div class="flex-1">
-                                            <h4 class="text-[14px] font-semibold text-[#101828]">{{ $session->title }}</h4>
-                                            <div class="mt-0.5 flex items-center gap-3 text-[12px] text-[#98a2b3]">
-                                                <span>{{ ucfirst($session->type) }}</span>
-                                                <span>·</span>
-                                                <span>{{ $session->duration }}</span>
-                                                <span>·</span>
-                                                <span>{{ $session->year }}</span>
                                             </div>
                                         </div>
-                                        <button class="flex h-9 items-center gap-1.5 rounded-lg bg-[#e85d26] px-4 text-[12px] font-semibold text-white transition-colors hover:bg-[#d14f1e]"
-                                            onclick="window.location='{{ route('bible-school.resources.play', [$speaker->slug, $session->slug]) }}'">
-                                            @if ($session->type === 'video')
-                                                <svg class="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M6.3 2.84A1.5 1.5 0 004 4.11v11.78a1.5 1.5 0 002.3 1.27l9.344-5.891a1.5 1.5 0 000-2.538L6.3 2.84z"/></svg>
-                                                Watch
-                                            @else
-                                                <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072M12 12h.01M18.364 5.636a9 9 0 010 12.728"/></svg>
-                                                Listen
-                                            @endif
-                                        </button>
-                                    </div>
-                                @endforeach
-                            </div>
-                        @endif
-                    </div>
+                                    </template>
 
+                                    {{-- STEP 2: Verify code --}}
+                                    <template x-if="step === 'verify'">
+                                        <div>
+                                            <h3 class="text-[17px] font-extrabold text-[#101828]">Check Your Inbox</h3>
+                                            <p class="mx-auto mt-1.5 max-w-sm text-[13px] leading-relaxed text-[#667085]">
+                                                We sent a code to <strong class="text-[#101828]" x-text="email"></strong>. Enter it below.
+                                            </p>
+                                            <div class="mx-auto mt-5 max-w-sm space-y-3">
+                                                <input
+                                                    x-model="code"
+                                                    type="text"
+                                                    placeholder="e.g. BS1234"
+                                                    maxlength="6"
+                                                    inputmode="text"
+                                                    class="h-[44px] w-full rounded-xl border border-[#e5e7eb] bg-[#f9fafb] px-4 text-center text-[18px] font-bold uppercase tracking-[0.2em] text-[#101828] placeholder-[#d1d5db] outline-none focus:border-[#e85d26] focus:ring-2 focus:ring-[#e85d26]/15"
+                                                    @keydown.enter="code.length === 6 ? verifyCode() : null"
+                                                >
+                                                <button
+                                                    @click="verifyCode()"
+                                                    :disabled="code.length !== 6 || loading"
+                                                    class="inline-flex h-[44px] w-full items-center justify-center gap-2 rounded-xl bg-[#e85d26] text-[14px] font-semibold text-white transition-colors hover:bg-[#d14f1e] disabled:opacity-40">
+                                                    <span x-show="!loading">Verify Code</span>
+                                                    <span x-show="loading" x-cloak>Verifying…</span>
+                                                </button>
+                                                <template x-if="error">
+                                                    <p class="text-[12px] text-red-500" x-text="error"></p>
+                                                </template>
+                                                <button @click="step = 'email'" class="text-[12px] text-[#98a2b3] hover:text-[#667085]">← Change email</button>
+                                            </div>
+                                        </div>
+                                    </template>
+
+                                    {{-- STEP 3: Success --}}
+                                    <template x-if="step === 'unlocked'">
+                                        <div class="flex flex-col items-center gap-2 py-2">
+                                            <div class="flex h-11 w-11 items-center justify-center rounded-full bg-[#dcfce7]">
+                                                <svg class="h-6 w-6 text-[#16a34a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                                            </div>
+                                            <p class="text-[14px] font-semibold text-[#101828]">{{ $year }} Sessions Unlocked!</p>
+                                            <p class="text-[12px] text-[#667085]">Refreshing…</p>
+                                        </div>
+                                    </template>
+
+                                </div>
+
+                            @endif
+                        </div>
+                        @endforeach
+
+                    </div>
                 </div>
 
                 {{-- RIGHT — Sidebar --}}
@@ -356,9 +315,9 @@
 
 @push('scripts')
 <script>
-function unlockFlow(firstName, speakerSlug) {
+function unlockFlow(firstName, speakerSlug, year) {
     return {
-        step: 'email',       // 'email' | 'verify' | 'unlocked'
+        step: 'closed',      // 'closed' | 'email' | 'verify' | 'unlocked'
         email: '',
         consent: false,
         code: '',
@@ -379,6 +338,7 @@ function unlockFlow(firstName, speakerSlug) {
                     body: JSON.stringify({
                         email: this.email,
                         speaker_slug: speakerSlug,
+                        year: year,
                     }),
                 });
                 const data = await res.json();
@@ -409,6 +369,7 @@ function unlockFlow(firstName, speakerSlug) {
                         email: this.email,
                         code: this.code,
                         speaker_slug: speakerSlug,
+                        year: year,
                     }),
                 });
                 const data = await res.json();

@@ -51,13 +51,24 @@ class BibleSchoolResourceController extends Controller
         $speaker->audios_count = BibleSchoolSession::whereIn('bible_school_event_id', $eventIds)
             ->where('type', 'audio')->where('is_active', true)->count();
 
+        // Group sessions by year, ordered year desc then sort_order
         $sessions = BibleSchoolSession::whereIn('bible_school_event_id', $eventIds)
             ->active()
             ->orderBy('year', 'desc')
             ->orderBy('sort_order')
             ->get();
 
-        $unlocked = in_array($slug, array_keys(session('unlocked_speakers', [])));
+        $sessionsByYear = $sessions->groupBy('year')->sortKeysDesc();
+
+        // All years require an access code — no open sessions
+        $lockedYears = $sessionsByYear->keys()->all();
+
+        // Determine which years this browser session has already unlocked
+        $unlockedKeys = session('unlocked_sessions', []);
+        $unlockedYears = collect($lockedYears)
+            ->filter(fn ($year) => isset($unlockedKeys[$slug . ':' . $year]))
+            ->values()
+            ->all();
 
         $otherSpeakers = Speaker::active()
             ->ordered()
@@ -70,7 +81,9 @@ class BibleSchoolResourceController extends Controller
                     ->where('is_active', true)->count();
             });
 
-        return view('pages.speaker-session', compact('speaker', 'sessions', 'unlocked', 'otherSpeakers'));
+        return view('pages.speaker-session', compact(
+            'speaker', 'sessionsByYear', 'lockedYears', 'unlockedYears', 'otherSpeakers'
+        ));
     }
 
     public function play(string $speakerSlug, string $sessionSlug)
@@ -84,12 +97,16 @@ class BibleSchoolResourceController extends Controller
             ->where('slug', $sessionSlug)
             ->firstOrFail();
 
+        // All sessions require a year-level access code
+        $unlockedKeys = session('unlocked_sessions', []);
+        $sessionUnlocked = isset($unlockedKeys[$speakerSlug . ':' . $session->year]);
+
         $allSessions = BibleSchoolSession::whereIn('bible_school_event_id', $eventIds)
             ->active()
             ->orderBy('year', 'desc')
             ->orderBy('sort_order')
             ->get();
 
-        return view('pages.session-play', compact('speaker', 'session', 'allSessions'));
+        return view('pages.session-play', compact('speaker', 'session', 'sessionUnlocked', 'allSessions'));
     }
 }
