@@ -10,6 +10,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/favicon.png') }}">
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>[x-cloak]{display:none!important}</style>
@@ -32,13 +36,8 @@
     >
         {{-- Logo --}}
         <div class="flex items-center gap-3 px-6 py-5 border-b border-gray-200">
-            <div class="w-8 h-8 bg-[#e85d26] rounded-full flex items-center justify-center shrink-0">
-                <span class="text-white font-bold text-xs">CL</span>
-            </div>
-            <div>
-                <p class="text-sm font-semibold leading-tight tracking-wide text-gray-900">City Life <span class="text-gray-400 font-light">International</span></p>
-                <p class="text-xs text-gray-400 leading-tight uppercase tracking-widest mt-0.5">Bible School</p>
-            </div>
+            <img src="{{ asset('images/logo_small_black.png') }}" alt="City Life International" class="h-10 w-50 object-contain shrink-0">
+
         </div>
 
         {{-- Navigation --}}
@@ -139,10 +138,7 @@
                 </svg>
             </button>
             <div class="flex items-center gap-2">
-                <div class="w-6 h-6 bg-[#e85d26] rounded-full flex items-center justify-center">
-                    <span class="text-white font-bold text-[9px]">CL</span>
-                </div>
-                <span class="font-semibold text-sm text-gray-900 tracking-wide">City Life <span class="text-gray-400 font-light">International</span></span>
+                <img src="{{ asset('images/logo_small_black.png') }}" alt="City Life International" class="h-6 w-6 object-contain">
             </div>
         </header>
 

@@ -13,6 +13,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/favicon.png') }}">
+
     <!-- Vite -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -76,6 +80,12 @@
     @unless (trim($__env->yieldContent('hide_footer')))
         @include('partials.footer')
     @endunless
+
+    {{-- Homepage Music Player --}}
+    @php $music = \App\Models\HomepageMusic::instance(); @endphp
+    @if ($music->is_active && $music->url)
+        @include('partials.music-player', ['music' => $music])
+    @endif
 
     @stack('scripts')
 </body>

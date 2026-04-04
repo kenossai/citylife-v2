@@ -13,7 +13,6 @@
 
 {{-- ── Page heading ───────────────────────────────────────────────────── --}}
 <div class="mb-8">
-    <p class="text-[#e85d26] text-xs font-semibold uppercase tracking-widest mb-2">Bible School</p>
     <h1 class="text-2xl font-extrabold text-gray-900">
         Welcome back, {{ $member->first_name }}!
     </h1>
@@ -204,7 +203,7 @@
     <div class="flex items-center justify-between mb-4">
         <h2 class="text-base font-bold text-gray-900 uppercase tracking-wide">Explore More Courses</h2>
         <a href="{{ route('courses') }}" class="text-sm text-[#e85d26] hover:text-[#cf4f1e] transition-colors flex items-center gap-1">
-            All Courses
+            Other Courses
             <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
         </a>
     </div>

@@ -18,10 +18,7 @@
 
             {{-- Logo --}}
             <a href="{{ url('/') }}" class="flex items-center gap-2">
-                <div class="w-8 h-8 bg-[#e85d26] rounded-full flex items-center justify-center">
-                    <span class="text-white font-bold text-xs">CL</span>
-                </div>
-                <span class="font-semibold text-sm tracking-wide">City Life <span class="text-gray-400 font-light">International</span></span>
+                <img src="{{ asset('images/logo_small_white.png') }}" alt="City Life International" class="h-12 w-50 object-contain">
             </a>
 
             {{-- Desktop Nav --}}
