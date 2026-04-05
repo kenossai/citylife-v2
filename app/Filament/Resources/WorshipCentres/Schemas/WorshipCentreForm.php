@@ -26,7 +26,7 @@ class WorshipCentreForm
                             ->maxLength(120),
                         TextInput::make('address')
                             ->required()
-                            ->placeholder('1 South Parade, Sheffield S1 2BJ')
+                            ->placeholder('1 South Parade Shalesmoor, Sheffield, S3 8SS')
                             ->maxLength(200)
                             ->columnSpanFull(),
                         TextInput::make('landmark')

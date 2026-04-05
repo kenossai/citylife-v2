@@ -312,7 +312,7 @@
                     Every £10 given provides a family with a week's worth of food parcels. Every £50 sponsors a Bible School student for a month. Every £200 funds a short-term missions team member. Your giving matters more than you know.
                 </p>
 
-                
+
             </div>
 
             <div class="relative rounded-2xl overflow-hidden shadow-xl h-80 lg:h-[420px]">
@@ -340,7 +340,7 @@
                 ['q' => 'Is my payment information secure?', 'a' => 'All online transactions are processed through secure, PCI-compliant payment gateways. We never store your full card details on our servers.'],
                 ['q' => 'Can I give to a specific fund?', 'a' => 'Yes. When giving online, select your preferred fund (Tithe, Offering, Missions, or Building Fund) from the dropdown. For bank transfers, simply include the fund name in your reference.'],
                 ['q' => 'How do I give by bank transfer?', 'a' => 'Use the bank details listed above. Bank: Virgin Money, Sort Code: 05-08-48, Account No: 20057965, Account Name: City Life International Church. Please use your name and the fund as the reference.'],
-                ['q' => 'How do I give by cheque?', 'a' => 'Make your cheque payable to "City Life International Church" and post it to 14 Hillsborough Road, Sheffield, S6 2L9. Please include a note with your name and the fund you\'re giving to.'],
+                ['q' => 'How do I give by cheque?', 'a' => 'Make your cheque payable to "City Life International Church" and post it to 1 South Parade Shalesmoor, Sheffield, S3 8SS. Please include a note with your name and the fund you\'re giving to.'],
             ];
         @endphp
 

@@ -14,9 +14,9 @@
     ];
 
     $serviceTimes = [
-        ['day' => 'Sunday', 'times' => ['9:00 AM — First Service', '11:15 AM — Second Service']],
-        ['day' => 'Wednesday', 'times' => ['7:00 PM — Midweek Service']],
-        ['day' => 'Friday', 'times' => ['7:00 PM — Prayer Meeting']],
+        ['day' => 'Sunday', 'times' => ['9:00 AM - Adult Bible Study', '10:00 AM - Main Service']],
+        ['day' => 'Thursday', 'times' => ['7:30 PM - Prayer Meeting']],
+        // ['day' => 'Friday', 'times' => ['7:00 PM — Prayer Meeting']],
     ];
 @endphp
 
@@ -33,7 +33,7 @@
     <div class="relative mx-auto flex min-h-[260px] max-w-7xl flex-col items-center justify-center px-4 py-16 text-center sm:min-h-[300px] sm:px-6 lg:px-8">
         <p class="mb-3 text-[11px] font-semibold uppercase tracking-[0.35em] text-[#e85d26]">City Life International</p>
         <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">Contact Us</h1>
-        <p class="mt-4 max-w-xl text-base text-white/60 sm:text-lg">We would love to hear from you. Reach out for any reason — we're here to help.</p>
+        <p class="mt-4 max-w-xl text-base text-white/60 sm:text-lg">We would love to hear from you. Reach out for any reason, We're here to help.</p>
         <nav class="mt-4 flex items-center gap-2 text-xs uppercase tracking-[0.24em] text-white/65">
             <a href="{{ url('/') }}" class="transition-colors hover:text-white">Home</a>
             <span>/</span>
@@ -43,10 +43,9 @@
 </section>
 
 {{-- ── CONTACT CARDS ───────────────────────────────────────────────────────── --}}
-<section class="relative z-10 -mt-12 pb-6 sm:-mt-16">
+{{-- <section class="relative z-10 -mt-12 pb-6 sm:-mt-16">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="grid gap-4 sm:grid-cols-3">
-            {{-- Address --}}
             <div class="flex items-start gap-4 rounded-2xl bg-white px-6 py-6 shadow-[0_8px_40px_rgba(16,12,14,0.10)]">
                 <div class="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-[#e85d26]/10">
                     <svg class="h-5 w-5 text-[#e85d26]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
@@ -54,11 +53,10 @@
                 <div>
                     <p class="text-[11px] font-bold uppercase tracking-[0.28em] text-[#e85d26]">Visit Us</p>
                     <p class="mt-1 text-sm font-semibold text-[#27242a]">City Life International Church</p>
-                    <p class="mt-0.5 text-sm text-[#66615b]">Sheffield, UK</p>
+                    <p class="mt-0.5 text-sm text-[#66615b]">1 South Parade Shalesmoor, Sheffield, S3 8SS</p>
                 </div>
             </div>
 
-            {{-- Email --}}
             <div class="flex items-start gap-4 rounded-2xl bg-white px-6 py-6 shadow-[0_8px_40px_rgba(16,12,14,0.10)]">
                 <div class="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-[#e85d26]/10">
                     <svg class="h-5 w-5 text-[#e85d26]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
@@ -66,11 +64,10 @@
                 <div>
                     <p class="text-[11px] font-bold uppercase tracking-[0.28em] text-[#e85d26]">Email Us</p>
                     <p class="mt-1 text-sm font-semibold text-[#27242a]">General Enquiries</p>
-                    <a href="mailto:info@citylifecc.com" class="mt-0.5 block text-sm text-[#e85d26] hover:underline">info@citylifecc.com</a>
+                    <a href="mailto:admin1@citylifecc.com" class="mt-0.5 block text-sm text-[#e85d26] hover:underline">admin1@citylifecc.com</a>
                 </div>
             </div>
 
-            {{-- Service Times --}}
             <div class="flex items-start gap-4 rounded-2xl bg-white px-6 py-6 shadow-[0_8px_40px_rgba(16,12,14,0.10)]">
                 <div class="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-[#e85d26]/10">
                     <svg class="h-5 w-5 text-[#e85d26]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -87,7 +84,7 @@
             </div>
         </div>
     </div>
-</section>
+</section> --}}
 
 {{-- ── MAIN CONTENT: FORM + LOCATIONS ─────────────────────────────────────── --}}
 <section class="py-16 sm:py-20">
@@ -216,8 +213,8 @@
 
                     @if ($location->times)
                     <p class="mt-1.5 flex items-start gap-2 text-sm text-[#66615b]">
-                        <svg class="mt-0.5 h-4 w-4 flex-shrink-0 text-[#e85d26]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        {{ $location->times }}
+                        <svg class="h-4 w-4 text-[#e85d26]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                        <a href="mailto:admin1@citylifecc.com" class="mt-0.5 block text-sm text-[#e85d26] hover:underline">admin1@citylifecc.com</a>
                     </p>
                     @endif
 
@@ -229,6 +226,20 @@
                     @endif
                 </div>
                 @endforeach
+                <div class="flex items-start gap-4 rounded-2xl bg-white px-6 py-6 shadow-[0_8px_40px_rgba(16,12,14,0.10)]">
+                <div class="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-[#e85d26]/10">
+                    <svg class="h-5 w-5 text-[#e85d26]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <div>
+                    <p class="text-[11px] font-bold uppercase tracking-[0.28em] text-[#e85d26]">Service Times</p>
+                    @foreach ($serviceTimes as $s)
+                    <p class="mt-1 text-sm font-semibold text-[#27242a]">{{ $s['day'] }}</p>
+                    @foreach ($s['times'] as $t)
+                    <p class="text-xs text-[#66615b]">{{ $t }}</p>
+                    @endforeach
+                    @endforeach
+                </div>
+            </div>
                 @else
                 {{-- Fallback location card --}}
                 <div class="rounded-2xl bg-white px-6 py-6 shadow-[0_8px_40px_rgba(16,12,14,0.08)]">
@@ -283,7 +294,7 @@
                     <p class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#e85d26]">Plan Your Visit</p>
                     <h2 class="mt-3 text-2xl font-extrabold text-white sm:text-3xl">New Here? You're Welcome.</h2>
                     <p class="mt-3 text-sm leading-7 text-white/60">
-                        Whether you're visiting for the first time or returning after a long while, we want your experience at City Life to be warm, welcoming, and life-giving. No dress code, no pressure — just come as you are.
+                        Whether you're visiting for the first time or returning after a long while, we want your experience at City Life to be warm, welcoming, and life-giving. No dress code, no pressure - just come as you are.
                     </p>
                     <ul class="mt-6 space-y-3">
                         @foreach ([['icon' => 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z', 'text' => 'Friendly team to welcome you at the door'], ['icon' => 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', 'text' => 'Sunday services at 9:00 AM and 11:15 AM'], ['icon' => 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z', 'text' => 'Vibrant children and youth programmes']] as $item)

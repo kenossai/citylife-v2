@@ -371,7 +371,7 @@
                 </div>
 
                 <p class="mt-8 text-[14px] text-white/40">
-                    All services held at 1 South Parade, Sheffield S1 2BJ
+                    All services held at 1 South Parade Shalesmoor, Sheffield, S3 8SS
                 </p>
             </div>
         </div>

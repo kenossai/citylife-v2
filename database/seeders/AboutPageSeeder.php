@@ -66,20 +66,11 @@ class AboutPageSeeder extends Seeder
             [
                 'label' => 'City Centre',
                 'name' => 'Sheffield City Centre',
-                'address' => '1 South Parade, Sheffield S1 2BJ',
+                'address' => '1 South Parade Shalesmoor, Sheffield, S3 8SS',
                 'landmark' => 'Behind Sheffield City Hall',
                 'times' => 'Sunday 9:00 AM and 11:00 AM',
                 'phone' => '+44 114 134 8912',
                 'sort_order' => 0,
-            ],
-            [
-                'label' => 'North',
-                'name' => 'Sheffield North',
-                'address' => '45 Burngreave Road, Sheffield S3 9DQ',
-                'landmark' => 'Burngreave Community Centre',
-                'times' => 'Sunday 10:30 AM and Friday 6:30 PM',
-                'phone' => '+44 114 134 8913',
-                'sort_order' => 1,
             ],
         ];
 
