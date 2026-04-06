@@ -19,6 +19,7 @@ use App\Http\Controllers\GivingController;
 use App\Http\Controllers\LeadershipController;
 use App\Http\Controllers\MinistryController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\InvitationController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/give', [GivingController::class, 'index'])->name('give');
@@ -47,6 +48,8 @@ Route::get('/bible-school/resources/{speaker}/{session}', [BibleSchoolResourceCo
 
 Route::post('/session-access/send-code', [SessionAccessController::class, 'sendCode'])->name('session-access.send-code');
 Route::post('/session-access/verify-code', [SessionAccessController::class, 'verifyCode'])->name('session-access.verify-code');
+
+Route::get('/accept-invitation/{user}', [InvitationController::class, 'accept'])->name('invitation.accept');
 
 Route::prefix('member')->name('member.')->group(function () {
     Route::get('/login', [MemberAuthController::class, 'showLogin'])->name('login');
