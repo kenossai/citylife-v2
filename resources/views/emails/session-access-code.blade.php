@@ -1,52 +1,86 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Access Code</title>
 </head>
-<body style="margin:0;padding:0;background-color:#f9fafb;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
-    <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f9fafb;padding:40px 20px;">
+<body style="margin:0;padding:0;background-color:#f3f4f6;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+@php $logoSrc = 'data:image/png;base64,' . base64_encode(file_get_contents(public_path('images/logo_small_black.png'))); @endphp
+    <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f3f4f6;padding:48px 20px;">
         <tr>
             <td align="center">
-                <table width="480" cellpadding="0" cellspacing="0" style="background-color:#13131f;border-radius:16px;overflow:hidden;">
-                    {{-- Header --}}
+
+                {{-- Card --}}
+                <table width="520" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+
+                    {{-- Brand Header --}}
                     <tr>
-                        <td style="padding:32px 32px 0;text-align:center;">
-                            <p style="margin:0;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#ff8904;">
-                                Bible School International
+                        <td style="padding:36px 40px 24px;text-align:center;border-bottom:1px solid #f1f5f9;">
+                            <img src="{{ $logoSrc }}" alt="{{ config('app.name') }}" width="100" height="30" style="display:block;margin:0 auto 12px;">
+                            <p style="margin:0;font-size:20px;font-weight:800;color:#1e293b;letter-spacing:-0.5px;">
+                                {{ config('app.name') }}
                             </p>
-                            <h1 style="margin:12px 0 0;font-size:24px;font-weight:800;color:#ffffff;">
-                                Your Access Code
-                            </h1>
-                            <p style="margin:8px 0 0;font-size:14px;color:rgba(255,255,255,0.5);line-height:1.5;">
+                        </td>
+                    </tr>
+
+                    {{-- Body --}}
+                    <tr>
+                        <td style="padding:36px 40px 0;">
+                            <p style="margin:0 0 6px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#e85d26;">Bible School International</p>
+                            <p style="margin:0 0 16px;font-size:22px;font-weight:800;color:#1e293b;">Your Access Code</p>
+                            <p style="margin:0;font-size:15px;color:#475569;line-height:1.6;">
                                 Use the code below to unlock your teaching sessions.
                             </p>
                         </td>
                     </tr>
 
-                    {{-- Code --}}
+                    {{-- Code Box --}}
                     <tr>
-                        <td style="padding:24px 32px;text-align:center;">
-                            <div style="display:inline-block;padding:16px 40px;background-color:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;">
-                                <span style="font-size:32px;font-weight:800;letter-spacing:8px;color:#ffffff;font-family:'Courier New',monospace;">{{ $code }}</span>
-                            </div>
+                        <td style="padding:24px 40px 0;">
+                            <table width="100%" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td style="background-color:#f1f5f9;border-radius:10px;padding:24px;text-align:center;">
+                                        <p style="margin:0 0 4px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#94a3b8;">Your Code</p>
+                                        <p style="margin:0;font-size:36px;font-weight:800;letter-spacing:10px;color:#1e293b;font-family:'Courier New',monospace;">{{ $code }}</p>
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                     </tr>
 
-                    {{-- Footer --}}
+                    {{-- Notice --}}
                     <tr>
-                        <td style="padding:0 32px 32px;text-align:center;">
-                            <p style="margin:0;font-size:13px;color:rgba(255,255,255,0.35);line-height:1.5;">
-                                This code expires in 15 minutes. If you didn't request this, you can safely ignore this email.
+                        <td style="padding:24px 40px 32px;">
+                            <table width="100%" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td style="background-color:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:14px 18px;">
+                                        <p style="margin:0;font-size:13px;color:#92400e;line-height:1.5;">
+                                            &#9675; This code expires in <strong>15 minutes</strong>. If you did not request this, you can safely ignore this email.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    {{-- Closing --}}
+                    <tr>
+                        <td style="padding:0 40px 36px;border-top:1px solid #f1f5f9;">
+                            <p style="margin:24px 0 0;font-size:15px;color:#475569;">
+                                In Christ,<br>
+                                <strong style="color:#1e293b;">The {{ config('app.name') }} Team</strong>
                             </p>
                         </td>
                     </tr>
+
                 </table>
 
-                <p style="margin:20px 0 0;font-size:12px;color:#98a2b3;">
-                    &copy; {{ date('Y') }} City Life International Church
+                {{-- Footer --}}
+                <p style="margin:20px 0 0;font-size:12px;color:#94a3b8;">
+                    &copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.
                 </p>
+
             </td>
         </tr>
     </table>
