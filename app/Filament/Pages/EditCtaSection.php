@@ -4,6 +4,7 @@ namespace App\Filament\Pages;
 
 use App\Models\CtaSection;
 use Filament\Actions\Action;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -61,9 +62,12 @@ class EditCtaSection extends Page
                         TextInput::make('btn_url')
                             ->label('Button URL')
                             ->maxLength(200),
-                        TextInput::make('background_image')
-                            ->label('Background Image Path / URL')
-                            ->maxLength(300)
+                        FileUpload::make('background_image')
+                            ->label('Background Image')
+                            ->image()
+                            ->disk('public')
+                            ->directory('cta')
+                            ->imagePreviewHeight('150')
                             ->columnSpanFull(),
                     ]),
 
@@ -72,10 +76,13 @@ class EditCtaSection extends Page
                         Repeater::make('side_images')
                             ->label('Side Images (shown on desktop)')
                             ->schema([
-                                TextInput::make('url')
-                                    ->label('Image URL')
-                                    ->required()
-                                    ->maxLength(300),
+                                FileUpload::make('url')
+                                    ->label('Image')
+                                    ->image()
+                                    ->disk('public')
+                                    ->directory('cta')
+                                    ->imagePreviewHeight('120')
+                                    ->required(),
                             ])
                             ->defaultItems(2)
                             ->maxItems(2),

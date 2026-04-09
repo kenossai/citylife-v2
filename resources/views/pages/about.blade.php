@@ -14,7 +14,7 @@
         [
             'eyebrow' => 'Our Leadership',
             'title' => 'Meet the people helping steward the vision and care of our church family.',
-            'image' => 'https://images.unsplash.com/photo-1573496799652-408c2ac9fe98?auto=format&fit=crop&w=900&q=80',
+            'image' => 'https://res.cloudinary.com/devguy/image/upload/v1775746158/citylife/leadership/leadership_mxm7fz.png',
             'href' => url('/leadership'),
         ],
         [
@@ -68,7 +68,7 @@
             <div class="grid gap-0 lg:grid-cols-[1.08fr_0.92fr] lg:items-end">
                 <div class="relative min-h-[340px] overflow-hidden rounded-[30px] bg-[#1a1517] shadow-[0_25px_80px_rgba(16,12,14,0.28)] sm:min-h-[460px] lg:rounded-[34px]">
                     <img
-                        src="{{ $aboutImage }}"
+                        src="{{ $aboutSection->image_path }}"
                         alt="City Life worship moment"
                         class="absolute inset-0 h-full w-full object-cover"
                     >
@@ -289,7 +289,7 @@
                         </p>
                     </div>
 
-                    <div class="grid gap-4 md:grid-cols-2">
+                    <div class="grid gap-4 md:grid-cols-5">
                         @foreach ($worshipCentres as $centre)
                             <article class="rounded-[24px] bg-white/95 p-5 shadow-[0_18px_40px_rgba(0,0,0,0.18)] backdrop-blur">
                                 <span class="inline-flex rounded-full bg-[#efe8e0] px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.28em] text-[#6b6259]">

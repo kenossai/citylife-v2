@@ -358,7 +358,7 @@
                 @foreach($missionsSection->images as $i => $image)
                 <div class="{{ $i === 0 ? 'row-span-2' : '' }} rounded-2xl overflow-hidden shadow-md">
                     <img src="{{ $image['url'] }}"
-                         alt="Missions" class="w-full {{ $i === 0 ? 'h-full' : 'h-48' }} object-cover">
+                         alt="Missions" class="w-full {{ $i === 0 ? 'h-full' : 'h-full' }} object-cover">
                 </div>
                 @endforeach
             </div>
@@ -374,7 +374,12 @@
 <section class="relative py-24 bg-[#111111] overflow-hidden">
     <div class="absolute inset-0 z-0">
         @if($ctaSection->background_image)
-        <img src="{{ $ctaSection->background_image }}"
+        @php
+            $ctaBg = \Illuminate\Support\Str::startsWith($ctaSection->background_image, ['http://', 'https://'])
+                ? $ctaSection->background_image
+                : asset('storage/' . ltrim($ctaSection->background_image, '/'));
+        @endphp
+        <img src="{{ $ctaBg }}"
              alt="Volunteer"
              class="w-full h-full object-cover opacity-30">
         @endif
@@ -407,14 +412,17 @@
             {{-- Two large images, offset stacked --}}
             @if($ctaSection->side_images && count($ctaSection->side_images) >= 2)
             <div class="hidden lg:flex items-start gap-5 pt-6">
-                <div class="rounded-2xl overflow-hidden shadow-xl flex-1">
-                    <img src="{{ $ctaSection->side_images[0]['url'] }}"
-                         alt="Service" class="w-full h-[580px] object-cover">
+                @foreach(array_slice($ctaSection->side_images, 0, 2) as $sideIndex => $sideImg)
+                @php
+                    $sideUrl = \Illuminate\Support\Str::startsWith($sideImg['url'], ['http://', 'https://'])
+                        ? $sideImg['url']
+                        : asset('storage/' . ltrim($sideImg['url'], '/'));
+                @endphp
+                <div class="rounded-2xl overflow-hidden shadow-xl flex-1{{ $sideIndex === 1 ? ' mt-14' : '' }}">
+                    <img src="{{ $sideUrl }}"
+                         alt="{{ $sideIndex === 0 ? 'Service' : 'Helping' }}" class="w-full h-[500px] object-cover">
                 </div>
-                <div class="rounded-2xl overflow-hidden shadow-xl flex-1 mt-14">
-                    <img src="{{ $ctaSection->side_images[1]['url'] }}"
-                         alt="Helping" class="w-full h-[580px] object-cover">
-                </div>
+                @endforeach
             </div>
             @endif
         </div>
