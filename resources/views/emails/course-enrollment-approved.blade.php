@@ -1,70 +1,69 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enrollment Approved</title>
 </head>
-<body style="margin:0;padding:0;background-color:#f9fafb;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
-    <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f9fafb;padding:40px 20px;">
+<body style="margin:0;padding:0;background-color:#f3f4f6;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+@php $logoSrc = 'data:image/png;base64,' . base64_encode(file_get_contents(public_path('images/logo_small_black.png'))); @endphp
+    <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f3f4f6;padding:48px 20px;">
         <tr>
             <td align="center">
-                <table width="480" cellpadding="0" cellspacing="0" style="background-color:#13131f;border-radius:16px;overflow:hidden;">
 
-                    {{-- Header --}}
+                {{-- Card --}}
+                <table width="520" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+
+                    {{-- Brand Header --}}
                     <tr>
-                        <td style="padding:32px 32px 0;text-align:center;">
-                            <p style="margin:0;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#e85d26;">
-                                {{ $enrollment->course->category ?? 'Bible School' }}
-                            </p>
-                            <h1 style="margin:12px 0 0;font-size:22px;font-weight:800;color:#ffffff;">
-                                You're In! 🎉
-                            </h1>
-                            <p style="margin:8px 0 0;font-size:14px;color:rgba(255,255,255,0.5);line-height:1.5;">
-                                Your enrollment has been approved. Welcome to the course!
+                        <td style="padding:36px 40px 24px;text-align:center;border-bottom:1px solid #f1f5f9;">
+                            <img src="{{ $logoSrc }}" alt="{{ config('app.name') }}" width="100" height="30" style="display:block;margin:0 auto 12px;">
+                            <p style="margin:0;font-size:20px;font-weight:800;color:#1e293b;letter-spacing:-0.5px;">
+                                {{ config('app.name') }}
                             </p>
                         </td>
                     </tr>
 
-                    {{-- Course Card --}}
+                    {{-- Body --}}
                     <tr>
-                        <td style="padding:24px 32px;">
-                            <table width="100%" cellpadding="0" cellspacing="0" style="background-color:rgba(232,93,38,0.1);border:1px solid rgba(232,93,38,0.25);border-radius:12px;overflow:hidden;">
+                        <td style="padding:36px 40px 0;">
+                            <p style="margin:0 0 6px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#e85d26;">{{ $enrollment->course->category ?? 'Bible School' }}</p>
+                            <p style="margin:0 0 16px;font-size:22px;font-weight:800;color:#1e293b;">You're Enrolled! 🎉</p>
+                            <p style="margin:0;font-size:15px;color:#475569;line-height:1.6;">
+                                Hello, <strong style="color:#1e293b;">{{ $enrollment->member->first_name }}</strong>! Your enrollment has been approved. Welcome to the course!
+                            </p>
+                        </td>
+                    </tr>
+
+                    {{-- Course Details Box --}}
+                    <tr>
+                        <td style="padding:24px 40px 0;">
+                            <table width="100%" cellpadding="0" cellspacing="0">
                                 <tr>
-                                    <td style="padding:20px 20px 0;">
-                                        <p style="margin:0;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:rgba(232,93,38,0.8);">Course</p>
-                                        <p style="margin:6px 0 0;font-size:18px;font-weight:700;color:#ffffff;">{{ $enrollment->course->title }}</p>
+                                    <td style="background-color:#f1f5f9;border-radius:10px;padding:18px 22px;">
+                                        <p style="margin:0 0 4px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#94a3b8;">Course</p>
+                                        <p style="margin:0 0 4px;font-size:17px;font-weight:700;color:#1e293b;">{{ $enrollment->course->title }}</p>
+                                        @if($enrollment->course->instructor_name)
+                                        <p style="margin:0 0 2px;font-size:13px;color:#64748b;">Instructor: {{ $enrollment->course->instructor_name }}</p>
+                                        @endif
+                                        @if($enrollment->course->start_date)
+                                        <p style="margin:0;font-size:13px;color:#64748b;">Starts: {{ $enrollment->course->start_date->format('j F Y') }}</p>
+                                        @endif
                                     </td>
                                 </tr>
-                                @if ($enrollment->course->instructor_name)
-                                <tr>
-                                    <td style="padding:8px 20px 0;">
-                                        <p style="margin:0;font-size:13px;color:rgba(255,255,255,0.5);">Instructor: {{ $enrollment->course->instructor_name }}</p>
-                                    </td>
-                                </tr>
-                                @endif
-                                @if ($enrollment->course->start_date)
-                                <tr>
-                                    <td style="padding:8px 20px 20px;">
-                                        <p style="margin:0;font-size:13px;color:rgba(255,255,255,0.5);">Starts: {{ $enrollment->course->start_date->format('j F Y') }}</p>
-                                    </td>
-                                </tr>
-                                @else
-                                <tr><td style="padding-bottom:20px;"></td></tr>
-                                @endif
                             </table>
                         </td>
                     </tr>
 
-                    {{-- Membership note (CDC) --}}
-                    @if ($enrollment->course->is_membership_course)
+                    {{-- Membership Note --}}
+                    @if($enrollment->course->is_membership_course)
                     <tr>
-                        <td style="padding:0 32px 8px;">
-                            <table width="100%" cellpadding="0" cellspacing="0" style="background-color:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);border-radius:12px;">
+                        <td style="padding:16px 40px 0;">
+                            <table width="100%" cellpadding="0" cellspacing="0">
                                 <tr>
-                                    <td style="padding:16px 20px;">
-                                        <p style="margin:0;font-size:13px;font-weight:600;color:#4ade80;">Church Membership</p>
-                                        <p style="margin:4px 0 0;font-size:13px;color:rgba(255,255,255,0.5);line-height:1.5;">
+                                    <td style="background-color:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:14px 18px;">
+                                        <p style="margin:0 0 3px;font-size:13px;font-weight:700;color:#15803d;">Church Membership</p>
+                                        <p style="margin:0;font-size:13px;color:#475569;line-height:1.5;">
                                             As part of completing this course you will be welcomed as an active member of City Life International Church. We look forward to journeying with you!
                                         </p>
                                     </td>
@@ -74,42 +73,80 @@
                     </tr>
                     @endif
 
-                    {{-- Footer message --}}
+                    {{-- CTA --}}
                     <tr>
-                        <td style="padding:16px 32px 0;text-align:center;">
-                            <p style="margin:0;font-size:13px;color:rgba(255,255,255,0.4);line-height:1.6;">
-                                Welcome, {{ $enrollment->member->first_name }}! If you have any questions, feel free to reach out to us. We are excited to have you on this journey.
+                        <td style="padding:24px 40px 0;text-align:center;">
+                            @if($enrollment->member->password_setup_token)
+                            <p style="margin:0 0 20px;font-size:15px;color:#475569;line-height:1.6;text-align:left;">
+                                Click the button below to create your password and access your learning dashboard.
                             </p>
+                            <table cellpadding="0" cellspacing="0" style="margin:0 auto;">
+                                <tr>
+                                    <td style="border-radius:10px;background-color:#e85d26;">
+                                        <a href="{{ route('member.setup-password.show', $enrollment->member->password_setup_token) }}"
+                                           style="display:inline-block;padding:14px 36px;font-size:15px;font-weight:700;color:#ffffff;text-decoration:none;border-radius:10px;">
+                                            Create Password &amp; Access Dashboard
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                            @else
+                            <p style="margin:0 0 20px;font-size:15px;color:#475569;line-height:1.6;text-align:left;">
+                                You can now access your course from your member dashboard.
+                            </p>
+                            <table cellpadding="0" cellspacing="0" style="margin:0 auto;">
+                                <tr>
+                                    <td style="border-radius:10px;background-color:#e85d26;">
+                                        <a href="{{ route('member.dashboard') }}"
+                                           style="display:inline-block;padding:14px 36px;font-size:15px;font-weight:700;color:#ffffff;text-decoration:none;border-radius:10px;">
+                                            Go to My Dashboard
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                            @endif
                         </td>
                     </tr>
 
-                    {{-- CTA button --}}
+                    {{-- Password link expiry notice --}}
+                    @if($enrollment->member->password_setup_token)
                     <tr>
-                        <td style="padding:24px 32px 32px;text-align:center;">
-                            @if ($enrollment->member->password_setup_token)
-                                {{-- First-time member: create password --}}
-                                <a href="{{ route('member.setup-password.show', $enrollment->member->password_setup_token) }}"
-                                   style="display:inline-block;background-color:#e85d26;color:#ffffff;font-size:14px;font-weight:700;text-decoration:none;padding:14px 32px;border-radius:100px;">
-                                    Create Password &amp; Access Dashboard →
-                                </a>
-                                <p style="margin:14px 0 0;font-size:12px;color:rgba(255,255,255,0.3);">
-                                    This link expires in 7 days. If it expires, you can request a new one from the login page.
-                                </p>
-                            @else
-                                {{-- Returning member: go straight to dashboard --}}
-                                <a href="{{ route('member.dashboard') }}"
-                                   style="display:inline-block;background-color:#e85d26;color:#ffffff;font-size:14px;font-weight:700;text-decoration:none;padding:14px 32px;border-radius:100px;">
-                                    Go to My Dashboard →
-                                </a>
-                            @endif
+                        <td style="padding:16px 40px 32px;">
+                            <table width="100%" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td style="background-color:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:14px 18px;">
+                                        <p style="margin:0;font-size:13px;color:#92400e;line-height:1.5;">
+                                            &#9675; This link expires in <strong>7 days</strong>. If it expires, you can request a new one from the login page.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    @else
+                    <tr><td style="padding-bottom:32px;"></td></tr>
+                    @endif
+
+                    {{-- Closing --}}
+                    <tr>
+                        <td style="padding:0 40px 36px;border-top:1px solid #f1f5f9;">
+                            <p style="margin:24px 0 4px;font-size:15px;color:#475569;line-height:1.6;">
+                                We are excited to have you on this journey. If you have any questions, do not hesitate to reach out to us.
+                            </p>
+                            <p style="margin:16px 0 0;font-size:15px;color:#475569;">
+                                In Christ,<br>
+                                <strong style="color:#1e293b;">The {{ config('app.name') }} Team</strong>
+                            </p>
                         </td>
                     </tr>
 
                 </table>
 
-                <p style="margin:20px 0 0;font-size:12px;color:#98a2b3;">
-                    &copy; {{ date('Y') }} City Life International Church
+                {{-- Footer --}}
+                <p style="margin:20px 0 0;font-size:12px;color:#94a3b8;">
+                    &copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.
                 </p>
+
             </td>
         </tr>
     </table>
