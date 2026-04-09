@@ -4,9 +4,32 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Ministry extends Model
 {
+    use LogsActivity;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logFillable()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->useLogName('ministries');
+    }
+
+    public function tapActivity(\Spatie\Activitylog\Models\Activity $activity, string $eventName): void
+    {
+        $activity->category     = 'Content Management';
+        $activity->severity     = match ($eventName) {
+            'deleted' => 'high',
+            'created' => 'low',
+            default   => 'medium',
+        };
+        $activity->is_sensitive = false;
+    }
     protected $fillable = [
         'leader_id',
         'name',

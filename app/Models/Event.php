@@ -3,9 +3,32 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Event extends Model
 {
+    use LogsActivity;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logFillable()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->useLogName('events');
+    }
+
+    public function tapActivity(\Spatie\Activitylog\Models\Activity $activity, string $eventName): void
+    {
+        $activity->category     = 'Content Management';
+        $activity->severity     = match ($eventName) {
+            'deleted' => 'high',
+            'created' => 'low',
+            default   => 'medium',
+        };
+        $activity->is_sensitive = false;
+    }
     protected $fillable = [
         'title',
         'event_at',

@@ -7,9 +7,33 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Member extends Authenticatable
 {
+    use LogsActivity;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logExcept(['password', 'remember_token', 'password_setup_token'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->useLogName('members');
+    }
+
+    public function tapActivity(\Spatie\Activitylog\Models\Activity $activity, string $eventName): void
+    {
+        $activity->category     = 'Personal Information';
+        $activity->severity     = match ($eventName) {
+            'deleted' => 'high',
+            default   => 'high',
+        };
+        $sensitiveFields = ['email', 'first_name', 'last_name', 'date_of_birth', 'phone', 'membership_status'];
+        $changed = array_keys($activity->properties['attributes'] ?? []);
+        $activity->is_sensitive = ! empty(array_intersect($changed, $sensitiveFields));
+    }
     protected $guard = 'member';
     protected static function booted(): void
     {

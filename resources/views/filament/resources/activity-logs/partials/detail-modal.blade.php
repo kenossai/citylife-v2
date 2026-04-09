@@ -1,0 +1,161 @@
+@php
+    /** @var \App\Models\ActivityLog $record */
+    $properties = $record->properties->toArray();
+    $attributes = $properties['attributes'] ?? [];
+    $old        = $properties['old'] ?? [];
+    $isUpdate   = $record->event === 'updated' && ! empty($old);
+
+    $actionColor = match($record->event) {
+        'created'    => 'text-green-600 bg-green-50 ring-green-200 dark:text-green-400 dark:bg-green-950 dark:ring-green-800',
+        'updated'    => 'text-amber-600 bg-amber-50 ring-amber-200 dark:text-amber-400 dark:bg-amber-950 dark:ring-amber-800',
+        'deleted'    => 'text-red-600 bg-red-50 ring-red-200 dark:text-red-400 dark:bg-red-950 dark:ring-red-800',
+        'logged_in'  => 'text-green-600 bg-green-50 ring-green-200 dark:text-green-400 dark:bg-green-950 dark:ring-green-800',
+        'logged_out' => 'text-gray-600 bg-gray-50 ring-gray-200 dark:text-gray-400 dark:bg-gray-800 dark:ring-gray-700',
+        default      => 'text-gray-600 bg-gray-50 ring-gray-200 dark:text-gray-400 dark:bg-gray-800 dark:ring-gray-700',
+    };
+    $severityColor = match($record->severity) {
+        'high'   => 'text-red-600 bg-red-50 ring-red-200 dark:text-red-400 dark:bg-red-950 dark:ring-red-800',
+        'medium' => 'text-amber-600 bg-amber-50 ring-amber-200 dark:text-amber-400 dark:bg-amber-950 dark:ring-amber-800',
+        default  => 'text-green-600 bg-green-50 ring-green-200 dark:text-green-400 dark:bg-green-950 dark:ring-green-800',
+    };
+    $categoryColor = match($record->category) {
+        'Personal Information' => 'text-amber-600 bg-amber-50 ring-amber-200 dark:text-amber-400 dark:bg-amber-950 dark:ring-amber-800',
+        'Authentication'       => 'text-blue-600 bg-blue-50 ring-blue-200 dark:text-blue-400 dark:bg-blue-950 dark:ring-blue-800',
+        'Courses'              => 'text-green-600 bg-green-50 ring-green-200 dark:text-green-400 dark:bg-green-950 dark:ring-green-800',
+        default                => 'text-gray-600 bg-gray-50 ring-gray-200 dark:text-gray-400 dark:bg-gray-800 dark:ring-gray-700',
+    };
+@endphp
+
+<div class="space-y-5">
+
+    {{-- Meta grid --}}
+    <dl class="grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-4">
+        <div>
+            <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-1">Action</dt>
+            <dd>
+                <span class="inline-flex items-center rounded-md px-2 py-0.5 text-xs font-semibold ring-1 ring-inset {{ $actionColor }}">
+                    {{ $record->action_label }}
+                </span>
+            </dd>
+        </div>
+        <div>
+            <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-1">Category</dt>
+            <dd>
+                <span class="inline-flex items-center rounded-md px-2 py-0.5 text-xs font-semibold ring-1 ring-inset {{ $categoryColor }}">
+                    {{ $record->category ?? '—' }}
+                </span>
+            </dd>
+        </div>
+        <div>
+            <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-1">Severity</dt>
+            <dd>
+                <span class="inline-flex items-center rounded-md px-2 py-0.5 text-xs font-semibold ring-1 ring-inset {{ $severityColor }}">
+                    {{ ucfirst($record->severity ?? 'low') }}
+                </span>
+            </dd>
+        </div>
+        <div>
+            <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-1">Sensitive</dt>
+            <dd class="flex items-center gap-1.5 mt-0.5">
+                @if($record->is_sensitive)
+                    <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                    <span class="text-sm text-amber-600 dark:text-amber-400 font-medium">Yes</span>
+                @else
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    <span class="text-sm text-gray-500">No</span>
+                @endif
+            </dd>
+        </div>
+        <div>
+            <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-1">Performed By</dt>
+            <dd class="text-sm font-medium text-gray-900 dark:text-white">{{ $record->causer_label }}</dd>
+        </div>
+        <div>
+            <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-1">Resource</dt>
+            <dd class="text-sm text-gray-700 dark:text-gray-300">{{ $record->resource_type }}</dd>
+        </div>
+        <div>
+            <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-1">Item</dt>
+            <dd class="text-sm text-gray-700 dark:text-gray-300">{{ $record->subject_label }}</dd>
+        </div>
+        <div>
+            <dt class="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-1">Timestamp</dt>
+            <dd class="text-sm text-gray-700 dark:text-gray-300">{{ $record->created_at->format('j F Y, g:i:s A') }}</dd>
+        </div>
+    </dl>
+
+    {{-- Divider --}}
+    <div class="border-t border-gray-100 dark:border-white/10"></div>
+
+    {{-- Changes --}}
+    @if(! empty($attributes) || ! empty($old))
+    <div>
+        <div class="flex items-center gap-3 mb-3">
+            <h4 class="text-sm font-semibold text-gray-900 dark:text-white">
+                {{ $isUpdate ? 'Changes' : ($record->event === 'created' ? 'Created With' : 'Snapshot at Deletion') }}
+            </h4>
+            @if($isUpdate)
+            <span class="text-xs text-gray-400">{{ count($old) }} field(s) changed</span>
+            @endif
+        </div>
+
+        <div class="overflow-x-auto rounded-lg ring-1 ring-gray-950/5 dark:ring-white/10">
+            @if($isUpdate)
+            <table class="w-full text-sm">
+                <thead class="bg-gray-50 dark:bg-white/5">
+                    <tr class="border-b border-gray-100 dark:border-white/10">
+                        <th class="py-2.5 px-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-400 w-1/4">Field</th>
+                        <th class="py-2.5 px-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-400 w-[37.5%]">Before</th>
+                        <th class="py-2.5 px-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-400 w-[37.5%]">After</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-50 dark:divide-white/5 bg-white dark:bg-gray-900">
+                    @foreach($old as $field => $before)
+                    @php $after = $attributes[$field] ?? null; @endphp
+                    <tr>
+                        <td class="py-2.5 px-4 font-medium text-gray-700 dark:text-gray-300">
+                            {{ ucwords(str_replace('_', ' ', $field)) }}
+                        </td>
+                        <td class="py-2.5 px-4">
+                            <span class="inline-block max-w-[14rem] truncate rounded px-2 py-0.5 text-xs bg-red-50 text-red-700 ring-1 ring-red-200 dark:bg-red-950 dark:text-red-300 dark:ring-red-800">
+                                {{ is_array($before) ? json_encode($before) : ($before ?? '—') }}
+                            </span>
+                        </td>
+                        <td class="py-2.5 px-4">
+                            <span class="inline-block max-w-[14rem] truncate rounded px-2 py-0.5 text-xs bg-green-50 text-green-700 ring-1 ring-green-200 dark:bg-green-950 dark:text-green-300 dark:ring-green-800">
+                                {{ is_array($after) ? json_encode($after) : ($after ?? '—') }}
+                            </span>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            @else
+            <table class="w-full text-sm">
+                <thead class="bg-gray-50 dark:bg-white/5">
+                    <tr class="border-b border-gray-100 dark:border-white/10">
+                        <th class="py-2.5 px-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-400 w-1/3">Field</th>
+                        <th class="py-2.5 px-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">Value</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-50 dark:divide-white/5 bg-white dark:bg-gray-900">
+                    @foreach($attributes as $field => $value)
+                    <tr>
+                        <td class="py-2.5 px-4 font-medium text-gray-700 dark:text-gray-300">
+                            {{ ucwords(str_replace('_', ' ', $field)) }}
+                        </td>
+                        <td class="py-2.5 px-4 text-gray-600 dark:text-gray-400 max-w-sm truncate">
+                            {{ is_array($value) ? json_encode($value) : ($value ?? '—') }}
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            @endif
+        </div>
+    </div>
+    @else
+    <p class="text-sm text-center text-gray-400 py-4">No field-level details were captured for this event.</p>
+    @endif
+
+</div>
