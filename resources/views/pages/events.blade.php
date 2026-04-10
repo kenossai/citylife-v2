@@ -129,25 +129,14 @@
             <div class="absolute inset-0 bg-black/72"></div>
         </div>
 
-        <div class="events-hero-inner relative mx-auto flex h-[300px] max-w-[1143px] flex-col items-center justify-center px-6 text-center">
-            <div class="inline-flex h-[30px] items-center rounded-full border border-white/20 bg-white/10 px-4 text-[12px] font-bold uppercase tracking-[0.1em] text-[#ff8904]">
-                <svg class="mr-2 h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10m-11 9h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                </svg>
-                What's On
-            </div>
-
-            <h1 class="mt-3 text-[42px] font-medium leading-none text-white sm:text-[60px] sm:tracking-[0.004em]">
-                Upcoming Events
-            </h1>
-
-            <div class="mt-3 flex items-center gap-2 text-[14px] text-white/60">
-                <a href="{{ route('home') }}" class="transition-colors hover:text-white">🏠 Home</a>
-                <svg class="h-4 w-4 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                </svg>
+        <div class="relative mx-auto flex min-h-[260px] max-w-7xl flex-col items-center justify-center px-4 py-16 text-center sm:min-h-[300px] sm:px-6 lg:px-8">
+            <p class="mb-3 text-[11px] font-semibold uppercase tracking-[0.35em] text-[#e85d26]">What's On</p>
+            <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">Upcoming Events</h1>
+            <nav class="mt-4 flex items-center gap-2 text-xs uppercase tracking-[0.24em] text-white/65">
+                <a href="{{ route('home') }}" class="transition-colors hover:text-white">Home</a>
+                <span>/</span>
                 <span class="text-white">Events</span>
-            </div>
+            </nav>
         </div>
     </section>
 

@@ -40,26 +40,14 @@
             <div class="absolute inset-0 bg-black/65"></div>
         </div>
 
-        <div class="relative mx-auto flex h-[260px] max-w-7xl flex-col items-center justify-center px-4 text-center sm:px-6 lg:px-8">
-            <div class="inline-flex h-[28px] items-center rounded-full border border-white/20 bg-white/10 px-4 text-[11px] font-bold uppercase tracking-[0.12em] text-[#ff8904]">
-                <svg class="mr-2 h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422A12.083 12.083 0 0121 12.5V17l-9 5-9-5v-4.5c0-.946.217-1.841.605-2.64L12 14z"/>
-                </svg>
-                Bible School
-            </div>
-
-            <h1 class="mt-4 text-[48px] font-extrabold leading-none tracking-tight text-white sm:text-[56px]">
-                Courses & Training
-            </h1>
-
-            <div class="mt-3 flex items-center gap-2 text-[13px] text-white/50">
-                <a href="{{ route('home') }}" class="transition-colors hover:text-white">🏠 Home</a>
-                <svg class="h-3.5 w-3.5 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                </svg>
-                <span class="text-white/80">Courses</span>
-            </div>
+        <div class="relative mx-auto flex min-h-[260px] max-w-7xl flex-col items-center justify-center px-4 py-16 text-center sm:min-h-[300px] sm:px-6 lg:px-8">
+            <p class="mb-3 text-[11px] font-semibold uppercase tracking-[0.35em] text-[#e85d26]">Bible School</p>
+            <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">Courses & Training</h1>
+            <nav class="mt-4 flex items-center gap-2 text-xs uppercase tracking-[0.24em] text-white/65">
+                <a href="{{ route('home') }}" class="transition-colors hover:text-white">Home</a>
+                <span>/</span>
+                <span class="text-white">Courses</span>
+            </nav>
         </div>
     </section>
 

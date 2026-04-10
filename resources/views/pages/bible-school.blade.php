@@ -25,24 +25,15 @@
             <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40"></div>
         </div>
 
-        <div class="relative mx-auto flex min-h-[340px] max-w-7xl flex-col justify-center px-4 sm:px-6 lg:px-8">
-            <div class="max-w-xl">
-                <div class="inline-flex h-[30px] items-center rounded-full border border-[#ff8904]/40 bg-[#1a1a2e] px-4 text-[11px] font-bold uppercase tracking-[0.12em] text-[#ff8904]">
-                    <svg class="mr-2 h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422A12.083 12.083 0 0121 12.5V17l-9 5-9-5v-4.5c0-.946.217-1.841.605-2.64L12 14z"/>
-                    </svg>
-                    City Life International
-                </div>
-
-                <h1 class="mt-5 text-[44px] font-extrabold leading-[1.05] tracking-tight text-white sm:text-[56px]">
-                    Bible School<br>International
-                </h1>
-
-                <p class="mt-4 max-w-md text-[15px] italic leading-relaxed text-white/60">
-                    Equipping believers with deep biblical knowledge, proven leadership skills, and a heart on fire for God.
-                </p>
-            </div>
+        <div class="relative mx-auto flex min-h-[260px] max-w-7xl flex-col items-center justify-center px-4 py-16 text-center sm:min-h-[300px] sm:px-6 lg:px-8">
+            <p class="mb-3 text-[11px] font-semibold uppercase tracking-[0.35em] text-[#e85d26]">City Life International</p>
+            <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">Bible School International</h1>
+            <p class="mt-4 max-w-xl text-base text-white/60 sm:text-lg">Equipping believers with deep biblical knowledge, proven leadership skills, and a heart on fire for God.</p>
+            <nav class="mt-4 flex items-center gap-2 text-xs uppercase tracking-[0.24em] text-white/65">
+                <a href="{{ url('/') }}" class="transition-colors hover:text-white">Home</a>
+                <span>/</span>
+                <span class="text-white">Bible School</span>
+            </nav>
         </div>
     </section>
 

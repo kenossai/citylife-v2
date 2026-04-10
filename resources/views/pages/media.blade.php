@@ -227,12 +227,10 @@
             <div class="absolute inset-0 bg-gradient-to-b from-[#131118]/76 via-[#131118]/74 to-[#131118]"></div>
         </div>
 
-        <div class="relative mx-auto flex min-h-[250px] max-w-6xl flex-col items-center justify-center px-4 py-16 text-center sm:min-h-[280px] sm:px-6 lg:px-8">
-            <span class="inline-flex items-center gap-2 rounded-full border border-[#e85d26]/25 bg-[#e85d26]/12 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.3em] text-[#ff9b74]">
-                Media Centre
-            </span>
-            <h1 class="mt-5 text-[36px] font-extrabold tracking-tight text-white sm:text-[48px]">Media &amp; Resources</h1>
-            <nav class="mt-4 flex items-center gap-2 text-[11px] uppercase tracking-[0.24em] text-white/62">
+        <div class="relative mx-auto flex min-h-[260px] max-w-7xl flex-col items-center justify-center px-4 py-16 text-center sm:min-h-[300px] sm:px-6 lg:px-8">
+            <p class="mb-3 text-[11px] font-semibold uppercase tracking-[0.35em] text-[#e85d26]">Media Centre</p>
+            <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">Media & Resources</h1>
+            <nav class="mt-4 flex items-center gap-2 text-xs uppercase tracking-[0.24em] text-white/65">
                 <a href="{{ route('home') }}" class="transition-colors hover:text-white">Home</a>
                 <span>/</span>
                 <span class="text-white">Media</span>

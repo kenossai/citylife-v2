@@ -86,9 +86,10 @@
             <div class="absolute inset-0 bg-gradient-to-b from-[#141117]/72 via-[#141117]/68 to-[#141117]"></div>
         </div>
 
-        <div class="relative mx-auto flex min-h-[220px] max-w-6xl flex-col items-center justify-center px-4 py-16 text-center sm:min-h-[250px] sm:px-6 lg:px-8">
-            <h1 class="text-[34px] font-extrabold tracking-tight text-white sm:text-[42px]">Missions &amp; Outreach</h1>
-            <nav class="mt-4 flex items-center gap-2 text-[11px] uppercase tracking-[0.24em] text-white/65">
+        <div class="relative mx-auto flex min-h-[260px] max-w-7xl flex-col items-center justify-center px-4 py-16 text-center sm:min-h-[300px] sm:px-6 lg:px-8">
+            <p class="mb-3 text-[11px] font-semibold uppercase tracking-[0.35em] text-[#e85d26]">City Life International</p>
+            <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">Missions & Outreach</h1>
+            <nav class="mt-4 flex items-center gap-2 text-xs uppercase tracking-[0.24em] text-white/65">
                 <a href="{{ url('/') }}" class="transition-colors hover:text-white">Home</a>
                 <span>/</span>
                 <span class="text-white">Missions</span>

@@ -68,13 +68,14 @@
             >
             <div class="absolute inset-0 bg-gradient-to-b from-[#101828]/80 to-[#101828]/60"></div>
         </div>
-        <div class="relative flex min-h-[220px] items-center justify-center text-center">
-            <div>
-                <p class="text-[13px] font-bold uppercase tracking-[0.15em] text-white/60">City Life International</p>
-                <h1 class="mt-2 text-[40px] font-extrabold leading-tight text-white sm:text-[52px]">
-                    Our <span class="italic text-[#e85d26]">Leadership</span>
-                </h1>
-            </div>
+        <div class="relative mx-auto flex min-h-[260px] max-w-7xl flex-col items-center justify-center px-4 py-16 text-center sm:min-h-[300px] sm:px-6 lg:px-8">
+            <p class="mb-3 text-[11px] font-semibold uppercase tracking-[0.35em] text-[#e85d26]">City Life International</p>
+            <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">Our Leadership</h1>
+            <nav class="mt-4 flex items-center gap-2 text-xs uppercase tracking-[0.24em] text-white/65">
+                <a href="{{ url('/') }}" class="transition-colors hover:text-white">Home</a>
+                <span>/</span>
+                <span class="text-white">Leadership</span>
+            </nav>
         </div>
     </section>
 

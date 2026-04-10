@@ -7,19 +7,20 @@
 <div class="bg-[#f9fafb] min-h-screen">
 
     {{-- Page Header --}}
-    <section class="relative overflow-hidden bg-[#18151a] pt-24 pb-16">
+    <section class="relative overflow-hidden bg-[#18151a] pt-16">
         <div class="pointer-events-none absolute inset-0">
             <div class="absolute -top-32 -right-32 h-96 w-96 rounded-full bg-[#e85d26]/10 blur-3xl"></div>
             <div class="absolute bottom-0 left-10 h-64 w-64 rounded-full bg-purple-600/10 blur-3xl"></div>
         </div>
-        <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center gap-2 text-[13px] text-white/40 mb-6">
-                <a href="{{ route('home') }}" class="hover:text-white transition-colors">🏠 Home</a>
-                <svg class="h-3.5 w-3.5 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                <span class="text-white/70">Books</span>
-            </div>
-            <h1 class="text-4xl font-extrabold text-white sm:text-5xl">Books</h1>
-            <p class="mt-3 text-[15px] text-white/50 max-w-xl">Explore books published by City Life International Church leaders and pastors.</p>
+        <div class="relative mx-auto flex min-h-[260px] max-w-7xl flex-col items-center justify-center px-4 py-16 text-center sm:min-h-[300px] sm:px-6 lg:px-8">
+            <p class="mb-3 text-[11px] font-semibold uppercase tracking-[0.35em] text-[#e85d26]">City Life International</p>
+            <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">Books</h1>
+            <p class="mt-4 max-w-xl text-base text-white/60 sm:text-lg">Explore books published by City Life International Church leaders and pastors.</p>
+            <nav class="mt-4 flex items-center gap-2 text-xs uppercase tracking-[0.24em] text-white/65">
+                <a href="{{ route('home') }}" class="transition-colors hover:text-white">Home</a>
+                <span>/</span>
+                <span class="text-white">Books</span>
+            </nav>
         </div>
     </section>
 
