@@ -94,7 +94,9 @@ class CourseEnrollmentsTable
                     ->label('Mark Attendance')
                     ->icon('heroicon-o-clipboard-document-check')
                     ->color('success')
-                    ->visible(fn ($record) => in_array($record->status, ['active', 'completed']))
+                    ->visible(fn ($record) => in_array($record->status, ['active', 'completed'])
+                        && ! ($record->total_lessons > 0 && $record->attendance_count >= $record->total_lessons)
+                    )
                     ->form(fn ($record) => [
                         Select::make('lesson_id')
                             ->label('Lesson')
