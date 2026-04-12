@@ -54,15 +54,9 @@
         ],
     ];
 
-    $partners = [
-        ['mark' => 'EC', 'name' => 'Eastgate Collective', 'region' => 'Kenya'],
-        ['mark' => 'HM', 'name' => 'Hands of Mercy', 'region' => 'Uganda'],
-        ['mark' => 'LT', 'name' => 'Living Truth', 'region' => 'India'],
-        ['mark' => 'RW', 'name' => 'Restore Wells', 'region' => 'Tanzania'],
-        ['mark' => 'NC', 'name' => 'New Communities', 'region' => 'United Kingdom'],
-        ['mark' => 'BF', 'name' => 'Bread for Families', 'region' => 'Romania'],
-        ['mark' => 'SS', 'name' => 'Strength to Stand', 'region' => 'Philippines'],
-        ['mark' => 'HP', 'name' => 'Hope Partners', 'region' => 'Brazil'],
+    $countries = [
+        ['flag' => '🇨🇩', 'name' => 'Congo', 'region' => 'Democratic Republic of Congo'],
+        ['flag' => '🇮🇳', 'name' => 'India', 'region' => 'India'],
     ];
 
     $impactSteps = [
@@ -192,30 +186,30 @@
             <div class="text-center">
                 <div class="mb-3 flex items-center justify-center gap-3">
                     <span class="h-px w-10 bg-[#e85d26]"></span>
-                    <p class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#e85d26]">Partnership Network</p>
+                    <p class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#e85d26]">Where We Serve</p>
                     <span class="h-px w-10 bg-[#e85d26]"></span>
                 </div>
-                <h2 class="text-3xl font-extrabold tracking-tight text-white sm:text-[38px]">Our Global Partners</h2>
+                <h2 class="text-3xl font-extrabold tracking-tight text-white sm:text-[38px]">Our Mission Countries</h2>
                 <p class="mx-auto mt-4 max-w-2xl text-sm leading-7 text-white/62 sm:text-[15px]">
-                    We work alongside trusted ministries, churches, and humanitarian teams who are serving with integrity in their local context.
+                    We are currently active on the ground in two nations, bringing the gospel and practical support to communities in need.
                 </p>
             </div>
 
-            <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                @foreach ($partners as $partner)
+            <div class="mt-10 grid gap-4 sm:grid-cols-2 max-w-xl mx-auto w-full">
+                @foreach ($countries as $country)
                     <article class="rounded-[12px] border border-white/8 bg-[#242532] px-5 py-6 text-center">
-                        <span class="mx-auto inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/8 text-[11px] font-extrabold uppercase tracking-[0.2em] text-[#ff915f]">
-                            {{ $partner['mark'] }}
+                        <span class="mx-auto flex h-14 w-14 items-center justify-center text-4xl">
+                            {{ $country['flag'] }}
                         </span>
-                        <h3 class="mt-4 text-[13px] font-bold uppercase tracking-[0.18em] text-white">{{ $partner['name'] }}</h3>
-                        <p class="mt-1 text-[11px] uppercase tracking-[0.22em] text-white/45">{{ $partner['region'] }}</p>
+                        <h3 class="mt-4 text-[13px] font-bold uppercase tracking-[0.18em] text-white">{{ $country['name'] }}</h3>
+                        <p class="mt-1 text-[11px] uppercase tracking-[0.22em] text-white/45">{{ $country['region'] }}</p>
                     </article>
                 @endforeach
             </div>
         </div>
     </section>
 
-    <section id="make-a-difference" class="bg-[#f7f4ef] py-16 sm:py-18 lg:py-20">
+    {{-- <section id="make-a-difference" class="bg-[#f7f4ef] py-16 sm:py-18 lg:py-20">
         <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
             <div class="grid gap-8 lg:grid-cols-[1.02fr_0.98fr] lg:items-start">
                 <div class="overflow-hidden rounded-[18px] bg-[#e6e0d7]">
@@ -272,7 +266,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
 
     <section id="mission-trip" class="relative overflow-hidden bg-[#151217] py-16 sm:py-18 lg:py-20">
         <div class="absolute inset-0">
