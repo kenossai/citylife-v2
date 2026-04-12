@@ -2,12 +2,14 @@
 
 namespace App\Filament\Resources\Sermons\Schemas;
 
+use App\Data\BibleBooks;
 use App\Models\Leader;
 use App\Models\SermonSeries;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -57,10 +59,11 @@ class SermonForm
                             ->placeholder('Guest speaker name')
                             ->maxLength(150)
                             ->helperText('Only fill this if the speaker is not one of our pastors.'),
-                        TextInput::make('scripture')
-                            ->label('Scripture Reference')
-                            ->placeholder('Galatians 5')
-                            ->maxLength(100),
+                        TagsInput::make('scripture')
+                            ->label('Scripture References')
+                            ->placeholder('Type a reference and press Enter…')
+                            ->suggestions(BibleBooks::all())
+                            ->helperText('Add one or more references, e.g. "John 3:16", "Romans 8:28–30". Press Enter after each.'),
                         Textarea::make('description')
                             ->rows(3)
                             ->columnSpanFull(),
@@ -76,9 +79,16 @@ class SermonForm
                 Section::make('Media Links')
                     ->columns(2)
                     ->schema([
-                        TextInput::make('thumbnail_path')
-                            ->label('Thumbnail Path / URL')
-                            ->maxLength(300),
+                        FileUpload::make('thumbnail_path')
+                            ->label('Thumbnail Image')
+                            ->disk('public')
+                            ->directory('sermon-thumbnails')
+                            ->image()
+                            ->imageEditor()
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                            ->maxSize(5120)
+                            ->helperText('Upload a thumbnail image (JPG, PNG or WebP, max 5 MB).')
+                            ->columnSpanFull(),
                         Toggle::make('auto_fetch_live')
                             ->label('Auto-Fetch Live Stream')
                             ->helperText('Automatically get YouTube live stream URL on Sundays at 11:15 AM.')

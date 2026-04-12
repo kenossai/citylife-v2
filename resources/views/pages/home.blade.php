@@ -202,7 +202,7 @@
                     Grow in the<br>
                     <span class="text-[#e85d26]">Word of God</span>
                 </h2>
-                <p class="text-gray-500 italic mb-2 text-sm">"{{ $featuredSermon->title }}" — {{ $featuredSermon->speaker_name }}{{ $featuredSermon->scripture ? ' takes us through ' . $featuredSermon->scripture : '' }}{{ $featuredSermon->description ? '. ' . Str::limit($featuredSermon->description, 150) : '' }}</p>
+                <p class="text-gray-500 italic mb-2 text-sm">"{{ $featuredSermon->title }}" — {{ $featuredSermon->speaker_name }}{{ $featuredSermon->scripture_text ? ' takes us through ' . $featuredSermon->scripture_text : '' }}{{ $featuredSermon->description ? '. ' . Str::limit($featuredSermon->description, 150) : '' }}</p>
                 <p class="text-gray-400 text-xs mb-8 uppercase tracking-wider">{{ $featuredSermon->preached_at->format('F j, Y') }}{{ $featuredSermon->service_label ? ' · ' . $featuredSermon->service_label : '' }}</p>
                 <div class="flex flex-wrap gap-3">
                     <a href="{{ $featuredSermon->slug ? route('media.show', $featuredSermon->slug) : route('media') }}"

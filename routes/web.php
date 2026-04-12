@@ -60,6 +60,12 @@ Route::prefix('member')->name('member.')->group(function () {
     Route::get('/setup-password/{token}', [MemberAuthController::class, 'showSetupPassword'])->name('setup-password.show');
     Route::post('/setup-password/{token}', [MemberAuthController::class, 'setupPassword'])->name('setup-password.store');
 
+    // Self-service password reset
+    Route::get('/forgot-password', [MemberAuthController::class, 'showForgotPassword'])->name('password.request');
+    Route::post('/forgot-password', [MemberAuthController::class, 'sendResetLink'])->name('password.email');
+    Route::get('/reset-password/{token}', [MemberAuthController::class, 'showResetPassword'])->name('password.reset');
+    Route::post('/reset-password/{token}', [MemberAuthController::class, 'resetPassword'])->name('password.update');
+
     Route::middleware('member.auth')->group(function () {
         Route::get('/dashboard', [MemberDashboardController::class, 'index'])->name('dashboard');
         Route::get('/my-courses', [MemberDashboardController::class, 'courses'])->name('courses');

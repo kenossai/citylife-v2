@@ -178,11 +178,11 @@
                         </div>
                     @endif
 
-                    @if ($sermon->scripture)
+                    @if ($sermon->scripture_text)
                         <div class="mt-8">
                             <div class="rounded-xl border-l-4 border-[#e85d26] bg-[#fff7ed] px-5 py-4">
                                 <p class="text-[11px] font-bold uppercase tracking-[0.1em] text-[#e85d26]">Key Scripture</p>
-                                <p class="mt-1 text-[15px] font-semibold text-[#101828]">{{ $sermon->scripture }}</p>
+                                <p class="mt-1 text-[15px] font-semibold text-[#101828]">{{ $sermon->scripture_text }}</p>
                             </div>
                         </div>
                     @endif
@@ -264,10 +264,10 @@
                                     <span class="text-[13px] font-semibold text-[#101828]">{{ $sermon->service_label }}</span>
                                 </div>
                             @endif
-                            @if ($sermon->scripture)
+                            @if ($sermon->scripture_text)
                                 <div class="flex items-center justify-between py-3">
                                     <span class="text-[12px] text-[#98a2b3]">Scripture</span>
-                                    <span class="text-[13px] font-semibold text-[#101828]">{{ $sermon->scripture }}</span>
+                                    <span class="text-[13px] font-semibold text-[#101828]">{{ $sermon->scripture_text }}</span>
                                 </div>
                             @endif
                         </div>

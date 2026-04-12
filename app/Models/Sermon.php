@@ -64,12 +64,21 @@ class Sermon extends Model
 
     protected $casts = [
         'preached_at'     => 'date',
+        'scripture'       => 'array',
         'is_featured'     => 'boolean',
         'is_upcoming'     => 'boolean',
         'is_live'         => 'boolean',
         'auto_fetch_live' => 'boolean',
         'is_active'       => 'boolean',
     ];
+
+    /**
+     * Returns all scripture references as a single display string, e.g. "John 3:16, Romans 8:28".
+     */
+    public function getScriptureTextAttribute(): string
+    {
+        return implode(', ', $this->scripture ?? []);
+    }
 
     public function leader(): BelongsTo
     {

@@ -4,9 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <title>Student Login — City Life International</title>
+    <title>Forgot Password — City Life International</title>
 
-    <!-- Fonts (matches frontend theme) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -21,11 +20,11 @@
             <a href="{{ route('home') }}">
                 <img src="{{ asset('images/logo_small_black.png') }}" alt="City Life International" class="h-10 w-auto object-contain">
             </a>
-            <a href="{{ route('home') }}" class="text-sm text-[#e85d26] hover:text-[#e85d26]/80 transition-colors flex items-center gap-1.5">
+            <a href="{{ route('member.login') }}" class="text-sm text-[#e85d26] hover:text-[#e85d26]/80 transition-colors flex items-center gap-1.5">
                 <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                 </svg>
-                Back to website
+                Back to sign in
             </a>
         </div>
     </nav>
@@ -37,8 +36,8 @@
             {{-- Heading --}}
             <div class="text-center mb-8">
                 <p class="text-[#e85d26] text-xs font-semibold uppercase tracking-widest mb-3">City Life International</p>
-                <h1 class="text-3xl font-extrabold text-[#101828] leading-tight">Welcome back</h1>
-                <p class="text-gray-500 text-sm mt-2">Sign in to continue your learning journey.</p>
+                <h1 class="text-3xl font-extrabold text-[#101828] leading-tight">Forgot your password?</h1>
+                <p class="text-gray-500 text-sm mt-2">Enter your email and we'll send you a reset link.</p>
             </div>
 
             {{-- Card --}}
@@ -50,7 +49,7 @@
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('member.login.post') }}" class="space-y-5">
+                <form method="POST" action="{{ route('member.password.email') }}" class="space-y-5">
                     @csrf
 
                     <div>
@@ -69,36 +68,11 @@
                         @enderror
                     </div>
 
-                    <div>
-                        <label for="password" class="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
-                        <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            required autocomplete="current-password"
-                            class="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:border-[#e85d26] focus:outline-none focus:ring-2 focus:ring-[#e85d26]/20 transition-colors"
-                            placeholder="••••••••"
-                        />
-                        @error('password')
-                            <p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div class="flex items-center justify-between">
-                        <label class="flex items-center gap-2 text-sm text-gray-500 select-none cursor-pointer">
-                            <input type="checkbox" name="remember" class="rounded border-gray-300 text-[#e85d26] focus:ring-[#e85d26]/20" />
-                            Remember me
-                        </label>
-                        <a href="{{ route('member.password.request') }}" class="text-sm text-gray-500 hover:text-[#e85d26] transition-colors">
-                            Forgot password?
-                        </a>
-                    </div>
-
                     <button
                         type="submit"
                         class="w-full inline-flex items-center justify-center gap-2 rounded-full bg-[#e85d26] hover:bg-[#cf4f1e] px-4 py-3 text-sm font-semibold text-white transition-colors focus:outline-none focus:ring-2 focus:ring-[#e85d26]/40"
                     >
-                        Sign in
+                        Send reset link
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
                         </svg>
@@ -106,14 +80,9 @@
                 </form>
             </div>
 
-            <p class="mt-6 text-center text-xs text-gray-400">
-                Not a student yet?
-                <a href="{{ route('courses') }}" class="text-gray-600 hover:text-[#e85d26] transition-colors">Browse our courses →</a>
-            </p>
         </div>
     </div>
 
-    {{-- ── Subtle footer ── --}}
     <footer class="py-6 text-center">
         <p class="text-xs text-gray-300">© {{ date('Y') }} City Life International. All rights reserved.</p>
     </footer>

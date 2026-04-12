@@ -157,4 +157,20 @@ class Member extends Authenticatable
 
         return $token;
     }
+
+    /**
+     * Generate a short-lived password reset token (1-hour expiry).
+     * Reuses the same columns as the setup token.
+     */
+    public function generatePasswordResetToken(): string
+    {
+        $token = Str::random(64);
+
+        $this->update([
+            'password_setup_token'             => $token,
+            'password_setup_token_expires_at'  => now()->addHour(),
+        ]);
+
+        return $token;
+    }
 }
