@@ -77,8 +77,9 @@
                         <template x-for="speaker in filteredSpeakers" :key="speaker.slug">
                             <div class="overflow-hidden rounded-2xl border border-[#f3f4f6] bg-white shadow-sm transition-shadow hover:shadow-md">
                                 {{-- Image --}}
-                                <div class="relative h-[260px] overflow-hidden">
-                                    <img :src="speaker.image" :alt="speaker.name" class="h-full w-full object-cover object-center">
+                                <div class="relative aspect-[4/3] overflow-hidden">
+                                    <img :src="speaker.image" :alt="speaker.name" class="h-full w-full object-cover object-top">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
                                     {{-- Year badges --}}
                                     <div class="absolute left-3 top-3 flex gap-1.5">
                                         <template x-for="year in speaker.years" :key="year">
