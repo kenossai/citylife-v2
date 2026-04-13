@@ -6,7 +6,7 @@
     <title>New Contact Message</title>
 </head>
 <body style="margin:0;padding:0;background-color:#f3f4f6;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
-@php $logoSrc = 'data:image/png;base64,' . base64_encode(file_get_contents(public_path('images/logo_small_black.png'))); @endphp
+@php $_logoPath = public_path('images/logo_small_black.png'); $logoSrc = file_exists($_logoPath) ? 'data:image/png;base64,' . base64_encode(file_get_contents($_logoPath)) : asset('images/logo_small_black.png'); @endphp
     <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f3f4f6;padding:48px 20px;">
         <tr>
             <td align="center">
