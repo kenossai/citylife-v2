@@ -190,7 +190,7 @@
                         </div>
 
                         <div class="px-5 pt-5 pb-5">
-                            <p class="h-[45.5px] overflow-hidden text-[14px] leading-[1.625] text-[#6a7282]">
+                            <p class="line-clamp-2 text-[14px] leading-[1.625] text-[#6a7282]">
                                 {{ $featuredEvent['description'] }}
                             </p>
 
@@ -289,7 +289,7 @@
                                     <h3 class="mt-2 text-[18px] font-medium leading-7 text-[#101828]" x-text="item.title"></h3>
 
                                     <p
-                                        class="mt-2 max-w-[605px] text-[14px] leading-[1.625] text-[#99a1af]"
+                                        class="mt-2 max-w-[605px] text-[14px] leading-[1.625] text-[#99a1af] line-clamp-2"
                                         x-text="item.description"
                                     ></p>
                                 </div>
