@@ -289,7 +289,7 @@
                         </p>
                     </div>
 
-                    <div class="grid gap-4 md:grid-cols-5">
+                    <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 {{ $worshipCentres->count() >= 3 ? 'lg:grid-cols-3' : ($worshipCentres->count() === 2 ? 'lg:grid-cols-2' : 'lg:grid-cols-1 ') }}">
                         @foreach ($worshipCentres as $centre)
                             <article class="rounded-[24px] bg-white/95 p-5 shadow-[0_18px_40px_rgba(0,0,0,0.18)] backdrop-blur">
                                 <span class="inline-flex rounded-full bg-[#efe8e0] px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.28em] text-[#6b6259]">
