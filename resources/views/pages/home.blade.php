@@ -265,7 +265,13 @@
 
                 {{-- Poster image on top --}}
                 <div class="w-full h-72 rounded-2xl overflow-hidden shadow-md mb-6">
-                    <img src="{{ $event->image_path }}"
+                    @php
+                        $eventImg = $event->image_path;
+                        if ($eventImg && !str_starts_with($eventImg, 'http')) {
+                            $eventImg = asset('storage/' . ltrim($eventImg, '/'));
+                        }
+                    @endphp
+                    <img src="{{ $eventImg }}"
                          alt="{{ $event->title }}"
                          class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
                 </div>

@@ -63,16 +63,12 @@ class EventsController extends Controller
                 'requires_registration' => (bool) $event->requires_registration,
             ], $index));
 
-        $fallbackEvents = $this->fallbackEvents();
+        if ($storedEvents->isNotEmpty()) {
+            return $storedEvents->sortBy('timestamp')->values();
+        }
 
-        return $storedEvents
-            ->concat($fallbackEvents->reject(
-                fn (array $fallbackEvent) => $storedEvents->contains(
-                    fn (array $storedEvent) => $storedEvent['slug'] === $fallbackEvent['slug']
-                )
-            ))
-            ->sortBy('timestamp')
-            ->values();
+        // Only use hardcoded fallbacks when there are no DB events (local/staging only)
+        return $this->fallbackEvents()->sortBy('timestamp')->values();
     }
 
     private function mapEvent(array $event, int $index): array
