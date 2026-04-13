@@ -88,9 +88,7 @@ class BibleSchoolEventForm
                         ->image()
                         ->disk('public')
                         ->directory('bible-school/events')
-                        ->imageResizeMode('cover')
-                        ->imageCropAspectRatio('16:9')
-                        ->maxSize(4096),
+                        ->maxSize(5096),
                 ]),
         ]);
     }

@@ -62,8 +62,7 @@ class SpeakerForm
                         ->disk('public')
                         ->directory('speakers')
                         ->imageResizeMode('cover')
-                        ->imageCropAspectRatio('3:4')
-                        ->maxSize(2048)
+                        ->maxSize(5096)
                         ->helperText('Portrait photo, ideally 600×800px.'),
 
                     FileUpload::make('cover_image')
@@ -72,8 +71,7 @@ class SpeakerForm
                         ->disk('public')
                         ->directory('speakers/covers')
                         ->imageResizeMode('cover')
-                        ->imageCropAspectRatio('16:9')
-                        ->maxSize(4096)
+                        ->maxSize(5096)
                         ->helperText('Wide banner shown at the top of the speaker page.'),
                 ]),
 
