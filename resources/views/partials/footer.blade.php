@@ -66,6 +66,7 @@
             <div class="flex items-center gap-4">
                 <a href="{{ url('/privacy-policy') }}" class="hover:text-gray-400 transition-colors">Privacy Policy</a>
                 <a href="{{ url('/cookie-policy') }}" class="hover:text-gray-400 transition-colors">Cookie Policy</a>
+                <a href="{{ route('safeguarding') }}" class="hover:text-gray-400 transition-colors">Safeguarding</a>
             </div>
         </div>
     </div>
