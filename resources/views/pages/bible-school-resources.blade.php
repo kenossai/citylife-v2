@@ -97,7 +97,9 @@
                                 {{-- Info --}}
                                 <div class="px-4 pb-4 pt-3.5">
                                     <p class="text-[11px] font-bold uppercase tracking-[0.08em] text-[#e85d26]" x-text="speaker.role"></p>
-                                    <h3 class="mt-1 text-[16px] font-bold text-[#101828]" x-text="speaker.name"></h3>
+                                    <a :href="'/bible-school/resources/' + speaker.slug">
+                                        <h3 class="mt-1 text-[16px] font-bold text-[#101828]" x-text="speaker.name"></h3>
+                                    </a>
                                     <p class="mt-0.5 text-[13px] text-[#667085]" x-text="speaker.church"></p>
 
                                     {{-- Media counts --}}
