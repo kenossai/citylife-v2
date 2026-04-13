@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -31,7 +31,6 @@ class Ministry extends Model
         $activity->is_sensitive = false;
     }
     protected $fillable = [
-        'leader_id',
         'name',
         'slug',
         'subtitle',
@@ -61,8 +60,8 @@ class Ministry extends Model
         return $query->where('is_active', true)->orderBy('sort_order');
     }
 
-    public function leader(): BelongsTo
+    public function leaders(): BelongsToMany
     {
-        return $this->belongsTo(Leader::class);
+        return $this->belongsToMany(Leader::class)->withPivot('sort_order')->orderBy('leader_ministry.sort_order');
     }
 }

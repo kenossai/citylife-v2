@@ -10,9 +10,14 @@
 
     $galleryImages = is_array($ministry->gallery_images) ? $ministry->gallery_images : [];
 
-    $leaderName  = $ministry->leader?->name       ?? $ministry->leader_name;
-    $leaderRole  = $ministry->leader?->role       ?? $ministry->leader_role;
-    $leaderImage = $ministry->leader?->image_path ?? $ministry->leader_image;
+    // Prefer linked leaders; fall back to manual single-leader fields
+    $linkedLeaders = $ministry->leaders;
+    $hasLinkedLeaders = $linkedLeaders->isNotEmpty();
+
+    // Build a unified leaders array for the view
+    $displayLeaders = $hasLinkedLeaders
+        ? $linkedLeaders->map(fn ($l) => ['name' => $l->name, 'role' => $l->role, 'image' => $l->image_path])->all()
+        : ($ministry->leader_name ? [['name' => $ministry->leader_name, 'role' => $ministry->leader_role, 'image' => $ministry->leader_image]] : []);
 @endphp
 
 @section('content')
@@ -79,10 +84,10 @@
                                 {{ $ministry->location }}
                             </span>
                         @endif
-                        @if ($leaderName)
+                        @if (count($displayLeaders))
                             <span class="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/8 px-4 py-2">
                                 <svg class="h-4 w-4 text-[#e85d26]" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6.75a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
-                                {{ $leaderName }}
+                                {{ collect($displayLeaders)->pluck('name')->join(', ') }}
                             </span>
                         @endif
                     </div>
@@ -192,34 +197,40 @@
     {{-- ================================================================
          MINISTRY LEADER
     ================================================================ --}}
-    @if ($leaderName)
+    @if (count($displayLeaders))
     <section class="bg-[#f9fafb] py-16 lg:py-24">
         <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
             <div class="mb-10 text-center">
                 <div class="mb-4 flex items-center justify-center gap-3">
                     <span class="h-px w-8 bg-[#e85d26]"></span>
-                    <span class="text-[11px] font-bold uppercase tracking-[0.18em] text-[#e85d26]">Our Leader</span>
+                    <span class="text-[11px] font-bold uppercase tracking-[0.18em] text-[#e85d26]">{{ count($displayLeaders) === 1 ? 'Our Leader' : 'Our Leaders' }}</span>
                     <span class="h-px w-8 bg-[#e85d26]"></span>
                 </div>
                 <h2 class="text-[30px] font-extrabold leading-tight text-[#101828] sm:text-[38px]">
-                    Meet The Leader
+                    {{ count($displayLeaders) === 1 ? 'Meet The Leader' : 'Meet The Leaders' }}
                 </h2>
             </div>
 
-            <div class="mx-auto max-w-sm">
+            <div class="mx-auto grid gap-6 {{ count($displayLeaders) === 1 ? 'max-w-sm' : (count($displayLeaders) === 2 ? 'max-w-xl grid-cols-2' : 'max-w-3xl grid-cols-2 sm:grid-cols-3') }}">
+                @foreach ($displayLeaders as $leader)
                 <div class="rounded-2xl border border-[#f3f4f6] bg-white p-6 text-center shadow-sm">
-                    @if ($leaderImage)
+                    @if ($leader['image'])
                         <img
-                            src="{{ $leaderImage }}"
-                            alt="{{ $leaderName }}"
+                            src="{{ $leader['image'] }}"
+                            alt="{{ $leader['name'] }}"
                             class="mx-auto h-24 w-24 rounded-full object-cover ring-4 ring-[#e85d26]/10"
                         >
+                    @else
+                        <div class="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-[#e85d26]/10 text-3xl font-bold text-[#e85d26]">
+                            {{ mb_strtoupper(mb_substr($leader['name'], 0, 1)) }}
+                        </div>
                     @endif
-                    <h3 class="mt-4 text-[16px] font-bold text-[#101828]">{{ $leaderName }}</h3>
-                    @if ($leaderRole)
-                        <p class="mt-1 text-[13px] font-medium text-[#e85d26]">{{ $leaderRole }}</p>
+                    <h3 class="mt-4 text-[16px] font-bold text-[#101828]">{{ $leader['name'] }}</h3>
+                    @if ($leader['role'])
+                        <p class="mt-1 text-[13px] font-medium text-[#e85d26]">{{ $leader['role'] }}</p>
                     @endif
                 </div>
+                @endforeach
             </div>
         </div>
     </section>
