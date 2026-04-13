@@ -11,7 +11,12 @@
     $galleryImages = is_array($ministry->gallery_images) ? $ministry->gallery_images : [];
 
     // Prefer linked leaders; fall back to manual single-leader fields
-    $linkedLeaders = $ministry->leaders;
+    // Guard against pivot table not existing yet (pre-migration)
+    try {
+        $linkedLeaders = $ministry->leaders;
+    } catch (\Exception $e) {
+        $linkedLeaders = collect();
+    }
     $hasLinkedLeaders = $linkedLeaders->isNotEmpty();
 
     // Build a unified leaders array for the view
