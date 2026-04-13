@@ -45,6 +45,10 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
+        if ($this->force_password_reset) {
+            return true;
+        }
+
         return $this->hasAnyRole(['super_admin', 'admin', 'content_manager', 'viewer']);
     }
 
