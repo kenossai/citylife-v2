@@ -64,8 +64,8 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-600">
             <span>&copy; {{ now()->year }} City Life Church. All rights reserved.</span>
             <div class="flex items-center gap-4">
-                <a href="{{ url('/privacy-policy') }}" class="hover:text-gray-400 transition-colors">Privacy Policy</a>
-                <a href="{{ url('/cookie-policy') }}" class="hover:text-gray-400 transition-colors">Cookie Policy</a>
+                <a href="{{ route('privacy-policy') }}" class="hover:text-gray-400 transition-colors">Privacy Policy</a>
+                <a href="{{ route('cookie-policy') }}" class="hover:text-gray-400 transition-colors">Cookie Policy</a>
                 <a href="{{ route('safeguarding') }}" class="hover:text-gray-400 transition-colors">Safeguarding</a>
             </div>
         </div>
