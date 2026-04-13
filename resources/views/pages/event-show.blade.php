@@ -58,7 +58,7 @@
 
                     <h1 class="mt-5 text-4xl font-extrabold tracking-tight text-white sm:text-5xl">{{ $event['title'] }}</h1>
                     <p class="mt-4 max-w-2xl text-sm leading-7 text-white/72 sm:text-[15px]">
-                        {{ $event['description'] }}
+                        {{ \Illuminate\Support\Str::limit($event['description'], 160) }}
                     </p>
 
                     <div class="mt-7 flex flex-wrap gap-3 text-sm text-white/84">
