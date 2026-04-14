@@ -16,7 +16,7 @@ class HomeController extends Controller
     public function index(): View
     {
         $heroSlides    = HeroSlide::active()->get();
-        $ministries    = Ministry::active()->get();
+        $ministries    = Ministry::active()->take(6)->get();
         $featuredSermon = Sermon::featured()
             ?? Sermon::active()->whereNotNull('slug')->latest('preached_at')->first();
         $upcomingEvents = Event::active()->upcoming()->take(2)->get();
