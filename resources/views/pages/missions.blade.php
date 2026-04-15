@@ -138,7 +138,7 @@
                                     @foreach ($pillar->leaders->take(3) as $leader)
                                         @if ($leader->image_path)
                                             <img
-                                                src="{{ \Illuminate\Support\Facades\Storage::url($leader->image_path) }}"
+                                                src="{{ $leader->image_path }}"
                                                 alt="{{ $leader->name }}"
                                                 title="{{ $leader->name }}"
                                                 onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'"
