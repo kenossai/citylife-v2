@@ -90,14 +90,44 @@
             <div class="overflow-hidden rounded-2xl shadow-xl">
                 <div class="relative aspect-video w-full bg-black">
                     @if ($youtubeId)
-                        <iframe
-                            src="https://www.youtube.com/embed/{{ $youtubeId }}?rel=0&modestbranding=1"
-                            title="{{ $sermon->title }}"
-                            class="absolute inset-0 h-full w-full"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            allowfullscreen
-                        ></iframe>
+                        <div
+                            x-data="{ playing: false }"
+                            class="absolute inset-0"
+                        >
+                            {{-- Thumbnail + play button (shown before click) --}}
+                            <div
+                                x-show="!playing"
+                                @click="playing = true"
+                                class="absolute inset-0 cursor-pointer group"
+                            >
+                                <img
+                                    src="{{ $thumbnail }}"
+                                    alt="{{ $sermon->title }}"
+                                    class="h-full w-full object-cover"
+                                >
+                                {{-- Dark overlay --}}
+                                <div class="absolute inset-0 bg-black/40 transition-colors group-hover:bg-black/50"></div>
+                                {{-- Play button --}}
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <div class="flex h-16 w-16 items-center justify-center rounded-full bg-[#e85d26] shadow-lg transition-transform duration-200 group-hover:scale-110 sm:h-20 sm:w-20">
+                                        <svg class="ml-1 h-7 w-7 text-white sm:h-9 sm:w-9" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M8 5v14l11-7z"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- YouTube iframe (loaded only after click) --}}
+                            <iframe
+                                x-show="playing"
+                                x-bind:src="playing ? 'https://www.youtube.com/embed/{{ $youtubeId }}?rel=0&modestbranding=1&autoplay=1' : ''"
+                                title="{{ $sermon->title }}"
+                                class="absolute inset-0 h-full w-full"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowfullscreen
+                            ></iframe>
+                        </div>
                     @elseif ($sermon->video_url)
                         <iframe
                             src="{{ $sermon->video_url }}"
