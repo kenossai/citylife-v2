@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Our Ministries — City Life International')
-@section('meta_description', 'Explore the ministries at City Life International Church. Find your place to belong and grow.')
+@section('title', 'Our Life Groups — City Life International')
+@section('meta_description', 'Explore the life groups at City Life International Church. Find your place to belong and grow.')
 
 @section('content')
 <div class="bg-white text-[#101828]">
@@ -19,12 +19,12 @@
             <div class="absolute inset-0 bg-gradient-to-b from-[#101828]/80 to-[#101828]/60"></div>
         </div>
         <div class="relative mx-auto flex min-h-[260px] max-w-7xl flex-col items-center justify-center px-4 py-16 text-center sm:min-h-[300px] sm:px-6 lg:px-8">
-            <p class="mb-3 text-[11px] font-semibold uppercase tracking-[0.35em] text-[#e85d26]">Our Ministries</p>
-            <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">Ministries</h1>
+            <p class="mb-3 text-[11px] font-semibold uppercase tracking-[0.35em] text-[#e85d26]">Our Life Groups</p>
+            <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">Life Groups</h1>
             <nav class="mt-4 flex items-center gap-2 text-xs uppercase tracking-[0.24em] text-white/65">
                 <a href="{{ route('home') }}" class="transition-colors hover:text-white">Home</a>
                 <span>/</span>
-                <span class="text-white">Ministries</span>
+                <span class="text-white">Life Groups</span>
             </nav>
         </div>
     </section>
@@ -45,14 +45,14 @@
             </h2>
             <p class="mt-5 text-[15px] leading-relaxed text-[#667085]">
                 At City Life International Church, we believe every person has a gift, a calling and a place to belong. Our
-                ministries exist to help you discover who you are in Christ, connect with others, and make a difference
+                life groups exist to help you discover who you are in Christ, connect with others, and make a difference
                 in your community and the world.
             </p>
         </div>
     </section>
 
     {{-- ============================================================
-         MINISTRY CARDS GRID
+         LIFE GROUP CARDS GRID
     ============================================================ --}}
     <section class="pb-20">
         <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
