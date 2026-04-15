@@ -62,13 +62,13 @@
             'meta' => trim(($sermon->speaker_name ?? 'Pastor') . ' • ' . (optional($sermon->preached_at)->format('M d, Y') ?: 'Mar 23, 2026')),
             'tag' => \Illuminate\Support\Str::upper(\Illuminate\Support\Str::limit($sermon->service_label ?: $tagFallbacks[$index % count($tagFallbacks)], 18, '')),
             'type' => $type,
-            'duration' => $durationFallbacks[$index % count($durationFallbacks)],
+            'duration' => $sermon->duration ?: null,
             'thumbnail' => $assetFromPath($sermon->thumbnail_path ?? null, $index),
             'watch_url' => route('media.show', \Illuminate\Support\Str::slug($sermon->title ?? 'walking-in-the-spirit')),
             'listen_url' => route('media.show', \Illuminate\Support\Str::slug($sermon->title ?? 'walking-in-the-spirit')),
             'description' => $sermon->description ?: 'An encouraging message to help you live with faith, clarity, and spiritual boldness in everyday life.',
-            'is_upcoming' => (bool) ($sermon->is_upcoming ?? false),
-            'upcoming_date' => optional($sermon->preached_at)->isFuture() ? optional($sermon->preached_at)->format('D, M j · g:i A') : null,
+            'is_upcoming' => $sermon->preached_at && $sermon->preached_at->isFuture(),
+            'upcoming_date' => $sermon->preached_at && $sermon->preached_at->isFuture() ? $sermon->preached_at->format('D, M j · g:i A') : null,
         ];
     };
 
@@ -305,9 +305,11 @@
                         class="h-[238px] w-full object-cover transition-transform duration-700 group-hover:scale-105 sm:h-[290px] lg:h-[262px]"
                     >
                     <div class="absolute inset-0 bg-gradient-to-t from-black/42 via-black/10 to-transparent"></div>
+                    @if ($featuredItem['duration'])
                     <span class="absolute bottom-4 left-4 rounded-full bg-black/70 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-white">
                         {{ $featuredItem['duration'] }}
                     </span>
+                    @endif
                     <span class="absolute left-1/2 top-1/2 inline-flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[#ff6b3b] text-white shadow-[0_14px_28px_rgba(255,107,59,0.35)] transition-transform duration-300 group-hover:scale-105">
                         <svg class="ml-1 h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M8 5v14l11-7z"/>
@@ -389,24 +391,42 @@
             <div class="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
                 <template x-for="item in visibleItems" :key="item.id">
                     <article class="overflow-hidden rounded-[14px] border border-[#efe7dc] bg-white shadow-[0_8px_20px_rgba(18,12,15,0.04)]">
-                        <a :href="item.watch_url" class="group relative block overflow-hidden">
-                            <img
-                                :src="item.thumbnail"
-                                :alt="item.title"
-                                class="h-[172px] w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                            >
-                            <span class="absolute bottom-4 right-4 rounded-full bg-black/72 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-white" x-text="item.duration"></span>
-                            <template x-if="item.is_upcoming">
+                        <template x-if="!item.is_upcoming">
+                            <a :href="item.watch_url" class="group relative block overflow-hidden">
+                                <img
+                                    :src="item.thumbnail"
+                                    :alt="item.title"
+                                    class="h-[172px] w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                >
+                                <template x-if="item.duration">
+                                    <span class="absolute bottom-4 right-4 rounded-full bg-black/72 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-white" x-text="item.duration"></span>
+                                </template>
+                            </a>
+                        </template>
+                        <template x-if="item.is_upcoming">
+                            <div class="group relative block overflow-hidden cursor-default">
+                                <img
+                                    :src="item.thumbnail"
+                                    :alt="item.title"
+                                    class="h-[172px] w-full object-cover opacity-60"
+                                >
                                 <span class="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-[#e85d26] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white shadow">
                                     <svg class="h-2.5 w-2.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg>
                                     Upcoming
                                 </span>
-                            </template>
-                        </a>
+                            </div>
+                        </template>
 
                         <div class="px-4 py-4 sm:px-5">
                             <p class="text-[10px] font-bold uppercase tracking-[0.24em] text-[#e85d26]" x-text="item.tag"></p>
-                            <h3 class="mt-2 text-[18px] font-extrabold leading-tight text-[#1f1b22]" x-text="item.title"></h3>
+                            <template x-if="!item.is_upcoming">
+                                <a :href="item.watch_url" class="mt-2 block">
+                                    <h3 class="text-[18px] font-extrabold leading-tight text-[#1f1b22] hover:text-[#e85d26] transition-colors" x-text="item.title"></h3>
+                                </a>
+                            </template>
+                            <template x-if="item.is_upcoming">
+                                <h3 class="mt-2 text-[18px] font-extrabold leading-tight text-[#1f1b22]" x-text="item.title"></h3>
+                            </template>
                             <p class="mt-3 text-[12px] text-[#8a8177]" x-text="item.meta"></p>
                             <template x-if="item.is_upcoming && item.upcoming_date">
                                 <p class="mt-1 inline-flex items-center gap-1 text-[11px] font-semibold text-[#e85d26]">

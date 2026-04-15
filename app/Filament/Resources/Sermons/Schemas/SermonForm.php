@@ -155,11 +155,67 @@ class SermonForm
                         TextInput::make('video_url')
                             ->label('Video URL')
                             ->placeholder('https://youtube.com/watch?v=...')
-                            ->helperText('Enter YouTube or video URL manually.')
+                            ->helperText('Enter a YouTube URL — duration will be fetched automatically.')
                             ->maxLength(300)
                             ->columnSpanFull()
+                            ->live(onBlur: true)
                             ->disabled(fn ($get) => (bool) $get('auto_fetch_live'))
-                            ->dehydrated(true),
+                            ->dehydrated(true)
+                            ->afterStateUpdated(function (?string $state, callable $set) {
+                                if (! $state) {
+                                    return;
+                                }
+
+                                preg_match('/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/', $state, $m);
+                                $videoId = $m[1] ?? null;
+
+                                if (! $videoId) {
+                                    return;
+                                }
+
+                                $apiKey = config('services.youtube.api_key');
+                                if (! $apiKey) {
+                                    return;
+                                }
+
+                                try {
+                                    $client = new \Google\Client();
+                                    $client->setDeveloperKey($apiKey);
+                                    $youtube  = new \Google\Service\YouTube($client);
+                                    $response = $youtube->videos->listVideos('contentDetails', ['id' => $videoId]);
+                                    $items    = $response->getItems();
+
+                                    if (empty($items)) {
+                                        return;
+                                    }
+
+                                    $iso = $items[0]->getContentDetails()->getDuration(); // e.g. PT42M17S
+                                    preg_match('/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/', $iso, $parts);
+
+                                    $hours   = (int) ($parts[1] ?? 0);
+                                    $minutes = (int) ($parts[2] ?? 0);
+                                    $seconds = (int) ($parts[3] ?? 0);
+
+                                    $duration = $hours > 0
+                                        ? sprintf('%d:%02d:%02d', $hours, $minutes, $seconds)
+                                        : sprintf('%d:%02d', $minutes, $seconds);
+
+                                    $set('duration', $duration);
+
+                                    Notification::make()
+                                        ->title('Duration fetched: ' . $duration)
+                                        ->success()
+                                        ->send();
+                                } catch (\Throwable $e) {
+                                    // Silently fail — duration stays empty
+                                }
+                            }),
+                        TextInput::make('duration')
+                            ->label('Duration')
+                            ->placeholder('Auto-filled from YouTube URL')
+                            ->maxLength(20)
+                            ->helperText('Auto-fetched when a YouTube URL is entered. You can also set it manually.')
+                            ->columnSpanFull(),
                         FileUpload::make('notes_path')
                             ->label('Sermon Notes (PDF)')
                             ->disk('public')

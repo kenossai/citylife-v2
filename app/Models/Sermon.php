@@ -51,6 +51,7 @@ class Sermon extends Model
         'service_label',
         'thumbnail_path',
         'video_url',
+        'duration',
         'notes_path',
         'notes_content',
         'notes_format',
