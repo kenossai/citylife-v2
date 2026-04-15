@@ -56,7 +56,7 @@
                     @endif
 
                     <p class="mt-4 max-w-2xl text-sm leading-7 text-white/72 sm:text-[15px]">
-                        {{ $pillar->description }}
+                        {{ \Illuminate\Support\Str::limit($pillar->description, 120) }}
                     </p>
 
                     @if ($pillar->leaders->isNotEmpty())
@@ -68,8 +68,12 @@
                                             src="{{ \Illuminate\Support\Facades\Storage::url($leader->image_path) }}"
                                             alt="{{ $leader->name }}"
                                             title="{{ $leader->name }}"
+                                            onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'"
                                             class="h-8 w-8 rounded-full object-cover ring-2 ring-[#16131c]"
                                         >
+                                        <span style="display:none" class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#e85d26]/20 ring-2 ring-[#16131c] text-[13px] font-bold text-[#e85d26]">
+                                            {{ mb_strtoupper(mb_substr($leader->name, 0, 1)) }}
+                                        </span>
                                     @else
                                         <span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#e85d26]/20 ring-2 ring-[#16131c] text-[13px] font-bold text-[#e85d26]">
                                             {{ mb_strtoupper(mb_substr($leader->name, 0, 1)) }}
@@ -208,8 +212,12 @@
                             <img
                                 src="{{ \Illuminate\Support\Facades\Storage::url($leader->image_path) }}"
                                 alt="{{ $leader->name }}"
+                                onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
                                 class="mx-auto h-24 w-24 rounded-full object-cover ring-4 ring-[#e85d26]/10"
                             >
+                            <div style="display:none" class="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-[#e85d26]/10 text-3xl font-bold text-[#e85d26]">
+                                {{ mb_strtoupper(mb_substr($leader->name, 0, 1)) }}
+                            </div>
                         @else
                             <div class="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-[#e85d26]/10 text-3xl font-bold text-[#e85d26]">
                                 {{ mb_strtoupper(mb_substr($leader->name, 0, 1)) }}

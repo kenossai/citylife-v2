@@ -141,8 +141,16 @@
                                                 src="{{ \Illuminate\Support\Facades\Storage::url($leader->image_path) }}"
                                                 alt="{{ $leader->name }}"
                                                 title="{{ $leader->name }}"
+                                                onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'"
                                                 class="h-6 w-6 rounded-full object-cover ring-2 ring-white"
                                             >
+                                            <span style="display:none" class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#e85d26]/15 text-[9px] font-bold text-[#e85d26] ring-2 ring-white">
+                                                {{ mb_strtoupper(mb_substr($leader->name, 0, 1)) }}
+                                            </span>
+                                        @else
+                                            <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#e85d26]/15 text-[9px] font-bold text-[#e85d26] ring-2 ring-white">
+                                                {{ mb_strtoupper(mb_substr($leader->name, 0, 1)) }}
+                                            </span>
                                         @endif
                                     @endforeach
                                     <span class="text-[11px] text-[#9a8f87]">{{ $pillar->leaders->pluck('name')->join(', ') }}</span>
