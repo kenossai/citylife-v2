@@ -65,7 +65,7 @@
                                 @foreach ($pillar->leaders->take(4) as $leader)
                                     @if ($leader->image_path)
                                         <img
-                                            src="{{ \Illuminate\Support\Facades\Storage::url($leader->image_path) }}"
+                                            src="{{ $leader->image_path }}"
                                             alt="{{ $leader->name }}"
                                             title="{{ $leader->name }}"
                                             onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'"
@@ -210,7 +210,7 @@
                     <div class="rounded-2xl border border-[#f3f4f6] bg-white p-6 text-center shadow-sm">
                         @if ($leader->image_path)
                             <img
-                                src="{{ \Illuminate\Support\Facades\Storage::url($leader->image_path) }}"
+                                src="{{ $leader->image_path }}"
                                 alt="{{ $leader->name }}"
                                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
                                 class="mx-auto h-24 w-24 rounded-full object-cover ring-4 ring-[#e85d26]/10"
