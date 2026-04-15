@@ -8,9 +8,7 @@
         ? \Illuminate\Support\Facades\Storage::url($pillar->image_path)
         : 'https://images.unsplash.com/photo-1504052434569-70ad5836ab65?auto=format&fit=crop&w=1800&q=80';
 
-    $aboutParagraphs = $pillar->about_text
-        ? array_filter(array_map('trim', preg_split('/\n{2,}/', $pillar->about_text)))
-        : [];
+    $hasAboutText = filled($pillar->about_text);
 
     $galleryImages = is_array($pillar->gallery_images) ? $pillar->gallery_images : [];
 @endphp
@@ -111,7 +109,7 @@
     {{-- ================================================================
          ABOUT
     ================================================================ --}}
-    @if (!empty($aboutParagraphs) || $pillar->vision_quote)
+    @if ($hasAboutText || $pillar->vision_quote)
     <section class="py-16 lg:py-24">
         <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
             <div class="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
@@ -125,11 +123,9 @@
                         {{ $pillar->title }}
                     </h2>
 
-                    @if (!empty($aboutParagraphs))
-                        <div class="mt-6 space-y-4 text-[15px] leading-relaxed text-[#667085]">
-                            @foreach ($aboutParagraphs as $paragraph)
-                                <p>{{ $paragraph }}</p>
-                            @endforeach
+                    @if ($hasAboutText)
+                        <div class="prose prose-sm sm:prose-base mt-6 max-w-none text-[#667085] prose-headings:text-[#101828] prose-a:text-[#e85d26] prose-strong:text-[#101828]">
+                            {!! $pillar->about_text !!}
                         </div>
                     @endif
                 </div>

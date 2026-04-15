@@ -5,6 +5,7 @@ namespace App\Filament\Resources\MissionPillars\Schemas;
 use App\Models\Leader;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -38,10 +39,10 @@ class MissionPillarForm
                             ->rows(3)
                             ->helperText('Short description shown on listing cards.')
                             ->columnSpanFull(),
-                        Textarea::make('about_text')
+                        RichEditor::make('about_text')
                             ->label('About Text (Detail Page)')
-                            ->rows(5)
-                            ->helperText('Full body text shown on the detail page. Separate paragraphs with blank lines.')
+                            ->helperText('Full body text shown on the detail page.')
+                            ->toolbarButtons(['bold', 'italic', 'underline', 'bulletList', 'orderedList', 'link', 'h2', 'h3', 'blockquote', 'undo', 'redo'])
                             ->columnSpanFull(),
                         TextInput::make('vision_quote')
                             ->label('Vision Quote')
