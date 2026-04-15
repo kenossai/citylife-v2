@@ -156,8 +156,8 @@
         {{-- Header --}}
         <div class="text-center mb-14">
             <p class="text-[#e85d26] text-sm font-semibold uppercase tracking-widest mb-2">Get Involved</p>
-            <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-3">Our Ministries</h2>
-            <p class="text-gray-500 max-w-md mx-auto">Find your place to serve, grow, and connect with others in our thriving ministries.</p>
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-3">Our Life Groups</h2>
+            <p class="text-gray-500 max-w-md mx-auto">Find your place to serve, grow, and connect with others in our thriving life groups.</p>
         </div>
 
         {{-- Grid --}}
@@ -186,7 +186,7 @@
 
         <div class="mt-10 text-center">
             <a href="{{ route('ministries') }}" class="inline-flex items-center gap-2 border-2 border-gray-900 hover:bg-gray-900 hover:text-white text-gray-900 font-bold text-sm uppercase tracking-wider px-7 py-3 rounded-full transition-colors">
-                View All Ministries
+                View All Groups
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
             </a>
         </div>
