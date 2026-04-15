@@ -260,9 +260,7 @@ class SermonForm
                         Toggle::make('is_active')
                             ->label('Active')
                             ->default(true),
-                        Toggle::make('is_upcoming')
-                            ->label('Upcoming Sermon')
-                            ->helperText('Mark as upcoming to show a scheduled badge on the frontend.'),
+
                     ]),
             ]);
     }
