@@ -15,57 +15,11 @@
         ? $missionsSection->btn_url
         : '#make-a-difference';
 
-    $pillars = [
-        [
-            'number' => '01',
-            'title' => 'Church Planting',
-            'image' => 'https://images.unsplash.com/photo-1504052434569-70ad5836ab65?auto=format&fit=crop&w=900&q=80',
-            'description' => 'We support pastors and pioneering teams who are planting gospel-centred churches in communities that need hope and healthy leadership.',
-        ],
-        [
-            'number' => '02',
-            'title' => 'Education & Training',
-            'image' => 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=900&q=80',
-            'description' => 'We invest in discipleship, leadership development, and practical training that equips people to flourish spiritually and vocationally.',
-        ],
-        [
-            'number' => '03',
-            'title' => 'Food Relief',
-            'image' => 'https://images.unsplash.com/photo-1593113598332-cd59a93f7d74?auto=format&fit=crop&w=900&q=80',
-            'description' => 'We respond to urgent need through food support, care packages, and trusted relief partnerships that serve families with dignity.',
-        ],
-        [
-            'number' => '04',
-            'title' => 'Clean Water Projects',
-            'image' => 'https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&w=900&q=80',
-            'description' => 'We help fund sustainable water solutions that improve health, reduce vulnerability, and open doors for long-term community transformation.',
-        ],
-        [
-            'number' => '05',
-            'title' => 'Community Development',
-            'image' => 'https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=900&q=80',
-            'description' => 'We partner with local leaders and organisations to strengthen families, expand opportunity, and build resilient communities.',
-        ],
-        [
-            'number' => '06',
-            'title' => 'Prayer & Evangelism',
-            'image' => 'https://images.unsplash.com/photo-1507692049790-de58290a4334?auto=format&fit=crop&w=900&q=80',
-            'description' => 'Everything we do is grounded in prayer and a desire to share the love and message of Jesus with humility, clarity, and compassion.',
-        ],
-    ];
+    $homePillars   = $pillars->where('type', 'home')->values();
+    $abroadPillars = $pillars->where('type', 'abroad')->values();
 
-    $countries = [
-        ['flag' => '🇨🇩', 'name' => 'Congo', 'region' => 'Democratic Republic of Congo'],
-        ['flag' => '🇮🇳', 'name' => 'India', 'region' => 'India'],
-    ];
-
-    $impactSteps = [
-        'Pray regularly for our mission partners, local teams, and the communities they serve.',
-        'Give financially so we can support urgent needs and long-term projects with consistency.',
-        'Join a local outreach or a global trip and serve practically with humility and purpose.',
-        'Offer your skills in mentoring, logistics, healthcare, media, administration, or hospitality.',
-        'Help champion the vision by inviting others to serve and support what God is doing through missions.',
-    ];
+    $homeCountries   = $countries->where('type', 'home')->values();
+    $abroadCountries = $countries->where('type', 'abroad')->values();
 @endphp
 
 @section('content')
@@ -152,31 +106,50 @@
             </div>
 
             <div class="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-                @foreach ($pillars as $pillar)
+                @forelse ($pillars as $pillar)
+                    @php
+                        $pillarImage = $pillar->image_path
+                            ? \Illuminate\Support\Facades\Storage::url($pillar->image_path)
+                            : 'https://images.unsplash.com/photo-1504052434569-70ad5836ab65?auto=format&fit=crop&w=900&q=80';
+                    @endphp
                     <article class="overflow-hidden rounded-[14px] border border-[#ede5da] bg-white shadow-[0_10px_28px_rgba(18,12,15,0.06)]">
                         <div class="relative h-36 overflow-hidden">
                             <img
-                                src="{{ $pillar['image'] }}"
-                                alt="{{ $pillar['title'] }}"
+                                src="{{ $pillarImage }}"
+                                alt="{{ $pillar->title }}"
                                 class="h-full w-full object-cover"
                             >
                             <span class="absolute left-4 top-4 inline-flex h-8 min-w-8 items-center justify-center rounded-full bg-[#e85d26] px-2 text-[10px] font-extrabold tracking-[0.12em] text-white">
-                                {{ $pillar['number'] }}
+                                {{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}
+                            </span>
+                            <span class="absolute right-3 top-3 rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest {{ $pillar->type === 'home' ? 'bg-emerald-100 text-emerald-700' : 'bg-sky-100 text-sky-700' }}">
+                                {{ ucfirst($pillar->type) }}
                             </span>
                         </div>
 
                         <div class="px-5 py-5">
-                            <h3 class="text-lg font-extrabold text-[#1f1b22]">{{ $pillar['title'] }}</h3>
-                            <p class="mt-3 text-[13px] leading-6 text-[#6b655f]">{{ $pillar['description'] }}</p>
-                            <a href="#make-a-difference" class="mt-4 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.22em] text-[#e85d26]">
-                                Learn More
-                                <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                                </svg>
-                            </a>
+                            <h3 class="text-lg font-extrabold text-[#1f1b22]">{{ $pillar->title }}</h3>
+                            <p class="mt-3 text-[13px] leading-6 text-[#6b655f]">{{ $pillar->description }}</p>
+                            @if ($pillar->leaders->isNotEmpty())
+                                <div class="mt-4 flex flex-wrap items-center gap-2">
+                                    @foreach ($pillar->leaders->take(3) as $leader)
+                                        @if ($leader->image_path)
+                                            <img
+                                                src="{{ \Illuminate\Support\Facades\Storage::url($leader->image_path) }}"
+                                                alt="{{ $leader->name }}"
+                                                title="{{ $leader->name }}"
+                                                class="h-6 w-6 rounded-full object-cover ring-2 ring-white"
+                                            >
+                                        @endif
+                                    @endforeach
+                                    <span class="text-[11px] text-[#9a8f87]">{{ $pillar->leaders->pluck('name')->join(', ') }}</span>
+                                </div>
+                            @endif
                         </div>
                     </article>
-                @endforeach
+                @empty
+                    <p class="col-span-3 py-6 text-center text-sm text-[#9a938c]">No mission pillars have been added yet.</p>
+                @endforelse
             </div>
         </div>
     </section>
@@ -191,20 +164,29 @@
                 </div>
                 <h2 class="text-3xl font-extrabold tracking-tight text-white sm:text-[38px]">Our Mission Countries</h2>
                 <p class="mx-auto mt-4 max-w-2xl text-sm leading-7 text-white/62 sm:text-[15px]">
-                    We are currently active on the ground in two nations, bringing the gospel and practical support to communities in need.
+                    We are currently active on the ground across {{ $countries->count() }} {{ $countries->count() === 1 ? 'nation' : 'nations' }}, bringing the gospel and practical support to communities in need.
                 </p>
             </div>
 
             <div class="mt-10 grid gap-4 sm:grid-cols-2 max-w-xl mx-auto w-full">
-                @foreach ($countries as $country)
+                @forelse ($countries as $country)
                     <article class="rounded-[12px] border border-white/8 bg-[#242532] px-5 py-6 text-center">
-                        <span class="mx-auto flex h-14 w-14 items-center justify-center text-4xl">
-                            {{ $country['flag'] }}
+                        @if ($country->flag)
+                            <span class="mx-auto flex h-14 w-14 items-center justify-center text-4xl">
+                                {{ $country->flag }}
+                            </span>
+                        @endif
+                        <h3 class="mt-4 text-[13px] font-bold uppercase tracking-[0.18em] text-white">{{ $country->name }}</h3>
+                        @if ($country->region)
+                            <p class="mt-1 text-[11px] uppercase tracking-[0.22em] text-white/45">{{ $country->region }}</p>
+                        @endif
+                        <span class="mt-2 inline-block rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest {{ $country->type === 'home' ? 'bg-emerald-900/60 text-emerald-300' : 'bg-sky-900/60 text-sky-300' }}">
+                            {{ ucfirst($country->type) }}
                         </span>
-                        <h3 class="mt-4 text-[13px] font-bold uppercase tracking-[0.18em] text-white">{{ $country['name'] }}</h3>
-                        <p class="mt-1 text-[11px] uppercase tracking-[0.22em] text-white/45">{{ $country['region'] }}</p>
                     </article>
-                @endforeach
+                @empty
+                    <p class="col-span-2 py-4 text-center text-sm text-white/40">No mission countries have been added yet.</p>
+                @endforelse
             </div>
         </div>
     </section>

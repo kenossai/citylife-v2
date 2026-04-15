@@ -13,7 +13,7 @@ class MissionsController extends Controller
     {
         $missionsSection = MissionsSection::instance();
 
-        $pillars = MissionPillar::active()->orderBy('sort_order')->get();
+        $pillars = MissionPillar::active()->with('leaders')->orderBy('sort_order')->get();
 
         $countries = MissionCountry::active()->orderBy('sort_order')->get();
 

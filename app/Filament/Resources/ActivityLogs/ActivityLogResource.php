@@ -177,6 +177,21 @@ class ActivityLogResource extends Resource
                                         TextEntry::make('user')
                                             ->label('User')
                                             ->state(fn () => $record->causer_label),
+                                        TextEntry::make('guard')
+                                            ->label('Guard / Portal')
+                                            ->state(fn () => match ($record->properties['guard'] ?? null) {
+                                                'web'    => 'Admin (web)',
+                                                'member' => 'Member Portal',
+                                                null     => '—',
+                                                default  => $record->properties['guard'],
+                                            })
+                                            ->badge()
+                                            ->color(fn () => match ($record->properties['guard'] ?? null) {
+                                                'web'    => 'info',
+                                                'member' => 'success',
+                                                default  => 'gray',
+                                            })
+                                            ->visible(fn () => filled($record->properties['guard'] ?? null)),
                                         TextEntry::make('ip_address')
                                             ->label('IP Address')
                                             ->state(fn () => $record->properties['context']['ip_address'] ?? '—'),
