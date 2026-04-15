@@ -4,6 +4,7 @@ namespace App\Filament\Resources\MissionPillars\Schemas;
 
 use App\Models\Leader;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -24,21 +25,55 @@ class MissionPillarForm
                             ->required()
                             ->maxLength(120)
                             ->columnSpanFull(),
+                        TextInput::make('slug')
+                            ->maxLength(120)
+                            ->helperText('Auto-generated from title if left blank. e.g. "church-planting"')
+                            ->columnSpanFull(),
+                        TextInput::make('subtitle')
+                            ->label('Subtitle / Tagline')
+                            ->maxLength(150)
+                            ->columnSpanFull(),
                         Textarea::make('description')
                             ->required()
                             ->rows(3)
+                            ->helperText('Short description shown on listing cards.')
+                            ->columnSpanFull(),
+                        Textarea::make('about_text')
+                            ->label('About Text (Detail Page)')
+                            ->rows(5)
+                            ->helperText('Full body text shown on the detail page. Separate paragraphs with blank lines.')
+                            ->columnSpanFull(),
+                        TextInput::make('vision_quote')
+                            ->label('Vision Quote')
+                            ->maxLength(400)
+                            ->helperText('Optional pull-quote shown on detail page.')
                             ->columnSpanFull(),
                     ]),
 
-                Section::make('Image & Display')
-                    ->columns(2)
+                Section::make('Image & Gallery')
                     ->schema([
                         FileUpload::make('image_path')
-                            ->label('Pillar Image')
+                            ->label('Main Image')
                             ->image()
                             ->disk('public')
                             ->directory('mission-pillars')
                             ->columnSpanFull(),
+                        Repeater::make('gallery_images')
+                            ->label('Gallery Images')
+                            ->schema([
+                                TextInput::make('url')
+                                    ->label('Image URL')
+                                    ->required()
+                                    ->maxLength(400),
+                            ])
+                            ->defaultItems(0)
+                            ->collapsible()
+                            ->columnSpanFull(),
+                    ]),
+
+                Section::make('Leaders & Display')
+                    ->columns(2)
+                    ->schema([
                         Select::make('leaders')
                             ->label('Leaders In Charge')
                             ->relationship('leaders', 'name')

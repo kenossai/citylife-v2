@@ -112,12 +112,13 @@
                             ? \Illuminate\Support\Facades\Storage::url($pillar->image_path)
                             : 'https://images.unsplash.com/photo-1504052434569-70ad5836ab65?auto=format&fit=crop&w=900&q=80';
                     @endphp
+                    <div class="group">
                     <article class="overflow-hidden rounded-[14px] border border-[#ede5da] bg-white shadow-[0_10px_28px_rgba(18,12,15,0.06)]">
                         <div class="relative h-36 overflow-hidden">
                             <img
                                 src="{{ $pillarImage }}"
                                 alt="{{ $pillar->title }}"
-                                class="h-full w-full object-cover"
+                                class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                             >
                             <span class="absolute left-4 top-4 inline-flex h-8 min-w-8 items-center justify-center rounded-full bg-[#e85d26] px-2 text-[10px] font-extrabold tracking-[0.12em] text-white">
                                 {{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}
@@ -145,8 +146,17 @@
                                     <span class="text-[11px] text-[#9a8f87]">{{ $pillar->leaders->pluck('name')->join(', ') }}</span>
                                 </div>
                             @endif
+                            @if ($pillar->slug)
+                                <a href="{{ route('missions.show', $pillar->slug) }}" class="mt-4 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.22em] text-[#e85d26]">
+                                    Learn More
+                                    <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                    </svg>
+                                </a>
+                            @endif
                         </div>
                     </article>
+                    </div>
                 @empty
                     <p class="col-span-3 py-6 text-center text-sm text-[#9a938c]">No mission pillars have been added yet.</p>
                 @endforelse

@@ -36,6 +36,7 @@ Route::get('/leadership', [LeadershipController::class, 'index'])->name('leaders
 Route::get('/our-ministries', [MinistryController::class, 'index'])->name('ministries');
 Route::get('/our-ministries/{slug}', [MinistryController::class, 'show'])->name('ministries.show');
 Route::get('/missions', [MissionsController::class, 'index'])->name('missions');
+Route::get('/missions/{slug}', [MissionsController::class, 'show'])->name('missions.show');
 Route::get('/events', [EventsController::class, 'index'])->name('events');
 Route::get('/events/{slug}', [EventsController::class, 'show'])->name('events.show');
 Route::get('/media', [MediaController::class, 'index'])->name('media');

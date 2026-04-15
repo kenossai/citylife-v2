@@ -19,4 +19,21 @@ class MissionsController extends Controller
 
         return view('pages.missions', compact('missionsSection', 'pillars', 'countries'));
     }
+
+    public function show(string $slug): View
+    {
+        $pillar = MissionPillar::with('leaders')
+            ->where('slug', $slug)
+            ->where('is_active', true)
+            ->firstOrFail();
+
+        $otherPillars = MissionPillar::active()
+            ->with('leaders')
+            ->where('id', '!=', $pillar->id)
+            ->orderBy('sort_order')
+            ->take(3)
+            ->get();
+
+        return view('pages.mission-pillar', compact('pillar', 'otherPillars'));
+    }
 }
