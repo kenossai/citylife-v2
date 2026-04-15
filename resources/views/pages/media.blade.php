@@ -67,8 +67,9 @@
             'watch_url' => route('media.show', \Illuminate\Support\Str::slug($sermon->title ?? 'walking-in-the-spirit')),
             'listen_url' => route('media.show', \Illuminate\Support\Str::slug($sermon->title ?? 'walking-in-the-spirit')),
             'description' => $sermon->description ?: 'An encouraging message to help you live with faith, clarity, and spiritual boldness in everyday life.',
-            'is_upcoming' => $sermon->preached_at && $sermon->preached_at->isFuture(),
-            'upcoming_date' => $sermon->preached_at && $sermon->preached_at->isFuture() ? $sermon->preached_at->format('D, M j · g:i A') : null,
+            'is_live'     => (bool) ($sermon->is_live ?? false),
+            'is_upcoming' => !($sermon->is_live ?? false) && $sermon->preached_at && $sermon->preached_at->copy()->setTime(10, 30)->isFuture(),
+            'upcoming_date' => (!($sermon->is_live ?? false) && $sermon->preached_at && $sermon->preached_at->copy()->setTime(10, 30)->isFuture()) ? $sermon->preached_at->copy()->setTime(10, 30)->format('D, M j · g:i A') : null,
         ];
     };
 
@@ -295,58 +296,125 @@
             </div>
 
             <div class="grid gap-8 lg:grid-cols-[1.02fr_0.98fr] lg:items-center">
-                <a
-                    href="{{ $featuredItem['watch_url'] }}"
-                    class="group relative block overflow-hidden rounded-[14px] bg-[#0f1016] shadow-[0_18px_40px_rgba(0,0,0,0.28)]"
-                >
-                    <img
-                        src="{{ $featuredItem['thumbnail'] }}"
-                        alt="{{ $featuredItem['title'] }}"
-                        class="h-[238px] w-full object-cover transition-transform duration-700 group-hover:scale-105 sm:h-[290px] lg:h-[262px]"
+                @if ($featuredItem['is_upcoming'])
+                    {{-- Upcoming: non-clickable, dimmed --}}
+                    <div class="relative block overflow-hidden rounded-[14px] bg-[#0f1016] shadow-[0_18px_40px_rgba(0,0,0,0.28)]">
+                        <img
+                            src="{{ $featuredItem['thumbnail'] }}"
+                            alt="{{ $featuredItem['title'] }}"
+                            class="h-[238px] w-full object-cover opacity-55 sm:h-[290px] lg:h-[262px]"
+                        >
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/42 via-black/10 to-transparent"></div>
+                        <span class="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-[#e85d26] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-white shadow">
+                            <svg class="h-2.5 w-2.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg>
+                            Upcoming
+                        </span>
+                    </div>
+                @elseif ($featuredItem['is_live'])
+                    {{-- Live: clickable, live badge --}}
+                    <a
+                        href="{{ $featuredItem['watch_url'] }}"
+                        class="group relative block overflow-hidden rounded-[14px] bg-[#0f1016] shadow-[0_18px_40px_rgba(0,0,0,0.28)]"
                     >
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/42 via-black/10 to-transparent"></div>
-                    @if ($featuredItem['duration'])
-                    <span class="absolute bottom-4 left-4 rounded-full bg-black/70 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-white">
-                        {{ $featuredItem['duration'] }}
-                    </span>
-                    @endif
-                    <span class="absolute left-1/2 top-1/2 inline-flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[#ff6b3b] text-white shadow-[0_14px_28px_rgba(255,107,59,0.35)] transition-transform duration-300 group-hover:scale-105">
-                        <svg class="ml-1 h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M8 5v14l11-7z"/>
-                        </svg>
-                    </span>
-                </a>
+                        <img
+                            src="{{ $featuredItem['thumbnail'] }}"
+                            alt="{{ $featuredItem['title'] }}"
+                            class="h-[238px] w-full object-cover transition-transform duration-700 group-hover:scale-105 sm:h-[290px] lg:h-[262px]"
+                        >
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/42 via-black/10 to-transparent"></div>
+                        <span class="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-red-600 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-white shadow">
+                            <span class="relative flex h-2 w-2">
+                                <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75"></span>
+                                <span class="relative inline-flex h-2 w-2 rounded-full bg-white"></span>
+                            </span>
+                            Live Now
+                        </span>
+                        <span class="absolute left-1/2 top-1/2 inline-flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[#ff6b3b] text-white shadow-[0_14px_28px_rgba(255,107,59,0.35)] transition-transform duration-300 group-hover:scale-105">
+                            <svg class="ml-1 h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        </span>
+                    </a>
+                @else
+                    {{-- Normal: clickable --}}
+                    <a
+                        href="{{ $featuredItem['watch_url'] }}"
+                        class="group relative block overflow-hidden rounded-[14px] bg-[#0f1016] shadow-[0_18px_40px_rgba(0,0,0,0.28)]"
+                    >
+                        <img
+                            src="{{ $featuredItem['thumbnail'] }}"
+                            alt="{{ $featuredItem['title'] }}"
+                            class="h-[238px] w-full object-cover transition-transform duration-700 group-hover:scale-105 sm:h-[290px] lg:h-[262px]"
+                        >
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/42 via-black/10 to-transparent"></div>
+                        @if ($featuredItem['duration'])
+                            <span class="absolute bottom-4 left-4 rounded-full bg-black/70 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-white">
+                                {{ $featuredItem['duration'] }}
+                            </span>
+                        @endif
+                        <span class="absolute left-1/2 top-1/2 inline-flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[#ff6b3b] text-white shadow-[0_14px_28px_rgba(255,107,59,0.35)] transition-transform duration-300 group-hover:scale-105">
+                            <svg class="ml-1 h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        </span>
+                    </a>
+                @endif
 
                 <div class="text-white">
-                    <span class="inline-flex rounded-full bg-[#e85d26]/16 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.24em] text-[#ff9d7a]">
-                        Latest Sermon
-                    </span>
+                    @if ($featuredItem['is_live'])
+                        <span class="inline-flex items-center gap-1.5 rounded-full bg-red-600/20 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.24em] text-red-400">
+                            <span class="relative flex h-2 w-2">
+                                <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
+                                <span class="relative inline-flex h-2 w-2 rounded-full bg-red-400"></span>
+                            </span>
+                            Live Now
+                        </span>
+                    @elseif ($featuredItem['is_upcoming'])
+                        <span class="inline-flex items-center gap-1.5 rounded-full bg-[#e85d26]/16 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.24em] text-[#ff9d7a]">
+                            <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg>
+                            Upcoming
+                        </span>
+                    @else
+                        <span class="inline-flex rounded-full bg-[#e85d26]/16 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.24em] text-[#ff9d7a]">
+                            Latest Sermon
+                        </span>
+                    @endif
                     <h2 class="mt-4 text-[31px] font-extrabold leading-tight text-white sm:text-[37px]">
                         {{ $featuredItem['title'] }}
                     </h2>
                     <p class="mt-3 text-[12px] font-semibold uppercase tracking-[0.22em] text-white/45">
                         {{ $featuredItem['speaker'] }} · {{ $featuredItem['date'] }}
                     </p>
+                    @if ($featuredItem['is_upcoming'] && $featuredItem['upcoming_date'])
+                        <p class="mt-2 inline-flex items-center gap-1.5 text-[12px] font-semibold text-[#e85d26]">
+                            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                            {{ $featuredItem['upcoming_date'] }}
+                        </p>
+                    @endif
                     <p class="mt-5 max-w-xl text-sm leading-7 text-white/68 sm:text-[15px]">
                         {{ $featuredItem['description'] }}
                     </p>
 
                     <div class="mt-7 flex flex-wrap gap-3">
-                        <a
-                            href="{{ $featuredItem['watch_url'] }}"
-                            class="inline-flex items-center gap-2 rounded-full bg-[#ff6b3b] px-5 py-2.5 text-[13px] font-semibold text-white transition-colors hover:bg-[#e85d26]"
-                        >
-                            Watch Now
-                            <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M8 5v14l11-7z"/>
-                            </svg>
-                        </a>
-                        <a
-                            href="{{ $featuredItem['listen_url'] }}"
-                            class="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/4 px-5 py-2.5 text-[13px] font-semibold text-white transition-colors hover:border-white/22 hover:bg-white/8"
-                        >
-                            Listen
-                        </a>
+                        @if ($featuredItem['is_upcoming'])
+                            <span class="inline-flex cursor-not-allowed items-center gap-2 rounded-full bg-white/10 px-5 py-2.5 text-[13px] font-semibold text-white/40">
+                                Watch Now
+                                <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </span>
+                            <span class="inline-flex cursor-not-allowed items-center gap-2 rounded-full border border-white/8 px-5 py-2.5 text-[13px] font-semibold text-white/30">
+                                Listen
+                            </span>
+                        @else
+                            <a
+                                href="{{ $featuredItem['watch_url'] }}"
+                                class="inline-flex items-center gap-2 rounded-full bg-[#ff6b3b] px-5 py-2.5 text-[13px] font-semibold text-white transition-colors hover:bg-[#e85d26]"
+                            >
+                                {{ $featuredItem['is_live'] ? 'Watch Live' : 'Watch Now' }}
+                                <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </a>
+                            <a
+                                href="{{ $featuredItem['listen_url'] }}"
+                                class="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/4 px-5 py-2.5 text-[13px] font-semibold text-white transition-colors hover:border-white/22 hover:bg-white/8"
+                            >
+                                Listen
+                            </a>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -400,6 +468,15 @@
                                 >
                                 <template x-if="item.duration">
                                     <span class="absolute bottom-4 right-4 rounded-full bg-black/72 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-white" x-text="item.duration"></span>
+                                </template>
+                                <template x-if="item.is_live">
+                                    <span class="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-red-600 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white shadow">
+                                        <span class="relative flex h-2 w-2">
+                                            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75"></span>
+                                            <span class="relative inline-flex h-2 w-2 rounded-full bg-white"></span>
+                                        </span>
+                                        Live
+                                    </span>
                                 </template>
                             </a>
                         </template>
