@@ -112,17 +112,19 @@
                             ? \Illuminate\Support\Facades\Storage::url($pillar->image_path)
                             : 'https://images.unsplash.com/photo-1504052434569-70ad5836ab65?auto=format&fit=crop&w=900&q=80';
                     @endphp
+                    @if ($pillar->slug)
+                    <a href="{{ route('missions.show', $pillar->slug) }}" class="group block">
+                    @else
                     <div class="group">
-                    <article class="overflow-hidden rounded-[14px] border border-[#ede5da] bg-white shadow-[0_10px_28px_rgba(18,12,15,0.06)]">
+                    @endif
+                    <article class="overflow-hidden rounded-[14px] border border-[#ede5da] bg-white shadow-[0_10px_28px_rgba(18,12,15,0.06)] transition-shadow duration-300 group-hover:shadow-[0_16px_40px_rgba(18,12,15,0.13)]">
                         <div class="relative h-36 overflow-hidden">
                             <img
                                 src="{{ $pillarImage }}"
                                 alt="{{ $pillar->title }}"
                                 class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                             >
-                            <span class="absolute left-4 top-4 inline-flex h-8 min-w-8 items-center justify-center rounded-full bg-[#e85d26] px-2 text-[10px] font-extrabold tracking-[0.12em] text-white">
-                                {{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}
-                            </span>
+
                             <span class="absolute right-3 top-3 rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest {{ $pillar->type === 'home' ? 'bg-emerald-100 text-emerald-700' : 'bg-sky-100 text-sky-700' }}">
                                 {{ ucfirst($pillar->type) }}
                             </span>
@@ -130,7 +132,7 @@
 
                         <div class="px-5 py-5">
                             <h3 class="text-lg font-extrabold text-[#1f1b22]">{{ $pillar->title }}</h3>
-                            <p class="mt-3 text-[13px] leading-6 text-[#6b655f]">{{ $pillar->description }}</p>
+                            <p class="mt-2 text-[13px] leading-6 text-[#6b655f]">{{ \Illuminate\Support\Str::limit($pillar->description, 110) }}</p>
                             @if ($pillar->leaders->isNotEmpty())
                                 <div class="mt-4 flex flex-wrap items-center gap-2">
                                     @foreach ($pillar->leaders->take(3) as $leader)
@@ -147,16 +149,20 @@
                                 </div>
                             @endif
                             @if ($pillar->slug)
-                                <a href="{{ route('missions.show', $pillar->slug) }}" class="mt-4 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.22em] text-[#e85d26]">
+                                <span class="mt-4 inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.22em] text-[#e85d26] group-hover:underline">
                                     Learn More
                                     <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                                     </svg>
-                                </a>
+                                </span>
                             @endif
                         </div>
                     </article>
+                    @if ($pillar->slug)
+                    </a>
+                    @else
                     </div>
+                    @endif
                 @empty
                     <p class="col-span-3 py-6 text-center text-sm text-[#9a938c]">No mission pillars have been added yet.</p>
                 @endforelse

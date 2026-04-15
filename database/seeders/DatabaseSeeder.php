@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
         $this->call(SpeakerSeeder::class);
         $this->call(BibleSchoolEventSeeder::class);
         $this->call(BibleSchoolSessionSeeder::class);
+        $this->call(MissionSeeder::class);
         $this->call(RoleSeeder::class);
     }
 }
