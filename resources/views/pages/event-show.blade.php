@@ -187,7 +187,7 @@
                                 {{ $relatedEvent['weekday'] }} • {{ $relatedEvent['time_label'] }}
                             </p>
                             <h3 class="mt-3 text-[22px] font-extrabold leading-tight text-[#201c24]">{{ $relatedEvent['title'] }}</h3>
-                            <p class="mt-3 text-sm leading-7 text-[#6d655d]">{{ $relatedEvent['description'] }}</p>
+                            <p class="mt-3 text-sm leading-7 text-[#6d655d]">{{ Str::limit($relatedEvent['description'], 120) }}</p>
                         </div>
                     </a>
                 @endforeach
