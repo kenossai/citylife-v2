@@ -61,6 +61,9 @@ class EventsController extends Controller
                 'badge'                 => $event->badge ?: 'Open To All',
                 'is_featured'           => (bool) $event->is_featured,
                 'requires_registration' => (bool) $event->requires_registration,
+                'requires_payment'      => (bool) $event->requires_payment,
+                'show_paypal'           => (bool) $event->show_paypal,
+                'show_sumup'            => (bool) $event->show_sumup,
             ], $index));
 
         if ($storedEvents->isNotEmpty()) {
@@ -88,6 +91,9 @@ class EventsController extends Controller
             'badge'                 => $event['badge'] ?? 'Open To All',
             'is_featured'           => $event['is_featured'] ?? false,
             'requires_registration' => $event['requires_registration'] ?? true,
+            'requires_payment'      => $event['requires_payment'] ?? false,
+            'show_paypal'           => $event['show_paypal'] ?? true,
+            'show_sumup'            => $event['show_sumup'] ?? true,
             'row_height'            => 185.5,
             'month'                 => strtoupper($date->format('M')),
             'day'                   => $date->format('d'),
