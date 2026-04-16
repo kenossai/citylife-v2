@@ -41,8 +41,6 @@ class Event extends Model
         'is_featured',
         'requires_registration',
         'requires_payment',
-        'show_paypal',
-        'show_sumup',
         'sort_order',
         'is_active',
     ];
@@ -53,8 +51,6 @@ class Event extends Model
         'is_featured'            => 'boolean',
         'requires_registration'  => 'boolean',
         'requires_payment'       => 'boolean',
-        'show_paypal'            => 'boolean',
-        'show_sumup'             => 'boolean',
         'sort_order'             => 'integer',
     ];
 

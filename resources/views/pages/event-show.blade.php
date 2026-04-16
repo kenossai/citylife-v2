@@ -157,7 +157,6 @@
                         Secure your place by completing your payment below.
                     </p>
                     <div class="mt-5 flex flex-col gap-3">
-                        @if ($event['show_paypal'])
                         <a
                             href="https://www.paypal.com/donate/?hosted_button_id=4KEE89F86PPQG"
                             target="_blank"
@@ -169,8 +168,6 @@
                             </svg>
                             Pay with PayPal
                         </a>
-                        @endif
-                        @if ($event['show_sumup'])
                         <a
                             href="https://pay.sumup.com/b2c/Q5WMU9IP"
                             target="_blank"
@@ -182,7 +179,6 @@
                             </svg>
                             Pay with SumUp
                         </a>
-                        @endif
                     </div>
                 </div>
                 @endif

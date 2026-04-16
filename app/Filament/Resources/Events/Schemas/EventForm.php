@@ -78,19 +78,8 @@ class EventForm
                         Toggle::make('requires_payment')
                             ->label('Requires Payment')
                             ->default(false)
-                            ->live()
-                            ->helperText('Show payment options on this event page.')
+                            ->helperText('Show PayPal and SumUp payment buttons on this event page.')
                             ->columnSpanFull(),
-                        Toggle::make('show_paypal')
-                            ->label('Show PayPal Button')
-                            ->default(true)
-                            ->helperText('paypal.com/donate/?hosted_button_id=4KEE89F86PPQG')
-                            ->visible(fn ($get) => $get('requires_payment')),
-                        Toggle::make('show_sumup')
-                            ->label('Show SumUp Button')
-                            ->default(true)
-                            ->helperText('pay.sumup.com/b2c/Q5WMU9IP')
-                            ->visible(fn ($get) => $get('requires_payment')),
                     ]),
 
                 Section::make('Image & Order')
