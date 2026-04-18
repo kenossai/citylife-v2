@@ -17,9 +17,9 @@
 
     {{-- ── Top nav bar ── --}}
     <nav class="bg-white border-b border-gray-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <a href="{{ route('home') }}">
-                <img src="{{ asset('images/logo_small_black.png') }}" alt="City Life International" class="h-10 w-auto object-contain">
+                <img src="{{ asset('images/logo_small_black.png') }}" alt="City Life International" class="h-15 w-80 object-contain">
             </a>
             <a href="{{ route('home') }}" class="text-sm text-[#e85d26] hover:text-[#e85d26]/80 transition-colors flex items-center gap-1.5">
                 <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">

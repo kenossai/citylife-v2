@@ -36,7 +36,7 @@
     >
         {{-- Logo --}}
         <div class="flex items-center gap-3 px-6 py-5 border-b border-gray-200">
-            <img src="{{ asset('images/logo_small_black.png') }}" alt="City Life International" class="h-10 w-50 object-contain shrink-0">
+            <img src="{{ asset('images/logo_small_black.png') }}" alt="City Life International" class="h-15 w-70 object-contain">
 
         </div>
 

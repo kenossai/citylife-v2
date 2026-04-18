@@ -6,7 +6,7 @@
 
 {{-- ── Page heading ── --}}
 <div class="mb-8">
-    <p class="text-[#e85d26] text-xs font-semibold uppercase tracking-widest mb-2">Bible School</p>
+    <p class="text-[#e85d26] text-xs font-semibold uppercase tracking-widest mb-2">Courses</p>
     <h1 class="text-2xl font-extrabold text-gray-900">My Courses</h1>
     <p class="text-gray-500 text-sm mt-1">All your enrolled courses and progress at a glance.</p>
 </div>

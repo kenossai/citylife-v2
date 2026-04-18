@@ -27,10 +27,10 @@
                     {{-- Body --}}
                     <tr>
                         <td style="padding:36px 40px 0;">
-                            <p style="margin:0 0 6px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#e85d26;">{{ $enrollment->course->category ?? 'Bible School' }}</p>
+                            <p style="margin:0 0 6px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#e85d26;">Welcome</p>
                             <p style="margin:0 0 16px;font-size:22px;font-weight:800;color:#1e293b;">You're Enrolled! 🎉</p>
                             <p style="margin:0;font-size:15px;color:#475569;line-height:1.6;">
-                                Hello, <strong style="color:#1e293b;">{{ $enrollment->member->first_name }}</strong>! Your enrollment has been approved. Welcome to the course!
+                                Hello, <strong style="color:#1e293b;">{{ $enrollment->member?->first_name ?? $enrollment->guest_name }}</strong>! Your enrollment has been approved. Welcome to the course!
                             </p>
                         </td>
                     </tr>
@@ -76,7 +76,7 @@
                     {{-- CTA --}}
                     <tr>
                         <td style="padding:24px 40px 0;text-align:center;">
-                            @if($enrollment->member->password_setup_token)
+                            @if($enrollment->member?->password_setup_token)
                             <p style="margin:0 0 20px;font-size:15px;color:#475569;line-height:1.6;text-align:left;">
                                 Click the button below to create your password and access your learning dashboard.
                             </p>
@@ -90,7 +90,7 @@
                                     </td>
                                 </tr>
                             </table>
-                            @else
+                            @elseif($enrollment->member)
                             <p style="margin:0 0 20px;font-size:15px;color:#475569;line-height:1.6;text-align:left;">
                                 You can now access your course from your member dashboard.
                             </p>
@@ -104,12 +104,16 @@
                                     </td>
                                 </tr>
                             </table>
+                            @else
+                            <p style="margin:0 0 20px;font-size:15px;color:#475569;line-height:1.6;text-align:left;">
+                                We will be in touch with more details about your course. If you have any questions in the meantime, feel free to contact us.
+                            </p>
                             @endif
                         </td>
                     </tr>
 
                     {{-- Password link expiry notice --}}
-                    @if($enrollment->member->password_setup_token)
+                    @if($enrollment->member?->password_setup_token)
                     <tr>
                         <td style="padding:16px 40px 32px;">
                             <table width="100%" cellpadding="0" cellspacing="0">

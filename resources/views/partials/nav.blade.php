@@ -14,11 +14,11 @@
 
 <nav class="fixed top-0 left-0 right-0 z-50 bg-[#111111] text-white" x-data="{ open: false }">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16">
+        <div class="flex items-center justify-between h-20">
 
             {{-- Logo --}}
             <a href="{{ url('/') }}" class="flex items-center gap-2">
-                <img src="{{ asset('images/logo_small_white.png') }}" alt="City Life International" class="h-12 w-50 object-contain">
+                <img src="{{ asset('images/logo_small_white.png') }}" alt="City Life International" class="h-20 w-80 object-contain">
             </a>
 
             {{-- Desktop Nav --}}
