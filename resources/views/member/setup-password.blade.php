@@ -14,16 +14,13 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>[x-cloak]{display:none!important}</style>
 </head>
-<body class="h-full min-h-screen bg-[#0f0f0f] font-sans antialiased flex flex-col">
+<body class="h-full min-h-screen bg-white font-sans antialiased flex flex-col">
 
     {{-- Nav --}}
-    <nav class="bg-[#111111] border-b border-white/10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <a href="{{ route('home') }}" class="flex items-center gap-2">
-                <div class="w-8 h-8 bg-[#e85d26] rounded-full flex items-center justify-center">
-                    <span class="text-white font-bold text-xs">CL</span>
-                </div>
-                <span class="font-semibold text-sm tracking-wide text-white">City Life <span class="text-gray-400 font-light">International</span></span>
+    <nav class="bg-white border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="{{ route('home') }}">
+                <img src="{{ asset('images/logo_small_black.png') }}" alt="City Life International" class="h-14 w-auto object-contain">
             </a>
         </div>
     </nav>
@@ -34,39 +31,39 @@
 
             {{-- Heading --}}
             <div class="text-center mb-8">
-                <p class="text-[#e85d26] text-xs font-semibold uppercase tracking-widest mb-3">Bible School Portal</p>
-                <h1 class="text-3xl font-extrabold text-white leading-tight">Create your password</h1>
-                <p class="text-gray-400 text-sm mt-2">
+                <p class="text-[#e85d26] text-xs font-semibold uppercase tracking-widest mb-3">Member Portal</p>
+                <h1 class="text-3xl font-extrabold text-gray-900 leading-tight">Create your password</h1>
+                <p class="text-gray-500 text-sm mt-2">
                     Hi {{ $member->first_name }}, set a password to access your course dashboard.
                 </p>
             </div>
 
             {{-- Card --}}
-            <div class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8">
+            <div class="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm">
 
                 <form method="POST" action="{{ route('member.setup-password.store', $token) }}" class="space-y-5" x-data="{ show: false }">
                     @csrf
 
                     {{-- Email (read-only, for context) --}}
                     <div>
-                        <label class="block text-sm font-medium text-gray-400 mb-1.5">Email address</label>
-                        <div class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-gray-400 select-none">
+                        <label class="block text-sm font-medium text-gray-500 mb-1.5">Email address</label>
+                        <div class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-500 select-none">
                             {{ $member->email }}
                         </div>
                     </div>
 
                     <div>
-                        <label for="password" class="block text-sm font-medium text-gray-300 mb-1.5">New password</label>
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-1.5">New password</label>
                         <div class="relative">
                             <input
                                 :type="show ? 'text' : 'password'"
                                 id="password"
                                 name="password"
                                 required autocomplete="new-password"
-                                class="w-full rounded-xl border @error('password') border-red-500/60 bg-red-500/10 @else border-white/10 bg-white/5 @enderror px-4 py-3 pr-11 text-sm text-white placeholder-gray-500 focus:border-[#e85d26] focus:outline-none focus:ring-2 focus:ring-[#e85d26]/30 transition-colors"
+                                class="w-full rounded-xl border @error('password') border-red-400 bg-red-50 @else border-gray-200 bg-white @enderror px-4 py-3 pr-11 text-sm text-gray-900 placeholder-gray-400 focus:border-[#e85d26] focus:outline-none focus:ring-2 focus:ring-[#e85d26]/20 transition-colors"
                                 placeholder="Min. 8 characters"
                             />
-                            <button type="button" @click="show = !show" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300 transition-colors">
+                            <button type="button" @click="show = !show" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">
                                 <svg x-show="!show" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
@@ -77,25 +74,25 @@
                             </button>
                         </div>
                         @error('password')
-                            <p class="mt-1.5 text-xs text-red-400">{{ $message }}</p>
+                            <p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <div>
-                        <label for="password_confirmation" class="block text-sm font-medium text-gray-300 mb-1.5">Confirm password</label>
+                        <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1.5">Confirm password</label>
                         <input
                             :type="show ? 'text' : 'password'"
                             id="password_confirmation"
                             name="password_confirmation"
                             required autocomplete="new-password"
-                            class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-gray-500 focus:border-[#e85d26] focus:outline-none focus:ring-2 focus:ring-[#e85d26]/30 transition-colors"
+                            class="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:border-[#e85d26] focus:outline-none focus:ring-2 focus:ring-[#e85d26]/20 transition-colors"
                             placeholder="Repeat your password"
                         />
                     </div>
 
                     <button
                         type="submit"
-                        class="w-full inline-flex items-center justify-center gap-2 rounded-full bg-[#e85d26] hover:bg-[#cf4f1e] px-4 py-3 text-sm font-semibold text-white transition-colors focus:outline-none focus:ring-2 focus:ring-[#e85d26]/50"
+                        class="w-full inline-flex items-center justify-center gap-2 rounded-full bg-[#e85d26] hover:bg-[#cf4f1e] px-4 py-3 text-sm font-semibold text-white transition-colors focus:outline-none focus:ring-2 focus:ring-[#e85d26]/40"
                     >
                         Create Password &amp; Go to Dashboard
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -109,7 +106,7 @@
     </div>
 
     <footer class="py-6 text-center">
-        <p class="text-xs text-gray-700">© {{ date('Y') }} City Life International. All rights reserved.</p>
+        <p class="text-xs text-gray-400">© {{ date('Y') }} City Life International. All rights reserved.</p>
     </footer>
 
 </body>
