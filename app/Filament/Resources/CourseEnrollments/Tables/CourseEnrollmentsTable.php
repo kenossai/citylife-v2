@@ -20,13 +20,17 @@ class CourseEnrollmentsTable
     {
         return $table
             ->columns([
-                TextColumn::make('member.first_name')
-                    ->label('Member')
-                    ->formatStateUsing(fn ($state, $record) => $record->member
-                        ? "{$record->member->first_name} {$record->member->last_name}"
-                        : '—')
-                    ->searchable(['members.first_name', 'members.last_name'])
-                    ->sortable(),
+                TextColumn::make('enrollee')
+                    ->label('Enrollee')
+                    ->getStateUsing(fn ($record) => $record->enrollee_label)
+                    ->searchable(query: fn ($query, string $search) => $query
+                        ->whereHas('member', fn ($q) => $q
+                            ->where('first_name', 'like', "%{$search}%")
+                            ->orWhere('last_name', 'like', "%{$search}%")
+                        )
+                        ->orWhere('guest_name', 'like', "%{$search}%")
+                    )
+                    ->sortable(false),
 
                 TextColumn::make('course.title')
                     ->label('Course')
@@ -87,7 +91,7 @@ class CourseEnrollmentsTable
                     ->visible(fn ($record) => $record->status === 'pending')
                     ->requiresConfirmation()
                     ->modalHeading('Approve Enrollment')
-                    ->modalDescription(fn ($record) => "Approve {$record->member?->first_name} {$record->member?->last_name} for {$record->course?->title}?")
+                    ->modalDescription(fn ($record) => "Approve {$record->enrollee_label} for {$record->course?->title}?")
                     ->action(fn ($record) => $record->update(['status' => 'active'])),
 
                 Action::make('mark_attendance')

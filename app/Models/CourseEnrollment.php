@@ -34,6 +34,8 @@ class CourseEnrollment extends Model
     protected $fillable = [
         'course_id',
         'member_id',
+        'guest_name',
+        'guest_email',
         'status',
         'attendance_count',
         'certificate_issued',
@@ -56,6 +58,14 @@ class CourseEnrollment extends Model
     public function member(): BelongsTo
     {
         return $this->belongsTo(Member::class);
+    }
+
+    public function getEnrolleeLabelAttribute(): string
+    {
+        if ($this->member) {
+            return "{$this->member->first_name} {$this->member->last_name}";
+        }
+        return $this->guest_name ?? 'Unknown';
     }
 
     public function progress(): HasMany
