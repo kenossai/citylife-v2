@@ -18,7 +18,7 @@
 
             {{-- Logo --}}
             <a href="{{ url('/') }}" class="flex items-center gap-2">
-                <img src="{{ asset('images/logo_small_white.png') }}" alt="City Life International" class="h-20 w-80 object-contain">
+                <img src="{{ asset('images/logo_small_white.png') }}" alt="City Life International" class="h-20 w-100 object-contain">
             </a>
 
             {{-- Desktop Nav --}}
