@@ -5,7 +5,7 @@
             {{-- Brand --}}
             <div>
                 <div class="flex items-center gap-2 mb-4">
-                    <img src="{{ asset('images/logo_small_white.png') }}" alt="City Life International" class="h-20 w-80 object-contain flex-shrink-0">
+                    <img src="{{ asset('images/logo_small_white.png') }}" alt="City Life International" class="h-20 w-auto object-contain flex-shrink-0">
                 </div>
                 <p class="text-sm leading-relaxed text-gray-500">
                     A vibrant Christian community in the heart of Sheffield, making disciples of Jesus Christ for the transformation of the city.
