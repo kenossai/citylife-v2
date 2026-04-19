@@ -254,13 +254,17 @@ class SermonForm
                 Section::make('Visibility')
                     ->columns(2)
                     ->schema([
+                        Toggle::make('is_live')
+                            ->label('🔴 Live Right Now')
+                            ->helperText('Turn ON when the service is streaming. The media page will show a Live badge and embed the stream immediately.')
+                            ->onColor('danger')
+                            ->columnSpanFull(),
                         Toggle::make('is_featured')
                             ->label('Featured on Homepage')
                             ->helperText('Only one sermon should be featured at a time.'),
                         Toggle::make('is_active')
                             ->label('Active')
                             ->default(true),
-
                     ]),
             ]);
     }
