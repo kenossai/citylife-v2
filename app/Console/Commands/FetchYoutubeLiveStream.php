@@ -51,7 +51,7 @@ class FetchYoutubeLiveStream extends Command
             // Turn off any sermons that were live-fetched previously
             Sermon::where('auto_fetch_live', true)
                 ->where('is_live', true)
-                ->update(['is_live' => false, 'video_url' => null]);
+                ->update(['is_live' => false]);
 
             return self::SUCCESS;
         }
