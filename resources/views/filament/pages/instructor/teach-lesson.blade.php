@@ -7,20 +7,37 @@
     @else
 
     {{-- Two-column teaching layout --}}
-    <div class="flex gap-0 -mx-6 -mt-6" style="min-height: calc(100vh - 9rem);">
+    <div x-data="{ sidebarOpen: true }" class="flex gap-0 -mx-6 -mt-6" style="min-height: calc(100vh - 9rem);">
 
         {{-- ── LEFT: Lesson Sidebar ───────────────────────────────────────── --}}
-        <aside class="w-72 shrink-0 border-r border-gray-200 dark:border-white/10 overflow-y-auto bg-white dark:bg-gray-900">
+        <aside
+            :style="sidebarOpen ? 'width: 18rem; overflow-y: auto;' : 'width: 2.5rem; overflow: hidden;'"
+            class="shrink-0 border-r border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 transition-all duration-300 ease-in-out relative"
+        >
+            {{-- Sidebar toggle button --}}
+            <button
+                @click="sidebarOpen = !sidebarOpen"
+                :title="sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'"
+                class="absolute top-3.5 right-2 z-20 flex h-7 w-7 items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
+            >
+                <svg
+                    :class="sidebarOpen ? '' : 'rotate-180'"
+                    class="h-4 w-4 transition-transform duration-300"
+                    fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                >
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+                </svg>
+            </button>
 
             {{-- Sidebar header --}}
-            <div class="sticky top-0 z-10 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-white/10 px-5 py-4">
+            <div x-show="sidebarOpen" class="sticky top-0 z-10 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-white/10 px-5 py-4 pr-10">
                 <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500">Course Content</p>
                 <p class="mt-1 text-sm font-semibold text-gray-900 dark:text-white leading-snug">{{ $course->title }}</p>
                 <p class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">{{ $totalLessons }} {{ \Illuminate\Support\Str::plural('lesson', $totalLessons) }}</p>
             </div>
 
             {{-- Grouped lessons --}}
-            <nav>
+            <nav x-show="sidebarOpen">
                 @foreach($this->grouped as $groupName => $groupLessons)
                 @php $groupIsOpen = $groupLessons->contains('id', $lesson->id); @endphp
                 <div
