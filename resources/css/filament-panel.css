@@ -1,0 +1,8 @@
+@import "tailwindcss/theme" layer(filament-panel-theme);
+@import "tailwindcss/utilities";
+@plugin "@tailwindcss/typography";
+
+@source '../views/filament/**/*.blade.php';
+@source '../../app/Filament/**/*.php';
+
+@custom-variant dark (&:where(.dark, .dark *));

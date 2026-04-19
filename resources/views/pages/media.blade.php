@@ -170,9 +170,9 @@
         ? $sermons->values()->map(fn ($sermon, $index) => $mapSermon($sermon, $index))
         : $fallbackMedia;
 
-    $featuredItem = $featuredSermon
-        ? $mapSermon($featuredSermon, 0)
-        : $mediaItems->first();
+    $featuredItem = $liveSermon
+        ? $mapSermon($liveSermon, 0)
+        : ($featuredSermon ? $mapSermon($featuredSermon, 0) : $mediaItems->first());
 
     $heroImage = asset('images/slide-1.png');
 
