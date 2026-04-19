@@ -239,55 +239,6 @@
         </div>
     </section>
 
-    {{-- ============================================================
-         LIVE BANNER — shown only when a sermon has is_live = true
-    ============================================================ --}}
-    @if (!empty($liveSermon))
-    @php
-        $liveChannelId = $liveSermon->youtube_channel_id;
-        $liveEmbedUrl  = $liveChannelId
-            ? 'https://www.youtube.com/embed/live_stream?channel=' . $liveChannelId . '&autoplay=1'
-            : null;
-    @endphp
-    <section class="bg-[#0f0c14] py-10">
-        <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-            <div class="mb-5 flex items-center gap-3">
-                <span class="relative flex h-3 w-3">
-                    <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75"></span>
-                    <span class="relative inline-flex h-3 w-3 rounded-full bg-red-600"></span>
-                </span>
-                <span class="text-[11px] font-bold uppercase tracking-[0.28em] text-red-400">We Are Live Now</span>
-                <span class="ml-auto text-[12px] text-white/40">{{ $liveSermon->title }}</span>
-            </div>
-            @if ($liveEmbedUrl)
-                <div class="aspect-video w-full overflow-hidden rounded-2xl shadow-[0_24px_60px_rgba(0,0,0,0.5)]">
-                    <iframe
-                        src="{{ $liveEmbedUrl }}"
-                        class="h-full w-full"
-                        frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen
-                    ></iframe>
-                </div>
-            @else
-                <div class="flex items-center justify-center rounded-2xl border border-red-500/20 bg-red-500/5 py-14 text-center">
-                    <div>
-                        <p class="text-[16px] font-bold text-white">{{ $liveSermon->title }}</p>
-                        <p class="mt-1 text-[13px] text-white/50">{{ $liveSermon->speakerName ?? '' }}</p>
-                        @if ($liveSermon->video_url)
-                            <a href="{{ $liveSermon->video_url }}" target="_blank" rel="noopener"
-                               class="mt-5 inline-flex items-center gap-2 rounded-full bg-red-600 px-6 py-2.5 text-[13px] font-semibold text-white hover:bg-red-700">
-                                Watch on YouTube
-                                <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                            </a>
-                        @endif
-                    </div>
-                </div>
-            @endif
-        </div>
-    </section>
-    @endif
-
     <section class="bg-[#161822] py-9 sm:py-10">
         <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
             <div class="mb-4 flex items-center gap-2">
