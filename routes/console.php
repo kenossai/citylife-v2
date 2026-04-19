@@ -8,8 +8,11 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-// Auto-fetch YouTube live stream every Sunday at 11:15 AM
+// Auto-fetch YouTube live stream every 5 minutes on Sunday mornings (10 AM – 2 PM)
+// The command turns is_live ON when a stream is found, and OFF when it ends.
 Schedule::command('sermons:fetch-live-stream')
-    ->weeklyOn(0, '11:15')   // 0 = Sunday
+    ->everyFiveMinutes()
+    ->sundays()
+    ->between('10:00', '14:00')
     ->withoutOverlapping()
     ->runInBackground();

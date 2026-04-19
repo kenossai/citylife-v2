@@ -8,7 +8,6 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
 
 class SermonsTable
@@ -30,7 +29,6 @@ class SermonsTable
                 TextColumn::make('series.title')->label('Series')->limit(30)->placeholder('—'),
                 TextColumn::make('preached_at')->label('Date')->date('M j, Y')->sortable(),
                 TextColumn::make('service_label')->label('Service')->limit(30),
-                ToggleColumn::make('is_live')->label('🔴 Live'),
                 IconColumn::make('is_featured')->label('Featured')->boolean(),
                 IconColumn::make('is_active')->label('Active')->boolean(),
             ])
