@@ -19,6 +19,7 @@ class CourseLesson extends Model
         'quiz_questions',
         'is_published',
         'available_date',
+        'reschedule_reason',
     ];
 
     protected $casts = [

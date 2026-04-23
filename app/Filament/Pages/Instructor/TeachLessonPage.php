@@ -2,11 +2,18 @@
 
 namespace App\Filament\Pages\Instructor;
 
+use App\Mail\CourseLessonRescheduledMail;
 use App\Models\Course;
+use App\Models\CourseEnrollment;
 use App\Models\CourseLesson;
+use Filament\Actions\Action;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Textarea;
+use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Computed;
 
@@ -69,6 +76,65 @@ class TeachLessonPage extends Page
     public function getTitle(): string | \Illuminate\Contracts\Support\Htmlable
     {
         return $this->lesson?->title ?? 'Lesson Viewer';
+    }
+
+    protected function getHeaderActions(): array
+    {
+        if (! $this->lesson) {
+            return [];
+        }
+
+        return [
+            Action::make('reschedule')
+                ->label('Reschedule Class')
+                ->icon('heroicon-o-arrow-path')
+                ->color('warning')
+                ->modalHeading('Reschedule Class')
+                ->modalDescription('Update the scheduled date for this lesson. Enrolled students will be notified by email.')
+                ->modalSubmitActionLabel('Save & Notify Students')
+                ->form([
+                    DatePicker::make('available_date')
+                        ->label('New Date')
+                        ->required()
+                        ->native(false)
+                        ->default(fn () => $this->lesson?->available_date),
+                    Textarea::make('reschedule_reason')
+                        ->label('Reason (shown to students)')
+                        ->placeholder('e.g. The instructor is unavailable this week.')
+                        ->rows(3)
+                        ->default(fn () => $this->lesson?->reschedule_reason),
+                ])
+                ->action(function (array $data): void {
+                    $this->lesson->update([
+                        'available_date'    => $data['available_date'],
+                        'reschedule_reason' => $data['reschedule_reason'] ?? null,
+                    ]);
+
+                    $this->lesson->refresh();
+
+                    $enrollments = CourseEnrollment::where('course_id', $this->lesson->course_id)
+                        ->whereIn('status', ['active', 'completed'])
+                        ->with('member')
+                        ->get();
+
+                    $notified = 0;
+                    foreach ($enrollments as $enrollment) {
+                        $email = $enrollment->member?->email ?? $enrollment->guest_email;
+                        $name  = $enrollment->member?->first_name ?? $enrollment->guest_name ?? 'Student';
+
+                        if ($email) {
+                            Mail::to($email)->queue(new CourseLessonRescheduledMail($this->lesson, $name));
+                            $notified++;
+                        }
+                    }
+
+                    Notification::make()
+                        ->title('Class rescheduled')
+                        ->body($notified > 0 ? "{$notified} student(s) notified by email." : 'No enrolled students to notify.')
+                        ->success()
+                        ->send();
+                }),
+        ];
     }
 
     /** @return Collection<string, Collection<int, CourseLesson>> */
