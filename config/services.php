@@ -45,4 +45,12 @@ return [
         'secret_key' => env('TURNSTILE_SECRET_KEY'),
     ],
 
+    'churchsuite' => [
+        'api_url'       => env('CHURCHSUITE_API_URL', 'https://api.churchsuite.com/v1'),
+        'token_url'     => env('CHURCHSUITE_TOKEN_URL', 'https://oauth.churchsuite.com/oauth2/token'),
+        'client_id'     => env('CHURCHSUITE_CLIENT_ID'),
+        'client_secret' => env('CHURCHSUITE_CLIENT_SECRET'),
+        'account_id'    => env('CHURCHSUITE_ACCOUNT_ID'),
+    ],
+
 ];

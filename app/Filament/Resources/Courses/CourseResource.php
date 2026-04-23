@@ -20,7 +20,7 @@ class CourseResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedAcademicCap;
 
-    public static function getNavigationGroup(): ?string { return 'Content'; }
+    public static function getNavigationGroup(): ?string { return 'Courses'; }
     public static function getNavigationLabel(): string  { return 'Courses'; }
     public static function getNavigationSort(): ?int     { return 3; }
 

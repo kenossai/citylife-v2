@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Mail\CourseEnrollmentApprovedMail;
 use App\Models\CourseEnrollment;
+use App\Models\Graduate;
 use Illuminate\Support\Facades\Mail;
 
 class CourseEnrollmentObserver
@@ -27,6 +28,23 @@ class CourseEnrollmentObserver
         if ($enrollment->status === 'active') {
             $this->sendApprovalEmail($enrollment);
         }
+
+        if ($enrollment->status === 'completed') {
+            $this->createGraduateRecord($enrollment);
+        }
+    }
+
+    private function createGraduateRecord(CourseEnrollment $enrollment): void
+    {
+        Graduate::firstOrCreate(
+            ['course_enrollment_id' => $enrollment->id],
+            [
+                'member_id'          => $enrollment->member_id,
+                'course_id'          => $enrollment->course_id,
+                'graduated_at'       => $enrollment->completed_at ?? now(),
+                'certificate_issued' => $enrollment->certificate_issued ?? false,
+            ]
+        );
     }
 
     private function sendApprovalEmail(CourseEnrollment $enrollment): void

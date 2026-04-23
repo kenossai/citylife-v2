@@ -1,31 +1,30 @@
 <?php
 
-namespace App\Filament\Resources\Members\Pages;
+namespace App\Filament\Resources\Courses\Pages;
 
-use App\Filament\Resources\Members\MemberResource;
-use App\Models\Member;
+use App\Filament\Resources\Courses\GraduatesResource;
+use App\Models\Graduate;
 use App\Services\ChurchSuiteService;
 use Filament\Actions\Action;
-use Filament\Actions\CreateAction;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
 use Throwable;
 
-class ListMembers extends ListRecords
+class ListGraduates extends ListRecords
 {
-    protected static string $resource = MemberResource::class;
+    protected static string $resource = GraduatesResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
-            Action::make('syncAllToChurchSuite')
-                ->label('Sync All Members')
+            Action::make('syncMembershipGraduates')
+                ->label('Sync to ChurchSuite')
                 ->icon('heroicon-o-arrow-path')
                 ->color('gray')
                 ->requiresConfirmation()
-                ->modalHeading('Sync full members to ChurchSuite')
-                ->modalDescription('This will push all records with a status of \'Member\' (CDC graduates) to ChurchSuite CRM. Visitors and other statuses are skipped.')
-                ->modalSubmitActionLabel('Yes, sync members')
+                ->modalHeading('Sync membership to ChurchSuite')
+                ->modalDescription('This will push every graduate from a membership course to ChurchSuite CRM. Graduates from other courses will be skipped.')
+                ->modalSubmitActionLabel('Yes, sync graduates')
                 ->action(function (): void {
                     $service = app(ChurchSuiteService::class);
 
@@ -41,10 +40,15 @@ class ListMembers extends ListRecords
                     $succeeded = 0;
                     $failed    = 0;
 
-                    Member::where('membership_status', 'member')
-                        ->each(function (Member $member) use ($service, &$succeeded, &$failed): void {
+                    Graduate::whereHas('course', fn ($q) => $q->where('is_membership_course', true))
+                        ->with(['member', 'course'])
+                        ->each(function (Graduate $graduate) use ($service, &$succeeded, &$failed): void {
+                            if (! $graduate->member) {
+                                return;
+                            }
+
                             try {
-                                $service->syncMember($member);
+                                $service->syncMember($graduate->member);
                                 $succeeded++;
                             } catch (Throwable) {
                                 $failed++;
@@ -53,22 +57,20 @@ class ListMembers extends ListRecords
 
                     if ($succeeded > 0) {
                         Notification::make()
-                            ->title("{$succeeded} member(s) synced to ChurchSuite")
+                            ->title("{$succeeded} Synced successfully to ChurchSuite")
                             ->success()
                             ->send();
                     }
 
                     if ($failed > 0) {
                         Notification::make()
-                            ->title("{$failed} member(s) failed to sync")
-                            ->body('Open each failed member record to see the error.')
+                            ->title("{$failed} Failed to sync to ChurchSuite")
+                            ->body('Check each failed record for details.')
                             ->danger()
                             ->persistent()
                             ->send();
                     }
                 }),
-
-            CreateAction::make(),
         ];
     }
 }

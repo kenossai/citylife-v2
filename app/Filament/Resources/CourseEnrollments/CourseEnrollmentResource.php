@@ -20,7 +20,7 @@ class CourseEnrollmentResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClipboardDocumentList;
 
-    public static function getNavigationGroup(): ?string { return 'Content'; }
+    public static function getNavigationGroup(): ?string { return 'Courses'; }
     public static function getNavigationLabel(): string  { return 'Course Enrollments'; }
     public static function getNavigationSort(): ?int     { return 5; }
     public static function getNavigationParentItem(): ?string { return 'Courses'; }

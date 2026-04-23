@@ -20,7 +20,7 @@ class LessonAttendanceResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClipboardDocumentCheck;
 
-    public static function getNavigationGroup(): ?string { return 'Content'; }
+    public static function getNavigationGroup(): ?string { return 'Courses'; }
     public static function getNavigationLabel(): string  { return 'Attendance'; }
     public static function getNavigationSort(): ?int     { return 6; }
     public static function getNavigationParentItem(): ?string { return 'Courses'; }

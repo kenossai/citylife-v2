@@ -3,7 +3,9 @@
 namespace App\Filament\Resources\Members\Schemas;
 
 use App\Models\Member;
+use App\Services\ChurchSuiteService;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -141,6 +143,29 @@ class MemberForm
                         Toggle::make('is_active')
                             ->label('Is active')
                             ->default(true),
+                    ]),
+
+                Section::make('ChurchSuite CRM')
+                    ->description('Read-only sync status. Use the "Sync to ChurchSuite" button to push updates.')
+                    ->columns(2)
+                    ->visible(fn () => app(ChurchSuiteService::class)->isConfigured())
+                    ->visibleOn('edit')
+                    ->schema([
+                        TextInput::make('churchsuite_id')
+                            ->label('ChurchSuite Contact ID')
+                            ->disabled()
+                            ->dehydrated(false),
+                        TextInput::make('churchsuite_sync_status')
+                            ->label('Sync Status')
+                            ->disabled()
+                            ->dehydrated(false)
+                            ->formatStateUsing(fn (?string $state) => $state ? ucfirst($state) : 'Not synced'),
+                        Placeholder::make('churchsuite_synced_at')
+                            ->label('Last Synced')
+                            ->content(fn (?Member $record) => $record?->churchsuite_synced_at?->diffForHumans() ?? '—'),
+                        Placeholder::make('churchsuite_sync_error')
+                            ->label('Last Error')
+                            ->content(fn (?Member $record) => $record?->churchsuite_sync_error ?? '—'),
                     ]),
             ]);
     }

@@ -83,6 +83,10 @@ class Member extends Authenticatable
         'notes',
         'bio',
         'is_active',
+        'churchsuite_id',
+        'churchsuite_synced_at',
+        'churchsuite_sync_status',
+        'churchsuite_sync_error',
         'notify_study_reminders',
         'notify_quiz_results',
         'notify_weekly_digest',
@@ -103,6 +107,7 @@ class Member extends Authenticatable
         'notify_quiz_results'      => 'boolean',
         'notify_weekly_digest'     => 'boolean',
         'password_setup_token_expires_at' => 'datetime',
+        'churchsuite_synced_at'    => 'datetime',
     ];
 
     public function spouse(): BelongsTo
