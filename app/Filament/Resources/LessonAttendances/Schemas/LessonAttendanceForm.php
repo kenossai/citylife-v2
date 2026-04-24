@@ -39,8 +39,8 @@ class LessonAttendanceForm
                         ->required(),
                 ]),
 
-                Select::make('enrollment_id')
-                    ->label('Student')
+                Select::make('enrollment_ids')
+                    ->label('Students')
                     ->options(fn ($get) => $get('course_id')
                         ? CourseEnrollment::with('member')
                             ->where('course_id', $get('course_id'))
@@ -53,7 +53,9 @@ class LessonAttendanceForm
                             ])
                         : [])
                     ->searchable()
-                    ->required(),
+                    ->multiple()
+                    ->required()
+                    ->dehydrated(false),
 
                 Grid::make(2)->schema([
                     DateTimePicker::make('attended_at')
