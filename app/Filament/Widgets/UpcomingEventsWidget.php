@@ -11,6 +11,8 @@ use Filament\Widgets\TableWidget as BaseWidget;
 
 class UpcomingEventsWidget extends BaseWidget
 {
+    protected static bool $isDiscovered = false;
+
     protected static ?int $sort = 5;
 
     protected static ?string $heading = 'Upcoming Events';
