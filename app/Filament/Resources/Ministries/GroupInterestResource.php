@@ -3,8 +3,10 @@
 namespace App\Filament\Resources\Ministries;
 
 use App\Filament\Resources\Ministries\Pages\ListGroupInterests;
+use App\Mail\GroupInterestReadMail;
 use App\Models\MinistryEnquiry;
 use BackedEnum;
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Resources\Resource;
@@ -14,7 +16,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
-use Filament\Actions\Action;
+use Illuminate\Support\Facades\Mail;
 
 class GroupInterestResource extends Resource
 {
@@ -92,9 +94,12 @@ class GroupInterestResource extends Resource
                     ->icon('heroicon-o-check-circle')
                     ->color('success')
                     ->iconButton()
-                    ->tooltip('Mark as read')
+                    ->tooltip('Mark as read & notify enquirer')
                     ->visible(fn (MinistryEnquiry $record) => ! $record->is_read)
-                    ->action(fn (MinistryEnquiry $record) => $record->update(['is_read' => true])),
+                    ->action(function (MinistryEnquiry $record) {
+                        $record->update(['is_read' => true]);
+                        Mail::to($record->email)->send(new GroupInterestReadMail($record));
+                    }),
             ])
             ->bulkActions([
                 BulkActionGroup::make([

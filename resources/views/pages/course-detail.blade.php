@@ -238,7 +238,23 @@
                                 </div>
                             @endif
 
-                            <form method="POST" action="{{ route('courses.enrol', $course->slug) }}">
+                            @php
+                                $allowedIps   = array_filter(array_map('trim', explode(',', config('services.church_wifi_ip', ''))));
+                                $onPremises   = empty($allowedIps) || in_array(request()->ip(), $allowedIps);
+                            @endphp
+
+                            @if (! $onPremises)
+                                <div class="flex flex-col items-center gap-3 py-4 text-center">
+                                    <span class="flex h-12 w-12 items-center justify-center rounded-full bg-[#fff3ee] text-[#e85d26]">
+                                        <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"/>
+                                        </svg>
+                                    </span>
+                                    <p class="text-[13px] font-semibold text-gray-800">Church WiFi required</p>
+                                    <p class="text-[12px] text-gray-500 leading-relaxed">Enrolment is only available when you are connected to the church WiFi on the premises.</p>
+                                </div>
+                            @else
+                                <form method="POST" action="{{ route('courses.enrol', $course->slug) }}">
                                 @csrf
                                 <div class="space-y-3">
                                     <input
@@ -268,6 +284,7 @@
                                     </button>
                                 </div>
                             </form>
+                            @endif
                         </div>
                     </div>
 

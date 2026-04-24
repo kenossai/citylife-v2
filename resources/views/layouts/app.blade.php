@@ -87,6 +87,20 @@
         @include('partials.music-player', ['music' => $music])
     @endif
 
+    {{-- Floating dashboard button for logged-in members on public pages --}}
+    @auth('member')
+        @unless(request()->is('member') || request()->is('member/*'))
+        <a href="{{ route('member.dashboard') }}"
+           title="Go to Dashboard"
+           class="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-full bg-[#e85d26] px-4 py-3 text-sm font-semibold text-white shadow-lg ring-2 ring-white transition-all hover:bg-[#cf4f1e] hover:shadow-xl active:scale-95">
+            <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+            </svg>
+            <span class="hidden sm:inline">My Dashboard</span>
+        </a>
+        @endunless
+    @endauth
+
     @stack('scripts')
 </body>
 </html>

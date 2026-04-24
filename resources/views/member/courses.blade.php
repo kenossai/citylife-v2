@@ -42,24 +42,32 @@
         $quizzesDone  = $enrollment->progress->whereNotNull('quiz_score')->count();
         $avgScore     = $enrollment->progress->whereNotNull('quiz_score')->avg('quiz_score');
 
-        // Find the next unread lesson for the CTA — skip locked ones
+        // Find the next unread lesson for the CTA, respecting the weekly lock gate
         $completedLessonIds = $enrollment->progress->whereNotNull('completed_at')->pluck('lesson_id')->toArray();
-        $enrolledAt = $enrollment->enrolled_at ?? $enrollment->created_at;
-        $nextLesson = $course->lessons
-            ->where('is_published', true)
-            ->sortBy('lesson_number')
-            ->first(fn($l) =>
-                !in_array($l->id, $completedLessonIds) &&
-                now()->gte($l->available_date ?? $enrolledAt->copy()->addWeeks($l->lesson_number - 1))
-            );
-        // Next locked lesson (for "available in X days" message)
-        $nextLockedLesson = $nextLesson ? null : $course->lessons
+        $enrolledAt    = $enrollment->enrolled_at ?? $enrollment->created_at;
+        $courseStart   = $enrolledAt->copy()->startOfDay()->isSunday()
+            ? $enrolledAt->copy()->startOfDay()
+            : $enrolledAt->copy()->startOfDay()->next('Sunday');
+        $firstUnread = $course->lessons
             ->where('is_published', true)
             ->sortBy('lesson_number')
             ->first(fn($l) => !in_array($l->id, $completedLessonIds));
-        $nextUnlockDate = $nextLockedLesson
-            ? ($nextLockedLesson->available_date ?? $enrolledAt->copy()->addWeeks($nextLockedLesson->lesson_number - 1))
-            : null;
+        if ($firstUnread) {
+            $unlockDate = $firstUnread->available_date ?? $courseStart->copy()->addWeeks($firstUnread->lesson_number - 1);
+            if (now()->lt($unlockDate)) {
+                $nextLesson       = null;
+                $nextLockedLesson = $firstUnread;
+                $nextUnlockDate   = $unlockDate;
+            } else {
+                $nextLesson       = $firstUnread;
+                $nextLockedLesson = null;
+                $nextUnlockDate   = null;
+            }
+        } else {
+            $nextLesson       = null;
+            $nextLockedLesson = null;
+            $nextUnlockDate   = null;
+        }
     @endphp
 
     <div class="group rounded-2xl bg-white border border-gray-200 shadow-sm overflow-hidden hover:border-[#e85d26]/30 transition-colors flex flex-col">

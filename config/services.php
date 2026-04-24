@@ -53,4 +53,12 @@ return [
         'account_id'    => env('CHURCHSUITE_ACCOUNT_ID'),
     ],
 
+    /*
+    | Church WiFi / premises IP whitelist.
+    | Set CHURCH_WIFI_IP in .env to the church's public IP address.
+    | The course enrolment form is only visible/accessible from this IP.
+    | Separate multiple IPs with commas: 1.2.3.4,5.6.7.8
+    */
+    'church_wifi_ip' => env('CHURCH_WIFI_IP', ''),
+
 ];

@@ -112,9 +112,12 @@
                         $isDone          = $sideProgress?->completed_at !== null;
                         $isCurrent       = $sideLesson->id === $lesson->id;
                         $minRead         = max(1, (int) ceil(str_word_count(strip_tags($sideLesson->content ?? '')) / 200));
-                        $slideEnrolledAt = $enrollment->enrolled_at ?? $enrollment->created_at;
-                        $slideUnlock     = $sideLesson->available_date ?? $slideEnrolledAt->copy()->addWeeks($sideLesson->lesson_number - 1);
-                        $isLocked        = false; // TODO: disabled for testing
+                        $slideEnrolledAt  = $enrollment->enrolled_at ?? $enrollment->created_at;
+                        $slideCourseStart = $slideEnrolledAt->copy()->startOfDay()->isSunday()
+                            ? $slideEnrolledAt->copy()->startOfDay()
+                            : $slideEnrolledAt->copy()->startOfDay()->next('Sunday');
+                        $slideUnlock     = $sideLesson->available_date ?? $slideCourseStart->copy()->addWeeks($sideLesson->lesson_number - 1);
+                        $isLocked        = now()->lt($slideUnlock);
                     @endphp
                     @if($isLocked)
                     <div class="flex items-center gap-3 px-5 py-3 opacity-50 cursor-not-allowed">
@@ -167,9 +170,12 @@
                     {{-- Module Quiz row --}}
                     @if($quizLesson)
                     @php
-                        $quizEnrolledAt = $enrollment->enrolled_at ?? $enrollment->created_at;
-                        $quizUnlockDate = $quizLesson->available_date ?? $quizEnrolledAt->copy()->addWeeks($quizLesson->lesson_number - 1);
-                        $quizIsLocked   = false; // TODO: disabled for testing
+                        $quizEnrolledAt  = $enrollment->enrolled_at ?? $enrollment->created_at;
+                        $quizCourseStart = $quizEnrolledAt->copy()->startOfDay()->isSunday()
+                            ? $quizEnrolledAt->copy()->startOfDay()
+                            : $quizEnrolledAt->copy()->startOfDay()->next('Sunday');
+                        $quizUnlockDate = $quizLesson->available_date ?? $quizCourseStart->copy()->addWeeks($quizLesson->lesson_number - 1);
+                        $quizIsLocked   = now()->lt($quizUnlockDate);
                     @endphp
                     @if($quizIsLocked)
                     <div class="flex items-center gap-3 px-5 py-3 opacity-50 cursor-not-allowed">

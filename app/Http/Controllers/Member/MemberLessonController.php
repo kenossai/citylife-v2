@@ -53,14 +53,22 @@ class MemberLessonController extends Controller
         $progressPercent = $totalLessons > 0 ? round(($completedCount / $totalLessons) * 100) : 0;
         $quizScore       = $progress?->quiz_score;
 
-        // Lock gate: each lesson unlocks (lesson_number - 1) weeks after enrollment
-        // TODO: lock gate temporarily disabled for testing — re-enable before go-live
-        $enrolledAt = $enrollment->enrolled_at ?? $enrollment->created_at;
-        // $unlockDate = $lesson->available_date ?? $enrolledAt->copy()->addWeeks($lesson->lesson_number - 1);
-        // abort_if(now()->lt($unlockDate), 403, 'This lesson is not yet available.');
+        // Lock gate: each lesson unlocks on a successive Sunday from the enrollment week.
+        // Lesson 1 = first Sunday on/after enrollment, Lesson 2 = week after that, etc.
+        $enrolledAt  = $enrollment->enrolled_at ?? $enrollment->created_at;
+        $courseStart = $enrolledAt->copy()->startOfDay()->isSunday()
+            ? $enrolledAt->copy()->startOfDay()
+            : $enrolledAt->copy()->startOfDay()->next('Sunday');
+        $unlockDate  = $lesson->available_date ?? $courseStart->copy()->addWeeks($lesson->lesson_number - 1);
+        abort_if(now()->lt($unlockDate), 403, 'This lesson is not yet available.');
 
         // Whether the next lesson is still locked
-        $nextLessonLocked = false; // disabled for testing
+        if ($nextLesson) {
+            $nextUnlockDate   = $nextLesson->available_date ?? $courseStart->copy()->addWeeks($nextLesson->lesson_number - 1);
+            $nextLessonLocked = now()->lt($nextUnlockDate);
+        } else {
+            $nextLessonLocked = false;
+        }
 
         return compact(
             'member', 'course', 'enrollment', 'lesson',
@@ -128,7 +136,18 @@ class MemberLessonController extends Controller
                 ->first();
 
             if ($nextLesson) {
-                // TODO: lock check disabled for testing — re-enable before go-live
+                $enrolledAt2   = $enrollment->enrolled_at ?? $enrollment->created_at;
+                $courseStart2  = $enrolledAt2->copy()->startOfDay()->isSunday()
+                    ? $enrolledAt2->copy()->startOfDay()
+                    : $enrolledAt2->copy()->startOfDay()->next('Sunday');
+                $nextUnlock    = $nextLesson->available_date ?? $courseStart2->copy()->addWeeks($nextLesson->lesson_number - 1);
+                if (now()->lt($nextUnlock)) {
+                    return redirect()->route('member.lesson.show', [
+                        'courseSlug' => $courseSlug,
+                        'lessonSlug' => $lessonSlug,
+                    ])->with('next_locked_until', $nextUnlock->toIso8601String())
+                      ->with('next_locked_title', $nextLesson->title);
+                }
                 return redirect()->route('member.lesson.show', [
                     'courseSlug' => $courseSlug,
                     'lessonSlug' => $nextLesson->slug,

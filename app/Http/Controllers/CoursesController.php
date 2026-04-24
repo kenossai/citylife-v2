@@ -38,6 +38,12 @@ class CoursesController extends Controller
     {
         $course = Course::where('slug', $slug)->active()->firstOrFail();
 
+        // Church WiFi gate — enrolment only allowed from church premises
+        $allowedIps = array_filter(array_map('trim', explode(',', config('services.church_wifi_ip', ''))));
+        if (! empty($allowedIps) && ! in_array($request->ip(), $allowedIps)) {
+            return back()->with('enrol_error', 'Enrolment is only available from within the church premises.');
+        }
+
         if (! $course->is_registration_open) {
             return back()->with('enrol_error', 'Registration for this course is not currently open.');
         }
