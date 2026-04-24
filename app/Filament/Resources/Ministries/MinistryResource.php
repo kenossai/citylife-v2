@@ -20,7 +20,7 @@ class MinistryResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedHeart;
 
-    public static function getNavigationGroup(): ?string { return 'Home Page'; }
+    public static function getNavigationGroup(): ?string { return 'Content'; }
     public static function getNavigationLabel(): string  { return 'Ministries'; }
     public static function getNavigationSort(): ?int     { return 3; }
 

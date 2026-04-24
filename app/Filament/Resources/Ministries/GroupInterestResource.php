@@ -22,9 +22,11 @@ class GroupInterestResource extends Resource
 {
     protected static ?string $model = MinistryEnquiry::class;
 
+    protected static ?string $slug = 'group-interests';
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUserGroup;
 
-    public static function getNavigationGroup(): ?string { return 'Home Page'; }
+    public static function getNavigationGroup(): ?string { return 'Courses'; }
     public static function getNavigationLabel(): string  { return 'Group Interests'; }
     public static function getNavigationSort(): ?int     { return 4; }
 
