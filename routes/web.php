@@ -13,6 +13,7 @@ use App\Http\Controllers\BibleSchoolResourceController;
 use App\Http\Controllers\Member\MemberAuthController;
 use App\Http\Controllers\Member\MemberDashboardController;
 use App\Http\Controllers\Member\MemberLessonController;
+use App\Http\Controllers\Member\MemberCourseReviewController;
 use App\Http\Controllers\Member\MemberSettingsController;
 use App\Http\Controllers\SessionAccessController;
 use App\Http\Controllers\GivingController;
@@ -35,6 +36,8 @@ Route::get('/about-citylife', [AboutController::class, 'index'])->name('about');
 Route::get('/leadership', [LeadershipController::class, 'index'])->name('leadership');
 Route::get('/our-ministries', [MinistryController::class, 'index'])->name('ministries');
 Route::get('/our-ministries/{slug}', [MinistryController::class, 'show'])->name('ministries.show');
+Route::get('/our-ministries/{slug}/join', [MinistryController::class, 'joinForm'])->name('ministries.join');
+Route::post('/our-ministries/{slug}/connect', [MinistryController::class, 'connect'])->name('ministries.connect');
 Route::get('/missions', [MissionsController::class, 'index'])->name('missions');
 Route::get('/missions/{slug}', [MissionsController::class, 'show'])->name('missions.show');
 Route::get('/events', [EventsController::class, 'index'])->name('events');
@@ -87,6 +90,10 @@ Route::prefix('member')->name('member.')->group(function () {
         Route::patch('/settings/notifications', [MemberSettingsController::class, 'updateNotifications'])->name('settings.notifications');
         Route::delete('/settings/account', [MemberSettingsController::class, 'deleteAccount'])->name('settings.delete-account');
 
+        // Church Profile (ChurchSuite sync data)
+        Route::get('/church-profile', [MemberSettingsController::class, 'showChurchProfile'])->name('church-profile');
+        Route::patch('/church-profile', [MemberSettingsController::class, 'updateChurchProfile'])->name('church-profile.update');
+
         // Lesson viewer
         Route::get('/courses/{courseSlug}/lessons/{lessonSlug}', [MemberLessonController::class, 'show'])->name('lesson.show');
         Route::post('/courses/{courseSlug}/lessons/{lessonSlug}/mark-read', [MemberLessonController::class, 'markRead'])->name('lesson.mark-read');
@@ -95,5 +102,9 @@ Route::prefix('member')->name('member.')->group(function () {
         Route::post('/courses/{courseSlug}/lessons/{lessonSlug}/notes', [MemberLessonController::class, 'saveNotes'])->name('lesson.notes');
         Route::get('/courses/{courseSlug}/lessons/{lessonSlug}/quiz', [MemberLessonController::class, 'quizPage'])->name('lesson.quiz-page');
         Route::post('/courses/{courseSlug}/lessons/{lessonSlug}/quiz', [MemberLessonController::class, 'submitQuiz'])->name('lesson.quiz');
+
+        // Course review (prompted after final lesson completion)
+        Route::get('/courses/{courseSlug}/review', [MemberCourseReviewController::class, 'create'])->name('course.review');
+        Route::post('/courses/{courseSlug}/review', [MemberCourseReviewController::class, 'store'])->name('course.review.store');
     });
 });

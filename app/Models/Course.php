@@ -73,6 +73,11 @@ class Course extends Model
         return $this->hasMany(CourseEnrollment::class);
     }
 
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(CourseReview::class);
+    }
+
     public function getInstructorNameAttribute(): string
     {
         return $this->guest_instructor_name ?? $this->leader?->name ?? '';

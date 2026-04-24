@@ -78,6 +78,11 @@ class CourseEnrollment extends Model
         return $this->hasMany(LessonAttendance::class, 'enrollment_id');
     }
 
+    public function review(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(CourseReview::class, 'enrollment_id');
+    }
+
     public function isCompleted(): bool
     {
         return $this->status === 'completed';

@@ -307,27 +307,42 @@
                     <h3 class="text-xl font-bold text-white">Connect With Us</h3>
                     <p class="mt-1 text-[13px] text-white/50">Fill in your details and we'll reach out to you.</p>
 
-                    <form class="mt-6 space-y-4" onsubmit="return false;">
+                    @if(session('connect_success'))
+                    <div class="mt-4 rounded-lg bg-emerald-500/20 border border-emerald-500/30 px-4 py-3 text-sm font-medium text-emerald-300">
+                        {{ session('connect_success') }}
+                    </div>
+                    @endif
+
+                    <form class="mt-6 space-y-4" method="POST" action="{{ route('ministries.connect', $ministry->slug) }}">
+                        @csrf
                         <div>
                             <label class="mb-1.5 block text-[12px] font-semibold uppercase tracking-wider text-white/60">Full Name</label>
                             <input
                                 type="text"
+                                name="full_name"
+                                value="{{ old('full_name') }}"
                                 placeholder="Your full name"
-                                class="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/30 outline-none transition focus:border-[#e85d26] focus:ring-1 focus:ring-[#e85d26]"
+                                class="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/30 outline-none transition focus:border-[#e85d26] focus:ring-1 focus:ring-[#e85d26] @error('full_name') border-red-500/60 @enderror"
                             >
+                            @error('full_name')<p class="mt-1 text-xs text-red-400">{{ $message }}</p>@enderror
                         </div>
                         <div>
                             <label class="mb-1.5 block text-[12px] font-semibold uppercase tracking-wider text-white/60">Email Address</label>
                             <input
                                 type="email"
+                                name="email"
+                                value="{{ old('email') }}"
                                 placeholder="your@email.com"
-                                class="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/30 outline-none transition focus:border-[#e85d26] focus:ring-1 focus:ring-[#e85d26]"
+                                class="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/30 outline-none transition focus:border-[#e85d26] focus:ring-1 focus:ring-[#e85d26] @error('email') border-red-500/60 @enderror"
                             >
+                            @error('email')<p class="mt-1 text-xs text-red-400">{{ $message }}</p>@enderror
                         </div>
                         <div>
                             <label class="mb-1.5 block text-[12px] font-semibold uppercase tracking-wider text-white/60">Phone Number</label>
                             <input
                                 type="tel"
+                                name="phone"
+                                value="{{ old('phone') }}"
                                 placeholder="+44 7000 000 000"
                                 class="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/30 outline-none transition focus:border-[#e85d26] focus:ring-1 focus:ring-[#e85d26]"
                             >
@@ -335,10 +350,11 @@
                         <div>
                             <label class="mb-1.5 block text-[12px] font-semibold uppercase tracking-wider text-white/60">Message</label>
                             <textarea
+                                name="message"
                                 rows="3"
                                 placeholder="Tell us a bit about yourself…"
                                 class="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/30 outline-none transition focus:border-[#e85d26] focus:ring-1 focus:ring-[#e85d26]"
-                            ></textarea>
+                            >{{ old('message') }}</textarea>
                         </div>
                         <button
                             type="submit"

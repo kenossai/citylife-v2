@@ -31,20 +31,48 @@ class CourseEnrollmentObserver
 
         if ($enrollment->status === 'completed') {
             $this->createGraduateRecord($enrollment);
+            $this->promoteMemberIfEligible($enrollment);
         }
     }
 
     private function createGraduateRecord(CourseEnrollment $enrollment): void
     {
+        $enrollment->loadMissing('course');
+
+        $certificateIssued = $enrollment->certificate_issued
+            || ($enrollment->course?->has_certificate ?? false);
+
         Graduate::firstOrCreate(
             ['course_enrollment_id' => $enrollment->id],
             [
                 'member_id'          => $enrollment->member_id,
                 'course_id'          => $enrollment->course_id,
                 'graduated_at'       => $enrollment->completed_at ?? now(),
-                'certificate_issued' => $enrollment->certificate_issued ?? false,
+                'certificate_issued' => $certificateIssued,
             ]
         );
+    }
+
+    private function promoteMemberIfEligible(CourseEnrollment $enrollment): void
+    {
+        $enrollment->loadMissing(['member', 'course']);
+
+        if (! $enrollment->course?->is_membership_course) {
+            return;
+        }
+
+        $member = $enrollment->member;
+
+        if (! $member) {
+            return;
+        }
+
+        if ($member->membership_status !== 'member') {
+            $member->update([
+                'membership_status' => 'member',
+                'membership_date'   => $enrollment->completed_at?->toDateString() ?? now()->toDateString(),
+            ]);
+        }
     }
 
     private function sendApprovalEmail(CourseEnrollment $enrollment): void

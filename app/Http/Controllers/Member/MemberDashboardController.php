@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Member;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\LessonProgress;
+use App\Models\Ministry;
 use Illuminate\Support\Facades\Auth;
 
 class MemberDashboardController extends Controller
@@ -116,7 +117,9 @@ class MemberDashboardController extends Controller
             ->orderByDesc('enrolled_at')
             ->get();
 
-        return view('member.courses', compact('member', 'enrollments'));
+        $lifeGroups = Ministry::active()->select('id', 'name', 'slug', 'subtitle', 'category_label', 'image_path', 'meeting_schedule', 'location')->get();
+
+        return view('member.courses', compact('member', 'enrollments', 'lifeGroups'));
     }
 
     public function progress()

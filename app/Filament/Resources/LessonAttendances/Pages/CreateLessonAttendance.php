@@ -13,16 +13,20 @@ class CreateLessonAttendance extends CreateRecord
 
     protected function handleRecordCreation(array $data): Model
     {
-        $enrollmentIds = $this->form->getRawState()['enrollment_ids'] ?? [];
+        $rawState      = $this->form->getRawState();
+        $enrollmentIds = $rawState['enrollment_ids'] ?? [];
+        $lessonIds     = $rawState['lesson_ids'] ?? [];
         $last          = null;
 
         foreach ((array) $enrollmentIds as $enrollmentId) {
-            $last = LessonAttendance::create([
-                'enrollment_id' => $enrollmentId,
-                'lesson_id'     => $data['lesson_id'],
-                'attended_at'   => $data['attended_at'],
-                'present'       => $data['present'] ?? true,
-            ]);
+            foreach ((array) $lessonIds as $lessonId) {
+                $last = LessonAttendance::create([
+                    'enrollment_id' => $enrollmentId,
+                    'lesson_id'     => $lessonId,
+                    'attended_at'   => $data['attended_at'],
+                    'present'       => $data['present'] ?? true,
+                ]);
+            }
         }
 
         // Filament requires a Model back — return the last created record

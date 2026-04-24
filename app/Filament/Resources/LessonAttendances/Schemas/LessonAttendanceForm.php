@@ -25,18 +25,20 @@ class LessonAttendanceForm
                         ->searchable()
                         ->required()
                         ->live()
-                        ->afterStateUpdated(fn (callable $set) => $set('enrollment_id', null) + $set('lesson_id', null))
+                        ->afterStateUpdated(fn (callable $set) => $set('enrollment_id', null) + $set('lesson_ids', null))
                         ->dehydrated(false),
 
-                    Select::make('lesson_id')
-                        ->label('Lesson')
+                    Select::make('lesson_ids')
+                        ->label('Lessons')
                         ->options(fn ($get) => $get('course_id')
                             ? CourseLesson::where('course_id', $get('course_id'))
                                 ->orderBy('lesson_number')
                                 ->pluck('title', 'id')
                             : [])
                         ->searchable()
-                        ->required(),
+                        ->multiple()
+                        ->required()
+                        ->dehydrated(false),
                 ]),
 
                 Select::make('enrollment_ids')

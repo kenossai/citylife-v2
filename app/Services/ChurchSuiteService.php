@@ -130,19 +130,37 @@ class ChurchSuiteService
         }
 
         if (filled($member->gender)) {
-            $payload['sex'] = $member->gender === 'male' ? 'M' : ($member->gender === 'female' ? 'F' : null);
+            $payload['sex'] = match ($member->gender) {
+                'male'   => 'M',
+                'female' => 'F',
+                default  => null,
+            };
         }
 
-        $address = array_filter([
-            $member->address,
-            $member->city,
-            $member->postcode,
-            $member->country,
-        ]);
+        if (filled($member->marital_status)) {
+            $payload['marital_status'] = $member->marital_status;
+        }
+
+        // Address — send as structured fields
+        $address = [];
+        if (filled($member->address))        { $address['address1'] = $member->address; }
+        if (filled($member->address_line_2)) { $address['address2'] = $member->address_line_2; }
+        if (filled($member->city))           { $address['city']     = $member->city; }
+        if (filled($member->county))         { $address['county']   = $member->county; }
+        if (filled($member->postcode))       { $address['postcode'] = $member->postcode; }
+        if (filled($member->country))        { $address['country']  = $member->country; }
 
         if (! empty($address)) {
-            $payload['address'] = implode(', ', $address);
+            $payload['address'] = $address;
         }
+
+        // Communication preferences
+        $payload['communication'] = [
+            'general_email'          => $member->receive_general_email ? 1 : 0,
+            'general_sms'            => $member->receive_general_sms   ? 1 : 0,
+            'rota_reminders_email'   => $member->receive_rota_email     ? 1 : 0,
+            'rota_reminders_sms'     => $member->receive_rota_sms       ? 1 : 0,
+        ];
 
         return array_filter($payload, fn ($v) => $v !== null);
     }

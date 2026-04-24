@@ -85,6 +85,56 @@ class MemberSettingsController extends Controller
         return back()->with('notifications_status', 'Notification preferences saved.');
     }
 
+    public function showChurchProfile()
+    {
+        $member = Auth::guard('member')->user();
+
+        return view('member.church-profile', compact('member'));
+    }
+
+    public function updateChurchProfile(Request $request)
+    {
+        $member = Auth::guard('member')->user();
+
+        // Assemble date_of_birth from the three separate inputs server-side
+        $day   = str_pad((string) $request->input('dob_day', ''), 2, '0', STR_PAD_LEFT);
+        $month = str_pad((string) $request->input('dob_month', ''), 2, '0', STR_PAD_LEFT);
+        $year  = $request->input('dob_year', '');
+        if ($day && $month && $year && $day !== '00' && $month !== '00') {
+            $request->merge(['date_of_birth' => "{$year}-{$month}-{$day}"]);
+        }
+
+        $validated = $request->validate([
+            'first_name'              => ['required', 'string', 'max:100'],
+            'last_name'               => ['required', 'string', 'max:100'],
+            'gender'                  => ['nullable', 'in:male,female,other'],
+            'date_of_birth'           => ['required', 'date', 'before:today'],
+            'email'                   => ['required', 'email', 'max:255', 'unique:members,email,' . $member->id],
+            'phone'                   => ['required', 'string', 'max:30'],
+            'address'                 => ['required', 'string', 'max:255'],
+            'address_line_2'          => ['nullable', 'string', 'max:255'],
+            'city'                    => ['required', 'string', 'max:100'],
+            'county'                  => ['nullable', 'string', 'max:100'],
+            'postcode'                => ['required', 'string', 'max:20'],
+            'country'                 => ['required', 'string', 'max:100'],
+            'marital_status'          => ['required', 'string', 'in:single,married,divorced,widowed,separated,prefer_not_to_say'],
+            'data_protection_accepted'=> ['required', 'accepted'],
+        ]);
+
+        $validated['receive_general_email'] = $request->boolean('receive_general_email');
+        $validated['receive_general_sms']   = $request->boolean('receive_general_sms');
+        $validated['receive_rota_email']    = $request->boolean('receive_rota_email');
+        $validated['receive_rota_sms']      = $request->boolean('receive_rota_sms');
+
+        if (! $member->data_protection_accepted) {
+            $validated['data_protection_accepted_at'] = now();
+        }
+
+        $member->update($validated);
+
+        return back()->with('church_profile_status', 'Your details have been saved successfully.');
+    }
+
     public function deleteAccount(Request $request)
     {
         $member = Auth::guard('member')->user();

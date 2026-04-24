@@ -13,7 +13,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
-<body class="h-full min-h-screen bg-white font-sans antialiased" x-data="{ sidebarOpen: false }">
+<body class="h-full min-h-screen bg-white font-sans antialiased" x-data="{ sidebarOpen: false, mounted: false }" x-init="$nextTick(() => mounted = true)">
 
 {{-- ── Top bar ── --}}
 <header class="fixed inset-x-0 top-0 z-40 flex h-12 items-center justify-between border-b border-gray-200 bg-[#111111] px-4 lg:px-6">
@@ -63,8 +63,8 @@
 
     {{-- ── Left sidebar — Course content ── --}}
     <aside
-        :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
-        class="fixed inset-y-0 left-0 z-40 mt-12 w-72 overflow-y-auto bg-white border-r border-gray-200 transition-transform duration-300 lg:static lg:mt-0 lg:translate-x-0 lg:shrink-0"
+        :class="{ 'translate-x-0': sidebarOpen, 'transition-transform duration-300': mounted }"
+        class="-translate-x-full fixed inset-y-0 left-0 z-40 mt-12 w-72 overflow-y-auto bg-white border-r border-gray-200 lg:static lg:mt-0 lg:translate-x-0 lg:shrink-0"
     >
         {{-- Sidebar header --}}
         <div class="sticky top-0 bg-white border-b border-gray-100 px-5 py-3.5 z-10">
@@ -114,7 +114,7 @@
                         $minRead         = max(1, (int) ceil(str_word_count(strip_tags($sideLesson->content ?? '')) / 200));
                         $slideEnrolledAt = $enrollment->enrolled_at ?? $enrollment->created_at;
                         $slideUnlock     = $sideLesson->available_date ?? $slideEnrolledAt->copy()->addWeeks($sideLesson->lesson_number - 1);
-                        $isLocked        = now()->lt($slideUnlock);
+                        $isLocked        = false; // TODO: disabled for testing
                     @endphp
                     @if($isLocked)
                     <div class="flex items-center gap-3 px-5 py-3 opacity-50 cursor-not-allowed">
@@ -169,7 +169,7 @@
                     @php
                         $quizEnrolledAt = $enrollment->enrolled_at ?? $enrollment->created_at;
                         $quizUnlockDate = $quizLesson->available_date ?? $quizEnrolledAt->copy()->addWeeks($quizLesson->lesson_number - 1);
-                        $quizIsLocked   = now()->lt($quizUnlockDate);
+                        $quizIsLocked   = false; // TODO: disabled for testing
                     @endphp
                     @if($quizIsLocked)
                     <div class="flex items-center gap-3 px-5 py-3 opacity-50 cursor-not-allowed">

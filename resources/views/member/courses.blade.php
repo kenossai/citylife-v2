@@ -186,4 +186,140 @@
 
 @endif
 
+{{-- ── Life Group Suggestion Modal ── --}}
+@if(session('suggest_life_group') && $lifeGroups->isNotEmpty())
+<div
+    x-data="{ open: true, step: 1 }"
+    x-show="open"
+    x-cloak
+    class="fixed inset-0 z-50 flex items-center justify-center p-4"
+    role="dialog"
+    aria-modal="true"
+>
+    {{-- Backdrop --}}
+    <div
+        class="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        @click="open = false"
+        x-transition.opacity
+    ></div>
+
+    {{-- Step 1: Ask --}}
+    <div
+        x-show="step === 1"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 scale-95"
+        x-transition:enter-end="opacity-100 scale-100"
+        class="relative z-10 w-full max-w-md rounded-2xl bg-white p-8 shadow-2xl text-center"
+    >
+        <div class="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-[#e85d26]/10">
+            <svg class="h-8 w-8 text-[#e85d26]" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"/>
+            </svg>
+        </div>
+
+        {{-- Congratulations --}}
+        <div class="mb-1 flex items-center justify-center gap-1.5">
+            <svg class="h-4 w-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+            </svg>
+            <span class="text-xs font-bold uppercase tracking-widest text-yellow-500">Course Complete</span>
+            <svg class="h-4 w-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+            </svg>
+        </div>
+        <h2 class="text-2xl font-extrabold text-gray-900">Congratulations! 🎉</h2>
+        <p class="mt-1 text-sm font-medium text-gray-500">You've successfully completed the course.</p>
+
+        <div class="my-5 h-px w-full bg-gray-100"></div>
+
+        <h3 class="text-lg font-extrabold text-gray-900">Join a Life Group?</h3>
+        <p class="mt-2 text-sm text-gray-500 leading-relaxed">
+            Now that you've completed the course, why not take your next step and get connected with a Life Group?
+        </p>
+
+        <div class="mt-7 flex flex-col gap-3 sm:flex-row sm:justify-center">
+            <button
+                @click="step = 2"
+                class="flex items-center justify-center gap-2 rounded-full bg-[#e85d26] px-7 py-2.5 text-sm font-semibold text-white hover:bg-[#cf4f1e] transition-colors"
+            >
+                Yes, See Life Groups
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                </svg>
+            </button>
+            <button
+                @click="open = false"
+                class="rounded-full border border-gray-200 px-7 py-2.5 text-sm font-semibold text-gray-500 hover:bg-gray-50 transition-colors"
+            >
+                Maybe later
+            </button>
+        </div>
+    </div>
+
+    {{-- Step 2: Life Group list --}}
+    <div
+        x-show="step === 2"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 scale-95"
+        x-transition:enter-end="opacity-100 scale-100"
+        class="relative z-10 w-full max-w-2xl rounded-2xl bg-white shadow-2xl overflow-hidden"
+        style="max-height: 90vh;"
+    >
+        {{-- Header --}}
+        <div class="flex items-center justify-between border-b border-gray-100 px-6 py-4">
+            <div>
+                <h2 class="text-lg font-extrabold text-gray-900">Choose a Life Group</h2>
+                <p class="text-xs text-gray-400 mt-0.5">Select one to connect with them</p>
+            </div>
+            <button @click="open = false" class="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 transition-colors">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+
+        {{-- Scrollable list --}}
+        <div class="overflow-y-auto p-4" style="max-height: calc(90vh - 70px);">
+            <div class="grid gap-3 sm:grid-cols-2">
+                @foreach($lifeGroups as $lg)
+                <a
+                    href="{{ route('ministries.join', $lg->slug) }}"
+                    class="group flex items-center gap-4 rounded-xl border border-gray-100 bg-gray-50 p-4 hover:border-[#e85d26]/40 hover:bg-[#e85d26]/5 transition-colors"
+                >
+                    @if($lg->image_path)
+                    <div class="h-12 w-12 shrink-0 overflow-hidden rounded-xl">
+                        <img src="{{ $lg->image_path }}" alt="{{ $lg->name }}" class="h-full w-full object-cover">
+                    </div>
+                    @else
+                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#e85d26]/10">
+                        <svg class="h-6 w-6 text-[#e85d26]" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"/>
+                        </svg>
+                    </div>
+                    @endif
+
+                    <div class="min-w-0 flex-1">
+                        @if($lg->category_label)
+                        <p class="text-[10px] font-bold uppercase tracking-widest text-[#e85d26] mb-0.5">{{ $lg->category_label }}</p>
+                        @endif
+                        <p class="text-sm font-bold text-gray-900 group-hover:text-[#e85d26] transition-colors truncate">{{ $lg->name }}</p>
+                        @if($lg->subtitle)
+                        <p class="text-xs text-gray-500 truncate">{{ $lg->subtitle }}</p>
+                        @endif
+                        @if($lg->meeting_schedule)
+                        <p class="mt-1 text-[11px] text-gray-400">{{ $lg->meeting_schedule }}</p>
+                        @endif
+                    </div>
+
+                    <svg class="h-4 w-4 shrink-0 text-gray-300 group-hover:text-[#e85d26] transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </a>
+                @endforeach
+            </div>
+        </div>
+    </div>
+</div>
+@endif
+
 @endsection

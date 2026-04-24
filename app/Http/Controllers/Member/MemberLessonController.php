@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Member;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\CourseLesson;
+use App\Models\CourseReview;
 use App\Models\LessonProgress;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -53,14 +54,13 @@ class MemberLessonController extends Controller
         $quizScore       = $progress?->quiz_score;
 
         // Lock gate: each lesson unlocks (lesson_number - 1) weeks after enrollment
+        // TODO: lock gate temporarily disabled for testing — re-enable before go-live
         $enrolledAt = $enrollment->enrolled_at ?? $enrollment->created_at;
-        $unlockDate = $lesson->available_date ?? $enrolledAt->copy()->addWeeks($lesson->lesson_number - 1);
-        abort_if(now()->lt($unlockDate), 403, 'This lesson is not yet available.');
+        // $unlockDate = $lesson->available_date ?? $enrolledAt->copy()->addWeeks($lesson->lesson_number - 1);
+        // abort_if(now()->lt($unlockDate), 403, 'This lesson is not yet available.');
 
         // Whether the next lesson is still locked
-        $nextLessonLocked = $nextLesson
-            ? now()->lt($nextLesson->available_date ?? $enrolledAt->copy()->addWeeks($nextLesson->lesson_number - 1))
-            : false;
+        $nextLessonLocked = false; // disabled for testing
 
         return compact(
             'member', 'course', 'enrollment', 'lesson',
@@ -111,6 +111,15 @@ class MemberLessonController extends Controller
             ['completed_at'  => now()]
         );
 
+        // Check if all published lessons are now complete
+        $totalLessons     = $course->lessons()->where('is_published', true)->count();
+        $completedLessons = $enrollment->progress()->whereNotNull('completed_at')->count();
+        $allDone          = $totalLessons > 0 && $completedLessons >= $totalLessons;
+
+        if ($allDone && $enrollment->status !== 'completed') {
+            $enrollment->update(['status' => 'completed', 'completed_at' => now()]);
+        }
+
         // Redirect to next lesson if it exists AND is already unlocked
         if ($request->has('next') && $request->input('next')) {
             $nextLesson = $course->lessons()
@@ -119,24 +128,17 @@ class MemberLessonController extends Controller
                 ->first();
 
             if ($nextLesson) {
-                $enrolledAt  = $enrollment->enrolled_at ?? $enrollment->created_at;
-                $unlockDate  = $nextLesson->available_date ?? $enrolledAt->copy()->addWeeks($nextLesson->lesson_number - 1);
-
-                if (now()->gte($unlockDate)) {
-                    return redirect()->route('member.lesson.show', [
-                        'courseSlug' => $courseSlug,
-                        'lessonSlug' => $nextLesson->slug,
-                    ]);
-                }
-
-                // Next lesson exists but is locked — tell the member when it unlocks
+                // TODO: lock check disabled for testing — re-enable before go-live
                 return redirect()->route('member.lesson.show', [
                     'courseSlug' => $courseSlug,
-                    'lessonSlug' => $lessonSlug,
-                ])->with('status', 'Lesson marked as read!')
-                  ->with('next_locked_until', $unlockDate->toDateTimeString())
-                  ->with('next_locked_title', $nextLesson->title);
+                    'lessonSlug' => $nextLesson->slug,
+                ]);
             }
+        }
+
+        // After the last lesson, prompt for a review (if not yet submitted)
+        if ($allDone && ! CourseReview::where('enrollment_id', $enrollment->id)->exists()) {
+            return redirect()->route('member.course.review', ['courseSlug' => $courseSlug]);
         }
 
         return redirect()->route('member.lesson.show', [
