@@ -14,6 +14,7 @@ class ChurchSuiteService
     private string $tokenUrl;
     private string $clientId;
     private string $clientSecret;
+    private string $accountId;
 
     public function __construct()
     {
@@ -21,6 +22,7 @@ class ChurchSuiteService
         $this->tokenUrl     = (string) config('services.churchsuite.token_url');
         $this->clientId     = (string) config('services.churchsuite.client_id');
         $this->clientSecret = (string) config('services.churchsuite.client_secret');
+        $this->accountId    = (string) config('services.churchsuite.account_id');
     }
 
     // -------------------------------------------------------------------------
@@ -38,15 +40,23 @@ class ChurchSuiteService
         $payload = $this->buildContactPayload($member);
 
         if ($member->churchsuite_id) {
-            $response = $this->client()->put(
-                "{$this->apiUrl}/addressbook/contacts/{$member->churchsuite_id}",
-                $payload
+            $response = $this->request(fn ($c) =>
+                $c->put("{$this->apiUrl}/{$this->accountId}/addressbook/contacts/{$member->churchsuite_id}", $payload)
             );
         } else {
-            $response = $this->client()->post(
-                "{$this->apiUrl}/addressbook/contacts",
-                $payload
-            );
+            // Search for an existing contact by email to prevent duplicates.
+            $existingId = $this->findContactByEmail($member->email);
+
+            if ($existingId) {
+                $member->churchsuite_id = $existingId;
+                $response = $this->request(fn ($c) =>
+                    $c->put("{$this->apiUrl}/{$this->accountId}/addressbook/contacts/{$existingId}", $payload)
+                );
+            } else {
+                $response = $this->request(fn ($c) =>
+                    $c->post("{$this->apiUrl}/{$this->accountId}/addressbook/contacts", $payload)
+                );
+            }
         }
 
         if (! $response->successful()) {
@@ -58,7 +68,14 @@ class ChurchSuiteService
             throw new RuntimeException("ChurchSuite API error: {$error}");
         }
 
-        $contactId = $response->json('id') ?? $response->json('data.id');
+        $data = $response->json();
+
+        $contactId = $data['id']
+            ?? ($data['data']['id'] ?? null);
+
+        if (! $contactId) {
+            throw new RuntimeException('ChurchSuite did not return a contact ID');
+        }
 
         $member->update([
             'churchsuite_id'          => $contactId,
@@ -73,7 +90,7 @@ class ChurchSuiteService
      */
     public function isConfigured(): bool
     {
-        return filled($this->clientId) && filled($this->clientSecret);
+        return filled($this->clientId) && filled($this->clientSecret) && filled($this->accountId);
     }
 
     // -------------------------------------------------------------------------
@@ -83,9 +100,52 @@ class ChurchSuiteService
     private function client(): PendingRequest
     {
         return Http::withToken($this->getAccessToken())
+            ->retry(3, 200)
+            ->withUserAgent('CityLife/' . config('app.version', '1.0') . ' (Laravel; +' . config('app.url') . ')')
             ->acceptJson()
             ->asJson()
             ->timeout(15);
+    }
+
+    /**
+     * Execute an HTTP callback, refreshing the token once on 401.
+     */
+    private function request(callable $callback): \Illuminate\Http\Client\Response
+    {
+        $response = $callback($this->client());
+
+        if ($response->status() === 401) {
+            Cache::forget('churchsuite_access_token');
+            $response = $callback($this->client());
+        }
+
+        return $response;
+    }
+
+    /**
+     * Search ChurchSuite for an existing contact by email.
+     * Returns the contact ID string, or null if not found.
+     */
+    private function findContactByEmail(string $email): ?string
+    {
+        $response = $this->request(fn ($c) =>
+            $c->get("{$this->apiUrl}/{$this->accountId}/addressbook/contacts", ['email' => $email])
+        );
+
+        if (! $response->successful()) {
+            return null;
+        }
+
+        $data = $response->json();
+
+        // ChurchSuite v2 returns paginated results: { data: [...] }
+        $contacts = $data['data'] ?? $data;
+
+        if (! is_array($contacts) || empty($contacts)) {
+            return null;
+        }
+
+        return (string) ($contacts[0]['id'] ?? '')  ?: null;
     }
 
     /**
@@ -93,21 +153,30 @@ class ChurchSuiteService
      */
     private function getAccessToken(): string
     {
-        return Cache::remember('churchsuite_access_token', 3300, function () {
-            $response = Http::asForm()->post($this->tokenUrl, [
-                'grant_type'    => 'client_credentials',
-                'client_id'     => $this->clientId,
-                'client_secret' => $this->clientSecret,
+        if (Cache::has('churchsuite_access_token')) {
+            return Cache::get('churchsuite_access_token');
+        }
+
+        $response = Http::asForm()
+            ->withBasicAuth($this->clientId, $this->clientSecret)
+            ->withUserAgent('CityLife/' . config('app.version', '1.0') . ' (Laravel; +' . config('app.url') . ')')
+            ->post($this->tokenUrl, [
+                'grant_type' => 'client_credentials',
             ]);
 
-            if (! $response->successful()) {
-                throw new RuntimeException(
-                    'ChurchSuite OAuth failed: ' . ($response->json('error_description') ?? $response->body())
-                );
-            }
+        if (! $response->successful()) {
+            throw new RuntimeException(
+                'ChurchSuite OAuth failed: ' . ($response->json('error_description') ?? $response->body())
+            );
+        }
 
-            return $response->json('access_token');
-        });
+        $data = $response->json();
+
+        $ttl = ($data['expires_in'] ?? 3600) - 60;
+
+        Cache::put('churchsuite_access_token', $data['access_token'], $ttl);
+
+        return $data['access_token'];
     }
 
     /**
@@ -162,6 +231,6 @@ class ChurchSuiteService
             'rota_reminders_sms'     => $member->receive_rota_sms       ? 1 : 0,
         ];
 
-        return array_filter($payload, fn ($v) => $v !== null);
+        return array_filter($payload, fn ($v) => $v !== null && $v !== []);
     }
 }
