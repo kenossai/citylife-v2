@@ -25,6 +25,22 @@ use App\Http\Controllers\LegalController;
 use App\Http\Controllers\InvitationController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// TEMP DEBUG — remove after testing
+// if (app()->isLocal()) {
+//     Route::get('/__debug/ip', function () {
+//         $raw     = config('services.church_wifi_ip', '');
+//         $allowed = array_filter(array_map('trim', explode(',', $raw)));
+//         return response()->json([
+//             'request_ip'  => request()->ip(),
+//             'allowed_ips' => array_values($allowed),
+//             'match'       => in_array(request()->ip(), $allowed),
+//             'server_addr' => $_SERVER['SERVER_ADDR'] ?? null,
+//             'x_forwarded' => request()->header('X-Forwarded-For'),
+//         ]);
+//     });
+// }
+
 Route::get('/give', [GivingController::class, 'index'])->name('give');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
