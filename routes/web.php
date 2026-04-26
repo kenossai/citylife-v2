@@ -23,23 +23,28 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\SafeguardingController;
 use App\Http\Controllers\LegalController;
 use App\Http\Controllers\InvitationController;
+use App\Http\Controllers\ChurchSuiteController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// TEMP DEBUG — remove after testing
-// if (app()->isLocal()) {
-//     Route::get('/__debug/ip', function () {
-//         $raw     = config('services.church_wifi_ip', '');
-//         $allowed = array_filter(array_map('trim', explode(',', $raw)));
-//         return response()->json([
-//             'request_ip'  => request()->ip(),
-//             'allowed_ips' => array_values($allowed),
-//             'match'       => in_array(request()->ip(), $allowed),
-//             'server_addr' => $_SERVER['SERVER_ADDR'] ?? null,
-//             'x_forwarded' => request()->header('X-Forwarded-For'),
-//         ]);
-//     });
-// }
+// ChurchSuite OAuth
+Route::get('/churchsuite/connect', [ChurchSuiteController::class, 'redirect'])->name('churchsuite.connect');
+Route::get('/churchsuite/callback', [ChurchSuiteController::class, 'callback'])->name('churchsuite.callback');
+
+// TEMP DEBUG — remove after WiFi IP is confirmed
+Route::get('/__debug/ip', function () {
+// TEMP DEBUG — remove after WiFi IP is confirmed
+Route::get('/__debug/ip', function () {
+    $raw     = config('services.church_wifi_ip', '');
+    $allowed = array_filter(array_map('trim', explode(',', $raw)));
+    return response()->json([
+        'your_ip'     => request()->ip(),
+        'allowed_ips' => array_values($allowed),
+        'match'       => in_array(request()->ip(), $allowed),
+        'x_forwarded' => request()->header('X-Forwarded-For'),
+        'cf_ip'       => request()->header('CF-Connecting-IP'),
+    ]);
+});
 
 Route::get('/give', [GivingController::class, 'index'])->name('give');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
