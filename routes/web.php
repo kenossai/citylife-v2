@@ -33,8 +33,6 @@ Route::get('/churchsuite/callback', [ChurchSuiteController::class, 'callback'])-
 
 // TEMP DEBUG — remove after WiFi IP is confirmed
 Route::get('/__debug/ip', function () {
-// TEMP DEBUG — remove after WiFi IP is confirmed
-Route::get('/__debug/ip', function () {
     $raw     = config('services.church_wifi_ip', '');
     $allowed = array_filter(array_map('trim', explode(',', $raw)));
     return response()->json([
